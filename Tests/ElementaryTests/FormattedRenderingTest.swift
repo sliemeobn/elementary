@@ -124,4 +124,20 @@ final class FormatedRenderingTests: XCTestCase {
             """
         )
     }
+
+    func testFormatsAttributes() {
+        HtmlFormattedAssertEqual(
+            div(.id("1")) {
+                "Hello "
+                span(.class("foo")) { "World" }
+                p(.class("bar")) { "!" }
+            },
+            """
+            <div id="1">
+              Hello <span class="foo">World</span>
+              <p class="bar">!</p>
+            </div>
+            """
+        )
+    }
 }
