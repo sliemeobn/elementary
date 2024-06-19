@@ -5,6 +5,11 @@ public extension Html {
         return renderer.collect()
     }
 
+    consuming func render(into writer: @escaping (String) -> Void) {
+        var renderer = HtmlStreamRenderer(writer: writer)
+        Self._render(self, into: &renderer, with: .emptyContext)
+    }
+
     // TODO: wrap this behind some config object
     consuming func renderFormatted() -> String {
         var renderer = PrettyHtmlTextRenderer(spaces: 2)

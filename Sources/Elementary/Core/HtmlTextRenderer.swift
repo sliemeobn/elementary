@@ -1,5 +1,5 @@
-// NOTE: maybe try a stream-based renderer as an option, probably pointless though....
 // NOTE: an async version of this could be interesteing, where the components content can by asnc, and the renderer is an async stream... probably a bit complex though
+// TODO: clean this up a bit
 
 struct HtmlTextRenderer: _HtmlRendering {
     private var result: String = ""
@@ -8,6 +8,14 @@ struct HtmlTextRenderer: _HtmlRendering {
     }
 
     consuming func collect() -> String { result }
+}
+
+struct HtmlStreamRenderer: _HtmlRendering {
+    let writer: (String) -> Void
+
+    mutating func appendToken(_ token: consuming _HtmlRenderToken) {
+        writer(token.renderedValue)
+    }
 }
 
 struct PrettyHtmlTextRenderer {
