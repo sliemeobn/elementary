@@ -3,7 +3,7 @@ import Foundation
 #if DEBUG
     func browserSyncReload() {
         let p = Process()
-        p.executableURL = URL(filePath: "/bin/sh")
+        p.executableURL = URL(string: "file:///bin/sh")
         p.arguments = ["-c", "browser-sync reload"]
         do {
             try p.run()
