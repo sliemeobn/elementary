@@ -5,8 +5,8 @@ public extension Html {
         return renderer.collect()
     }
 
-    consuming func render(into sink: @escaping (String) -> Void) {
-        var renderer = HtmlStreamRenderer(sink: sink)
+    consuming func render(into writer: @escaping (String) -> Void) {
+        var renderer = HtmlStreamRenderer(writer: writer)
         Self._render(self, into: &renderer, with: .emptyContext)
     }
 

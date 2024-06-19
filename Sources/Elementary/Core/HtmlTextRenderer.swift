@@ -1,4 +1,5 @@
 // NOTE: an async version of this could be interesteing, where the components content can by asnc, and the renderer is an async stream... probably a bit complex though
+// TODO: clean this up a bit
 
 struct HtmlTextRenderer: _HtmlRendering {
     private var result: String = ""
@@ -10,10 +11,10 @@ struct HtmlTextRenderer: _HtmlRendering {
 }
 
 struct HtmlStreamRenderer: _HtmlRendering {
-    let sink: (String) -> Void
+    let writer: (String) -> Void
 
     mutating func appendToken(_ token: consuming _HtmlRenderToken) {
-        sink(token.renderedValue)
+        writer(token.renderedValue)
     }
 }
 
