@@ -40,7 +40,7 @@ public extension HtmlTag {
     enum del: HtmlTrait.Paired { public static let name = "del" }
     enum dfn: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "dfn" }
     enum em: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "em" }
-    enum i: HtmlTrait.Paired { public static let name = "i" }
+    enum i: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "i" }
     enum ins: HtmlTrait.Paired { public static let name = "ins" }
     enum kbd: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "kbd" }
     enum mark: HtmlTrait.Paired { public static let name = "mark" }
