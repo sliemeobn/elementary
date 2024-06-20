@@ -6,7 +6,7 @@ struct App {
         let router = Router()
 
         router.get("") { _, _ in
-            MainLayout(title: "Hello, there!") {
+            MainLayout(title: "Hello there!") {
                 WelcomePage()
             }
         }
@@ -15,7 +15,7 @@ struct App {
             let name = String(request.uri.queryParameters.get("name") ?? "")
             let count = request.uri.queryParameters.get("count", as: Int.self) ?? 1
 
-            return MainLayout(title: "Greeting") {
+            return MainLayout(title: "Greetings") {
                 GreetingPage(name: name.isEmpty ? "kind stranger" : name, greetingCount: count)
             }
         }
