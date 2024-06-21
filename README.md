@@ -106,7 +106,7 @@ struct List: HTML {
                 // list rendering
                 for (index, item) in items.enumerated() {
                     // seamless composition of elements
-                    ListItem(text: item, isimportant: index == importantIndex)
+                    ListItem(text: item, isImportant: index == importantIndex)
                 }
             }
         }
@@ -115,12 +115,12 @@ struct List: HTML {
 
 struct ListItem: HTML {
     var text: String
-    var isimportant: Bool = false
+    var isImportant: Bool = false
 
     var content: some HTML {
         // conditional attributes
         li { text }
-            .attributes(.class("important"), when: isimportant)
+            .attributes(.class("important"), when: isImportant)
     }
 }
 ```
