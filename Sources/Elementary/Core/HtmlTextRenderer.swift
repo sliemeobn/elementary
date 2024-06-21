@@ -1,24 +1,24 @@
 // NOTE: an async version of this could be interesteing, where the components content can by asnc, and the renderer is an async stream... probably a bit complex though
 // TODO: clean this up a bit
 
-struct HtmlTextRenderer: _HtmlRendering {
+struct HTMLTextRenderer: _HTMLRendering {
     private var result: String = ""
-    mutating func appendToken(_ token: consuming _HtmlRenderToken) {
+    mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         result += token.renderedValue
     }
 
     consuming func collect() -> String { result }
 }
 
-struct HtmlStreamRenderer: _HtmlRendering {
+struct HTMLStreamRenderer: _HTMLRendering {
     let writer: (String) -> Void
 
-    mutating func appendToken(_ token: consuming _HtmlRenderToken) {
+    mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         writer(token.renderedValue)
     }
 }
 
-struct PrettyHtmlTextRenderer {
+struct PrettyHTMLTextRenderer {
     let indentation: String
 
     init(spaces: Int) {
@@ -27,7 +27,7 @@ struct PrettyHtmlTextRenderer {
 
     private var result: String = ""
     private var currentIndentation: String = ""
-    private var currentTokenContext = _HtmlRenderToken.RenderingType.block
+    private var currentTokenContext = _HTMLRenderToken.RenderingType.block
     private var currentInlineText = ""
     private var isInLineAfterBlockTagOpen = false
 
@@ -76,8 +76,8 @@ struct PrettyHtmlTextRenderer {
     }
 }
 
-extension PrettyHtmlTextRenderer: _HtmlRendering {
-    mutating func appendToken(_ token: consuming _HtmlRenderToken) {
+extension PrettyHTMLTextRenderer: _HTMLRendering {
+    mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         let renderedToken = token.renderedValue
 
         if token.shouldInline(currentlyInlined: isInLineAfterBlockTagOpen || !currentInlineText.isEmpty) {
@@ -134,7 +134,7 @@ extension PrettyHtmlTextRenderer: _HtmlRendering {
     }
 }
 
-extension _HtmlRenderToken {
+extension _HTMLRenderToken {
     var renderedValue: String {
         switch self {
         case let .startTagOpen(tagName, _):
@@ -159,7 +159,7 @@ extension _HtmlRenderToken {
     }
 }
 
-extension _HtmlRenderToken {
+extension _HTMLRenderToken {
     func shouldInline(currentlyInlined: Bool) -> Bool {
         switch self {
         case .startTagOpen(_, .inline), .endTag(_, .inline), .text, .raw, .comment:
@@ -173,12 +173,12 @@ extension _HtmlRenderToken {
 }
 
 extension String {
-    enum HtmlEscapingMode {
+    enum HTMLEscapingMode {
         case attribute
         case content
     }
 
-    func htmlEscaped(for mode: HtmlEscapingMode) -> String {
+    func htmlEscaped(for mode: HTMLEscapingMode) -> String {
         var result = [UInt8]()
         result.reserveCapacity(utf8.count)
 

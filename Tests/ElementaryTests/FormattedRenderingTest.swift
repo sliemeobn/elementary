@@ -3,7 +3,7 @@ import XCTest
 
 final class FormatedRenderingTests: XCTestCase {
     func testFormatsBlocks() {
-        HtmlFormattedAssertEqual(
+        HTMLFormattedAssertEqual(
             div { div { p {}; p {} } },
             """
             <div>
@@ -17,8 +17,8 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsInlineTextAndRaw() {
-        HtmlFormattedAssertEqual(
-            div { div { p { "Hello&" }; p { HtmlRaw("World&") } } },
+        HTMLFormattedAssertEqual(
+            div { div { p { "Hello&" }; p { HTMLRaw("World&") } } },
             """
             <div>
               <div>
@@ -31,7 +31,7 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsLineBreaks() {
-        HtmlFormattedAssertEqual(
+        HTMLFormattedAssertEqual(
             p {
                 """
                 This,
@@ -50,8 +50,8 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsComments() {
-        HtmlFormattedAssertEqual(
-            div { HtmlComment("Hello") },
+        HTMLFormattedAssertEqual(
+            div { HTMLComment("Hello") },
             """
             <div><!--Hello--></div>
             """
@@ -59,9 +59,9 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsMixedContextInBlock() {
-        HtmlFormattedAssertEqual(
+        HTMLFormattedAssertEqual(
             div {
-                HtmlComment("Hello")
+                HTMLComment("Hello")
                 p { "World" }
             },
             """
@@ -74,7 +74,7 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsInlineElements() {
-        HtmlFormattedAssertEqual(
+        HTMLFormattedAssertEqual(
             div {
                 "Hello, "
                 span { "Wor" }
@@ -87,7 +87,7 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsUnpairedTags() {
-        HtmlFormattedAssertEqual(
+        HTMLFormattedAssertEqual(
             div {
                 "Hello"
                 br()
@@ -104,7 +104,7 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsMixed() {
-        HtmlFormattedAssertEqual(
+        HTMLFormattedAssertEqual(
             div {
                 "Hello"
                 p { "World" }
@@ -126,7 +126,7 @@ final class FormatedRenderingTests: XCTestCase {
     }
 
     func testFormatsAttributes() {
-        HtmlFormattedAssertEqual(
+        HTMLFormattedAssertEqual(
             div(.id("1")) {
                 "Hello "
                 span(.class("foo")) { "World" }

@@ -1,155 +1,155 @@
-public enum HtmlTag {}
+public enum HTMLTag {}
 
-public enum HtmlTrait {
+public enum HTMLTrait {
     public enum Attributes {}
-    public protocol Paired: HtmlTagDefinition, Attributes.Global {}
-    public protocol Unpaired: HtmlTagDefinition, Attributes.Global {}
+    public protocol Paired: HTMLTagDefinition, Attributes.Global {}
+    public protocol Unpaired: HTMLTagDefinition, Attributes.Global {}
     public protocol RenderedInline {}
 }
 
-public extension HtmlTrait.Attributes {
+public extension HTMLTrait.Attributes {
     protocol Global {}
 }
 
-public extension HtmlTag {
+public extension HTMLTag {
     // https://www.w3schools.com/TAGS/ref_byfunc.asp
     // Basic
-    enum html: HtmlTrait.Paired { public static let name = "html" }
-    enum head: HtmlTrait.Paired { public static let name = "head" }
-    enum title: HtmlTrait.Paired { public static let name = "title" }
-    enum body: HtmlTrait.Paired { public static let name = "body" }
-    enum h1: HtmlTrait.Paired { public static let name = "h1" }
-    enum h2: HtmlTrait.Paired { public static let name = "h2" }
-    enum h3: HtmlTrait.Paired { public static let name = "h3" }
-    enum h4: HtmlTrait.Paired { public static let name = "h4" }
-    enum h5: HtmlTrait.Paired { public static let name = "h5" }
-    enum h6: HtmlTrait.Paired { public static let name = "h6" }
-    enum p: HtmlTrait.Paired { public static let name = "p" }
-    enum br: HtmlTrait.Unpaired { public static let name = "br" }
-    enum hr: HtmlTrait.Unpaired { public static let name = "hr" }
+    enum html: HTMLTrait.Paired { public static let name = "html" }
+    enum head: HTMLTrait.Paired { public static let name = "head" }
+    enum title: HTMLTrait.Paired { public static let name = "title" }
+    enum body: HTMLTrait.Paired { public static let name = "body" }
+    enum h1: HTMLTrait.Paired { public static let name = "h1" }
+    enum h2: HTMLTrait.Paired { public static let name = "h2" }
+    enum h3: HTMLTrait.Paired { public static let name = "h3" }
+    enum h4: HTMLTrait.Paired { public static let name = "h4" }
+    enum h5: HTMLTrait.Paired { public static let name = "h5" }
+    enum h6: HTMLTrait.Paired { public static let name = "h6" }
+    enum p: HTMLTrait.Paired { public static let name = "p" }
+    enum br: HTMLTrait.Unpaired { public static let name = "br" }
+    enum hr: HTMLTrait.Unpaired { public static let name = "hr" }
 
     // Formatting
-    enum abbr: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "abbr" }
-    enum address: HtmlTrait.Paired { public static let name = "address" }
-    enum b: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "b" }
-    enum bdi: HtmlTrait.Paired { public static let name = "bdi" }
-    enum bdo: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "bdo" }
-    enum blockquote: HtmlTrait.Paired { public static let name = "blockquote" }
-    enum cite: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "cite" }
-    enum code: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "code" }
-    enum del: HtmlTrait.Paired { public static let name = "del" }
-    enum dfn: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "dfn" }
-    enum em: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "em" }
-    enum i: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "i" }
-    enum ins: HtmlTrait.Paired { public static let name = "ins" }
-    enum kbd: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "kbd" }
-    enum mark: HtmlTrait.Paired { public static let name = "mark" }
-    enum meter: HtmlTrait.Paired { public static let name = "meter" }
-    enum pre: HtmlTrait.Paired { public static let name = "pre" }
-    enum progress: HtmlTrait.Paired { public static let name = "progress" }
-    enum q: HtmlTrait.Paired { public static let name = "q" }
-    enum rp: HtmlTrait.Paired { public static let name = "rp" }
-    enum rt: HtmlTrait.Paired { public static let name = "rt" }
-    enum ruby: HtmlTrait.Paired { public static let name = "ruby" }
-    enum s: HtmlTrait.Paired { public static let name = "s" }
-    enum samp: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "samp" }
-    enum small: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "small" }
-    enum strong: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "strong" }
-    enum sub: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "sub" }
-    enum sup: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "sup" }
-    enum template: HtmlTrait.Paired { public static let name = "template" }
-    enum time: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "time" }
-    enum u: HtmlTrait.Paired { public static let name = "u" }
-    // enum var_: HtmlTrait.Paired { public static let name = "var" }
-    enum wbr: HtmlTrait.Unpaired { public static let name = "wbr" }
+    enum abbr: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "abbr" }
+    enum address: HTMLTrait.Paired { public static let name = "address" }
+    enum b: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "b" }
+    enum bdi: HTMLTrait.Paired { public static let name = "bdi" }
+    enum bdo: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "bdo" }
+    enum blockquote: HTMLTrait.Paired { public static let name = "blockquote" }
+    enum cite: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "cite" }
+    enum code: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "code" }
+    enum del: HTMLTrait.Paired { public static let name = "del" }
+    enum dfn: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "dfn" }
+    enum em: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "em" }
+    enum i: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "i" }
+    enum ins: HTMLTrait.Paired { public static let name = "ins" }
+    enum kbd: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "kbd" }
+    enum mark: HTMLTrait.Paired { public static let name = "mark" }
+    enum meter: HTMLTrait.Paired { public static let name = "meter" }
+    enum pre: HTMLTrait.Paired { public static let name = "pre" }
+    enum progress: HTMLTrait.Paired { public static let name = "progress" }
+    enum q: HTMLTrait.Paired { public static let name = "q" }
+    enum rp: HTMLTrait.Paired { public static let name = "rp" }
+    enum rt: HTMLTrait.Paired { public static let name = "rt" }
+    enum ruby: HTMLTrait.Paired { public static let name = "ruby" }
+    enum s: HTMLTrait.Paired { public static let name = "s" }
+    enum samp: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "samp" }
+    enum small: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "small" }
+    enum strong: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "strong" }
+    enum sub: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "sub" }
+    enum sup: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "sup" }
+    enum template: HTMLTrait.Paired { public static let name = "template" }
+    enum time: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "time" }
+    enum u: HTMLTrait.Paired { public static let name = "u" }
+    // enum var_: HTMLTrait.Paired { public static let name = "var" }
+    enum wbr: HTMLTrait.Unpaired { public static let name = "wbr" }
 
     // Forms and Input
-    enum form: HtmlTrait.Paired { public static let name = "form" }
-    enum input: HtmlTrait.Unpaired { public static let name = "input" }
-    enum textarea: HtmlTrait.Paired { public static let name = "textarea" }
-    enum button: HtmlTrait.Paired { public static let name = "button" }
-    enum select: HtmlTrait.Paired { public static let name = "select" }
-    enum optgroup: HtmlTrait.Paired { public static let name = "optgroup" }
-    enum option: HtmlTrait.Paired { public static let name = "option" }
-    enum label: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "label" }
-    enum fieldset: HtmlTrait.Paired { public static let name = "fieldset" }
-    enum legend: HtmlTrait.Paired { public static let name = "legend" }
-    enum datalist: HtmlTrait.Paired { public static let name = "datalist" }
-    enum output: HtmlTrait.Paired { public static let name = "output" }
+    enum form: HTMLTrait.Paired { public static let name = "form" }
+    enum input: HTMLTrait.Unpaired { public static let name = "input" }
+    enum textarea: HTMLTrait.Paired { public static let name = "textarea" }
+    enum button: HTMLTrait.Paired { public static let name = "button" }
+    enum select: HTMLTrait.Paired { public static let name = "select" }
+    enum optgroup: HTMLTrait.Paired { public static let name = "optgroup" }
+    enum option: HTMLTrait.Paired { public static let name = "option" }
+    enum label: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "label" }
+    enum fieldset: HTMLTrait.Paired { public static let name = "fieldset" }
+    enum legend: HTMLTrait.Paired { public static let name = "legend" }
+    enum datalist: HTMLTrait.Paired { public static let name = "datalist" }
+    enum output: HTMLTrait.Paired { public static let name = "output" }
 
     // Frames
-    enum iframe: HtmlTrait.Paired { public static let name = "iframe" }
+    enum iframe: HTMLTrait.Paired { public static let name = "iframe" }
 
     // Images
-    enum img: HtmlTrait.Unpaired { public static let name = "img" }
-    enum map: HtmlTrait.Paired { public static let name = "map" }
-    enum area: HtmlTrait.Unpaired { public static let name = "area" }
-    enum canvas: HtmlTrait.Paired { public static let name = "canvas" }
-    enum figcaption: HtmlTrait.Paired { public static let name = "figcaption" }
-    enum figure: HtmlTrait.Paired { public static let name = "figure" }
-    enum picture: HtmlTrait.Paired { public static let name = "picture" }
-    enum svg: HtmlTrait.Paired { public static let name = "svg" }
+    enum img: HTMLTrait.Unpaired { public static let name = "img" }
+    enum map: HTMLTrait.Paired { public static let name = "map" }
+    enum area: HTMLTrait.Unpaired { public static let name = "area" }
+    enum canvas: HTMLTrait.Paired { public static let name = "canvas" }
+    enum figcaption: HTMLTrait.Paired { public static let name = "figcaption" }
+    enum figure: HTMLTrait.Paired { public static let name = "figure" }
+    enum picture: HTMLTrait.Paired { public static let name = "picture" }
+    enum svg: HTMLTrait.Paired { public static let name = "svg" }
 
     // Audio / Video
-    enum audio: HtmlTrait.Paired { public static let name = "audio" }
-    enum source: HtmlTrait.Unpaired { public static let name = "source" }
-    enum track: HtmlTrait.Unpaired { public static let name = "track" }
-    enum video: HtmlTrait.Paired { public static let name = "video" }
+    enum audio: HTMLTrait.Paired { public static let name = "audio" }
+    enum source: HTMLTrait.Unpaired { public static let name = "source" }
+    enum track: HTMLTrait.Unpaired { public static let name = "track" }
+    enum video: HTMLTrait.Paired { public static let name = "video" }
 
     // Links
-    enum a: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "a" }
-    enum link: HtmlTrait.Unpaired { public static let name = "link" }
-    enum nav: HtmlTrait.Paired { public static let name = "nav" }
+    enum a: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "a" }
+    enum link: HTMLTrait.Unpaired { public static let name = "link" }
+    enum nav: HTMLTrait.Paired { public static let name = "nav" }
 
     // Lists
-    enum menu: HtmlTrait.Paired { public static let name = "menu" }
-    enum ul: HtmlTrait.Paired { public static let name = "ul" }
-    enum ol: HtmlTrait.Paired { public static let name = "ol" }
-    enum li: HtmlTrait.Paired { public static let name = "li" }
-    enum dl: HtmlTrait.Paired { public static let name = "dl" }
-    enum dt: HtmlTrait.Paired { public static let name = "dt" }
-    enum dd: HtmlTrait.Paired { public static let name = "dd" }
+    enum menu: HTMLTrait.Paired { public static let name = "menu" }
+    enum ul: HTMLTrait.Paired { public static let name = "ul" }
+    enum ol: HTMLTrait.Paired { public static let name = "ol" }
+    enum li: HTMLTrait.Paired { public static let name = "li" }
+    enum dl: HTMLTrait.Paired { public static let name = "dl" }
+    enum dt: HTMLTrait.Paired { public static let name = "dt" }
+    enum dd: HTMLTrait.Paired { public static let name = "dd" }
 
     // Tables
-    enum table: HtmlTrait.Paired { public static let name = "table" }
-    enum caption: HtmlTrait.Paired { public static let name = "caption" }
-    enum th: HtmlTrait.Paired { public static let name = "th" }
-    enum tr: HtmlTrait.Paired { public static let name = "tr" }
-    enum td: HtmlTrait.Paired { public static let name = "td" }
-    enum thead: HtmlTrait.Paired { public static let name = "thead" }
-    enum tbody: HtmlTrait.Paired { public static let name = "tbody" }
-    enum tfoot: HtmlTrait.Paired { public static let name = "tfoot" }
-    enum col: HtmlTrait.Unpaired { public static let name = "col" }
-    enum colgroup: HtmlTrait.Paired { public static let name = "colgroup" }
+    enum table: HTMLTrait.Paired { public static let name = "table" }
+    enum caption: HTMLTrait.Paired { public static let name = "caption" }
+    enum th: HTMLTrait.Paired { public static let name = "th" }
+    enum tr: HTMLTrait.Paired { public static let name = "tr" }
+    enum td: HTMLTrait.Paired { public static let name = "td" }
+    enum thead: HTMLTrait.Paired { public static let name = "thead" }
+    enum tbody: HTMLTrait.Paired { public static let name = "tbody" }
+    enum tfoot: HTMLTrait.Paired { public static let name = "tfoot" }
+    enum col: HTMLTrait.Unpaired { public static let name = "col" }
+    enum colgroup: HTMLTrait.Paired { public static let name = "colgroup" }
 
     // Styles and Semantics
-    enum style: HtmlTrait.Paired { public static let name = "style" }
-    enum div: HtmlTrait.Paired { public static let name = "div" }
-    enum span: HtmlTrait.Paired, HtmlTrait.RenderedInline { public static let name = "span" }
-    enum header: HtmlTrait.Paired { public static let name = "header" }
-    enum hgroup: HtmlTrait.Paired { public static let name = "hgroup" }
-    enum footer: HtmlTrait.Paired { public static let name = "footer" }
-    enum main: HtmlTrait.Paired { public static let name = "main" }
-    enum section: HtmlTrait.Paired { public static let name = "section" }
-    enum article: HtmlTrait.Paired { public static let name = "article" }
-    enum aside: HtmlTrait.Paired { public static let name = "aside" }
-    enum details: HtmlTrait.Paired { public static let name = "details" }
-    enum dialog: HtmlTrait.Paired { public static let name = "dialog" }
-    enum summary: HtmlTrait.Paired { public static let name = "summary" }
-    enum data: HtmlTrait.Paired { public static let name = "data" }
+    enum style: HTMLTrait.Paired { public static let name = "style" }
+    enum div: HTMLTrait.Paired { public static let name = "div" }
+    enum span: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "span" }
+    enum header: HTMLTrait.Paired { public static let name = "header" }
+    enum hgroup: HTMLTrait.Paired { public static let name = "hgroup" }
+    enum footer: HTMLTrait.Paired { public static let name = "footer" }
+    enum main: HTMLTrait.Paired { public static let name = "main" }
+    enum section: HTMLTrait.Paired { public static let name = "section" }
+    enum article: HTMLTrait.Paired { public static let name = "article" }
+    enum aside: HTMLTrait.Paired { public static let name = "aside" }
+    enum details: HTMLTrait.Paired { public static let name = "details" }
+    enum dialog: HTMLTrait.Paired { public static let name = "dialog" }
+    enum summary: HTMLTrait.Paired { public static let name = "summary" }
+    enum data: HTMLTrait.Paired { public static let name = "data" }
 
     // Meta Info
-    enum meta: HtmlTrait.Unpaired { public static let name = "meta" }
-    enum base: HtmlTrait.Unpaired { public static let name = "base" }
+    enum meta: HTMLTrait.Unpaired { public static let name = "meta" }
+    enum base: HTMLTrait.Unpaired { public static let name = "base" }
 
     // Programming
-    enum script: HtmlTrait.Paired { public static let name = "script" }
-    enum noscript: HtmlTrait.Paired { public static let name = "noscript" }
-    enum embed: HtmlTrait.Unpaired { public static let name = "embed" }
-    enum object: HtmlTrait.Paired { public static let name = "object" }
-    enum param: HtmlTrait.Unpaired { public static let name = "param" }
+    enum script: HTMLTrait.Paired { public static let name = "script" }
+    enum noscript: HTMLTrait.Paired { public static let name = "noscript" }
+    enum embed: HTMLTrait.Unpaired { public static let name = "embed" }
+    enum object: HTMLTrait.Paired { public static let name = "object" }
+    enum param: HTMLTrait.Unpaired { public static let name = "param" }
 }
 
-public extension HtmlTagDefinition where Self: HtmlTrait.RenderedInline {
+public extension HTMLTagDefinition where Self: HTMLTrait.RenderedInline {
     static var _rendersInline: Bool { true }
 }

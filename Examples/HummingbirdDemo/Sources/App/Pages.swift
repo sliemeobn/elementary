@@ -1,16 +1,16 @@
 import Elementary
 
-struct MainLayout<Body: Html>: HtmlDocument {
+struct MainLayout<Body: HTML>: HTMLDocument {
     var title: String
-    @HtmlBuilder var pageContent: Body
+    @HTMLBuilder var pageContent: Body
 
-    var head: some Html {
+    var head: some HTML {
         meta(.name(.viewport), .content("width=device-width, initial-scale=1.0"))
-        HtmlComment("Do not use this in production, use the tailwind CLI to generate a production build from your swift files.")
+        HTMLComment("Do not use this in production, use the tailwind CLI to generate a production build from your swift files.")
         script(.src("https://cdn.tailwindcss.com")) {}
     }
 
-    var body: some Html {
+    var body: some HTML {
         div(.class("flex flex-col min-h-screen items-center font-mono bg-zinc-300")) {
             div(.class("bg-zinc-50 m-12 p-12 rounded-lg shadow-md gap-4")) {
                 h1(.class("text-3xl pb-6 mx-auto")) { title }
@@ -22,8 +22,8 @@ struct MainLayout<Body: Html>: HtmlDocument {
     }
 }
 
-struct WelcomePage: Html {
-    var content: some Html {
+struct WelcomePage: HTML {
+    var content: some HTML {
         div(.class("flex flex-col gap-4")) {
             p {
                 "This is a simple example of using "
@@ -45,11 +45,11 @@ struct WelcomePage: Html {
     }
 }
 
-struct GreetingPage: Html {
+struct GreetingPage: HTML {
     var name: String
     var greetingCount: Int
 
-    var content: some Html {
+    var content: some HTML {
         if greetingCount < 1 {
             p(.class("text-red-500")) {
                 "No greetings to show."
@@ -70,11 +70,11 @@ struct GreetingPage: Html {
 // example of using modifier-like methods to apply styling
 extension input {
     // making the return type specify the input tag allows to chain attributes for it
-    func roundedTextbox() -> some Html<HtmlTag.input> {
+    func roundedTextbox() -> some HTML<HTMLTag.input> {
         attributes(.class("rounded-lg p-2 border border-gray-300"))
     }
 
-    func primaryButton() -> some Html<HtmlTag.input> {
+    func primaryButton() -> some HTML<HTMLTag.input> {
         attributes(
             .class("rounded-lg p-2 bg-orange-500 text-white font-semibold shadow-sm"),
             .class("hover:bg-orange-600 hover:shadow-xl")

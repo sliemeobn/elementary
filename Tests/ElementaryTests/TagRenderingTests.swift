@@ -3,28 +3,28 @@ import XCTest
 
 final class TagRenderingTests: XCTestCase {
     func testRendersEmptyTag() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             p {},
             "<p></p>"
         )
     }
 
     func testRendersNestedTags() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             div { p {} },
             "<div><p></p></div>"
         )
     }
 
     func testRendersSelfClosingTag() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             br(),
             "<br>"
         )
     }
 
     func testRendersTuples() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             div {
                 h1 {}
                 p {}
@@ -33,7 +33,7 @@ final class TagRenderingTests: XCTestCase {
     }
 
     func testRendersOptionals() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             div {
                 if true {
                     p {}
@@ -41,7 +41,7 @@ final class TagRenderingTests: XCTestCase {
             }, "<div><p></p></div>"
         )
 
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             div {
                 if false {
                     p {}
@@ -51,7 +51,7 @@ final class TagRenderingTests: XCTestCase {
     }
 
     func testRendersConditionals() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             div {
                 if true {
                     p {}
@@ -61,7 +61,7 @@ final class TagRenderingTests: XCTestCase {
             }, "<div><p></p></div>"
         )
 
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             div {
                 if false {
                     p {}
@@ -73,7 +73,7 @@ final class TagRenderingTests: XCTestCase {
     }
 
     func testRendersLists() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             div {
                 for _ in 0 ..< 3 {
                     p {}
