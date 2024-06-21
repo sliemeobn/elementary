@@ -12,6 +12,9 @@ let package = Package(
     name: "Elementary",
     platforms: [
         .macOS(.v14),
+        .iOS(.v16),
+        .tvOS(.v16),
+        .watchOS(.v8),
     ],
     products: [
         .library(
