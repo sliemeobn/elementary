@@ -4,6 +4,8 @@
 
 [Examples](#play-with-it) | [Motivation](#motivation-and-other-packages)
 
+🚧 Work In Progress 🚧 - don't bet your future on it just yet ;)
+
 ```swift
 struct MainPage: HtmlDocument {
     var title: String = "Elementary"
