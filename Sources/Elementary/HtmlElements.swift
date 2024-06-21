@@ -1,135 +1,135 @@
 // https://www.w3schools.com/TAGS/ref_byfunc.asp
 // Basic
-public typealias html<Content: Html> = HtmlElement<HtmlTag.html, Content>
-public typealias head<Content: Html> = HtmlElement<HtmlTag.head, Content>
-public typealias title<Content: Html> = HtmlElement<HtmlTag.title, Content>
-public typealias body<Content: Html> = HtmlElement<HtmlTag.body, Content>
-public typealias h1<Content: Html> = HtmlElement<HtmlTag.h1, Content>
-public typealias h2<Content: Html> = HtmlElement<HtmlTag.h2, Content>
-public typealias h3<Content: Html> = HtmlElement<HtmlTag.h3, Content>
-public typealias h4<Content: Html> = HtmlElement<HtmlTag.h4, Content>
-public typealias h5<Content: Html> = HtmlElement<HtmlTag.h5, Content>
-public typealias h6<Content: Html> = HtmlElement<HtmlTag.h6, Content>
-public typealias p<Content: Html> = HtmlElement<HtmlTag.p, Content>
-public typealias br = HtmlVoidElement<HtmlTag.br>
-public typealias hr = HtmlVoidElement<HtmlTag.hr>
+public typealias html<Content: HTML> = HTMLElement<HTMLTag.html, Content>
+public typealias head<Content: HTML> = HTMLElement<HTMLTag.head, Content>
+public typealias title<Content: HTML> = HTMLElement<HTMLTag.title, Content>
+public typealias body<Content: HTML> = HTMLElement<HTMLTag.body, Content>
+public typealias h1<Content: HTML> = HTMLElement<HTMLTag.h1, Content>
+public typealias h2<Content: HTML> = HTMLElement<HTMLTag.h2, Content>
+public typealias h3<Content: HTML> = HTMLElement<HTMLTag.h3, Content>
+public typealias h4<Content: HTML> = HTMLElement<HTMLTag.h4, Content>
+public typealias h5<Content: HTML> = HTMLElement<HTMLTag.h5, Content>
+public typealias h6<Content: HTML> = HTMLElement<HTMLTag.h6, Content>
+public typealias p<Content: HTML> = HTMLElement<HTMLTag.p, Content>
+public typealias br = HTMLVoidElement<HTMLTag.br>
+public typealias hr = HTMLVoidElement<HTMLTag.hr>
 
 // Formatting
-public typealias abbr<Content: Html> = HtmlElement<HtmlTag.abbr, Content>
-public typealias address<Content: Html> = HtmlElement<HtmlTag.address, Content>
-public typealias b<Content: Html> = HtmlElement<HtmlTag.b, Content>
-public typealias bdi<Content: Html> = HtmlElement<HtmlTag.bdi, Content>
-public typealias bdo<Content: Html> = HtmlElement<HtmlTag.bdo, Content>
-public typealias blockquote<Content: Html> = HtmlElement<HtmlTag.blockquote, Content>
-public typealias cite<Content: Html> = HtmlElement<HtmlTag.cite, Content>
-public typealias code<Content: Html> = HtmlElement<HtmlTag.code, Content>
-public typealias del<Content: Html> = HtmlElement<HtmlTag.del, Content>
-public typealias dfn<Content: Html> = HtmlElement<HtmlTag.dfn, Content>
-public typealias em<Content: Html> = HtmlElement<HtmlTag.em, Content>
-public typealias i<Content: Html> = HtmlElement<HtmlTag.i, Content>
-public typealias ins<Content: Html> = HtmlElement<HtmlTag.ins, Content>
-public typealias kbd<Content: Html> = HtmlElement<HtmlTag.kbd, Content>
-public typealias mark<Content: Html> = HtmlElement<HtmlTag.mark, Content>
-public typealias meter<Content: Html> = HtmlElement<HtmlTag.meter, Content>
-public typealias pre<Content: Html> = HtmlElement<HtmlTag.pre, Content>
-public typealias progress<Content: Html> = HtmlElement<HtmlTag.progress, Content>
-public typealias q<Content: Html> = HtmlElement<HtmlTag.q, Content>
-public typealias rp<Content: Html> = HtmlElement<HtmlTag.rp, Content>
-public typealias rt<Content: Html> = HtmlElement<HtmlTag.rt, Content>
-public typealias ruby<Content: Html> = HtmlElement<HtmlTag.ruby, Content>
-public typealias s<Content: Html> = HtmlElement<HtmlTag.s, Content>
-public typealias samp<Content: Html> = HtmlElement<HtmlTag.samp, Content>
-public typealias small<Content: Html> = HtmlElement<HtmlTag.small, Content>
-public typealias strong<Content: Html> = HtmlElement<HtmlTag.strong, Content>
-public typealias sub<Content: Html> = HtmlElement<HtmlTag.sub, Content>
-public typealias sup<Content: Html> = HtmlElement<HtmlTag.sup, Content>
-public typealias template<Content: Html> = HtmlElement<HtmlTag.template, Content>
-public typealias time<Content: Html> = HtmlElement<HtmlTag.time, Content>
-public typealias u<Content: Html> = HtmlElement<HtmlTag.u, Content>
-public typealias wbr = HtmlVoidElement<HtmlTag.wbr>
+public typealias abbr<Content: HTML> = HTMLElement<HTMLTag.abbr, Content>
+public typealias address<Content: HTML> = HTMLElement<HTMLTag.address, Content>
+public typealias b<Content: HTML> = HTMLElement<HTMLTag.b, Content>
+public typealias bdi<Content: HTML> = HTMLElement<HTMLTag.bdi, Content>
+public typealias bdo<Content: HTML> = HTMLElement<HTMLTag.bdo, Content>
+public typealias blockquote<Content: HTML> = HTMLElement<HTMLTag.blockquote, Content>
+public typealias cite<Content: HTML> = HTMLElement<HTMLTag.cite, Content>
+public typealias code<Content: HTML> = HTMLElement<HTMLTag.code, Content>
+public typealias del<Content: HTML> = HTMLElement<HTMLTag.del, Content>
+public typealias dfn<Content: HTML> = HTMLElement<HTMLTag.dfn, Content>
+public typealias em<Content: HTML> = HTMLElement<HTMLTag.em, Content>
+public typealias i<Content: HTML> = HTMLElement<HTMLTag.i, Content>
+public typealias ins<Content: HTML> = HTMLElement<HTMLTag.ins, Content>
+public typealias kbd<Content: HTML> = HTMLElement<HTMLTag.kbd, Content>
+public typealias mark<Content: HTML> = HTMLElement<HTMLTag.mark, Content>
+public typealias meter<Content: HTML> = HTMLElement<HTMLTag.meter, Content>
+public typealias pre<Content: HTML> = HTMLElement<HTMLTag.pre, Content>
+public typealias progress<Content: HTML> = HTMLElement<HTMLTag.progress, Content>
+public typealias q<Content: HTML> = HTMLElement<HTMLTag.q, Content>
+public typealias rp<Content: HTML> = HTMLElement<HTMLTag.rp, Content>
+public typealias rt<Content: HTML> = HTMLElement<HTMLTag.rt, Content>
+public typealias ruby<Content: HTML> = HTMLElement<HTMLTag.ruby, Content>
+public typealias s<Content: HTML> = HTMLElement<HTMLTag.s, Content>
+public typealias samp<Content: HTML> = HTMLElement<HTMLTag.samp, Content>
+public typealias small<Content: HTML> = HTMLElement<HTMLTag.small, Content>
+public typealias strong<Content: HTML> = HTMLElement<HTMLTag.strong, Content>
+public typealias sub<Content: HTML> = HTMLElement<HTMLTag.sub, Content>
+public typealias sup<Content: HTML> = HTMLElement<HTMLTag.sup, Content>
+public typealias template<Content: HTML> = HTMLElement<HTMLTag.template, Content>
+public typealias time<Content: HTML> = HTMLElement<HTMLTag.time, Content>
+public typealias u<Content: HTML> = HTMLElement<HTMLTag.u, Content>
+public typealias wbr = HTMLVoidElement<HTMLTag.wbr>
 
 // Forms and Input
-public typealias form<Content: Html> = HtmlElement<HtmlTag.form, Content>
-public typealias input = HtmlVoidElement<HtmlTag.input>
-public typealias textarea<Content: Html> = HtmlElement<HtmlTag.textarea, Content>
-public typealias button<Content: Html> = HtmlElement<HtmlTag.button, Content>
-public typealias select<Content: Html> = HtmlElement<HtmlTag.select, Content>
-public typealias optgroup<Content: Html> = HtmlElement<HtmlTag.optgroup, Content>
-public typealias option<Content: Html> = HtmlElement<HtmlTag.option, Content>
-public typealias label<Content: Html> = HtmlElement<HtmlTag.label, Content>
-public typealias fieldset<Content: Html> = HtmlElement<HtmlTag.fieldset, Content>
-public typealias legend<Content: Html> = HtmlElement<HtmlTag.legend, Content>
-public typealias datalist<Content: Html> = HtmlElement<HtmlTag.datalist, Content>
-public typealias output<Content: Html> = HtmlElement<HtmlTag.output, Content>
+public typealias form<Content: HTML> = HTMLElement<HTMLTag.form, Content>
+public typealias input = HTMLVoidElement<HTMLTag.input>
+public typealias textarea<Content: HTML> = HTMLElement<HTMLTag.textarea, Content>
+public typealias button<Content: HTML> = HTMLElement<HTMLTag.button, Content>
+public typealias select<Content: HTML> = HTMLElement<HTMLTag.select, Content>
+public typealias optgroup<Content: HTML> = HTMLElement<HTMLTag.optgroup, Content>
+public typealias option<Content: HTML> = HTMLElement<HTMLTag.option, Content>
+public typealias label<Content: HTML> = HTMLElement<HTMLTag.label, Content>
+public typealias fieldset<Content: HTML> = HTMLElement<HTMLTag.fieldset, Content>
+public typealias legend<Content: HTML> = HTMLElement<HTMLTag.legend, Content>
+public typealias datalist<Content: HTML> = HTMLElement<HTMLTag.datalist, Content>
+public typealias output<Content: HTML> = HTMLElement<HTMLTag.output, Content>
 
 // Frames
-public typealias iframe<Content: Html> = HtmlElement<HtmlTag.iframe, Content>
+public typealias iframe<Content: HTML> = HTMLElement<HTMLTag.iframe, Content>
 
 // Images
-public typealias img = HtmlVoidElement<HtmlTag.img>
-public typealias map<Content: Html> = HtmlElement<HtmlTag.map, Content>
-public typealias area = HtmlVoidElement<HtmlTag.area>
-public typealias canvas<Content: Html> = HtmlElement<HtmlTag.canvas, Content>
-public typealias figcaption<Content: Html> = HtmlElement<HtmlTag.figcaption, Content>
-public typealias figure<Content: Html> = HtmlElement<HtmlTag.figure, Content>
-public typealias picture<Content: Html> = HtmlElement<HtmlTag.picture, Content>
-public typealias svg<Content: Html> = HtmlElement<HtmlTag.svg, Content>
+public typealias img = HTMLVoidElement<HTMLTag.img>
+public typealias map<Content: HTML> = HTMLElement<HTMLTag.map, Content>
+public typealias area = HTMLVoidElement<HTMLTag.area>
+public typealias canvas<Content: HTML> = HTMLElement<HTMLTag.canvas, Content>
+public typealias figcaption<Content: HTML> = HTMLElement<HTMLTag.figcaption, Content>
+public typealias figure<Content: HTML> = HTMLElement<HTMLTag.figure, Content>
+public typealias picture<Content: HTML> = HTMLElement<HTMLTag.picture, Content>
+public typealias svg<Content: HTML> = HTMLElement<HTMLTag.svg, Content>
 
 // Audio / Video
-public typealias audio<Content: Html> = HtmlElement<HtmlTag.audio, Content>
-public typealias source = HtmlVoidElement<HtmlTag.source>
-public typealias track = HtmlVoidElement<HtmlTag.track>
-public typealias video<Content: Html> = HtmlElement<HtmlTag.video, Content>
+public typealias audio<Content: HTML> = HTMLElement<HTMLTag.audio, Content>
+public typealias source = HTMLVoidElement<HTMLTag.source>
+public typealias track = HTMLVoidElement<HTMLTag.track>
+public typealias video<Content: HTML> = HTMLElement<HTMLTag.video, Content>
 
 // Links
-public typealias a<Content: Html> = HtmlElement<HtmlTag.a, Content>
-public typealias link = HtmlVoidElement<HtmlTag.link>
-public typealias nav<Content: Html> = HtmlElement<HtmlTag.nav, Content>
+public typealias a<Content: HTML> = HTMLElement<HTMLTag.a, Content>
+public typealias link = HTMLVoidElement<HTMLTag.link>
+public typealias nav<Content: HTML> = HTMLElement<HTMLTag.nav, Content>
 
 // Lists
-public typealias menu<Content: Html> = HtmlElement<HtmlTag.menu, Content>
-public typealias ul<Content: Html> = HtmlElement<HtmlTag.ul, Content>
-public typealias ol<Content: Html> = HtmlElement<HtmlTag.ol, Content>
-public typealias li<Content: Html> = HtmlElement<HtmlTag.li, Content>
-public typealias dl<Content: Html> = HtmlElement<HtmlTag.dl, Content>
-public typealias dt<Content: Html> = HtmlElement<HtmlTag.dt, Content>
-public typealias dd<Content: Html> = HtmlElement<HtmlTag.dd, Content>
+public typealias menu<Content: HTML> = HTMLElement<HTMLTag.menu, Content>
+public typealias ul<Content: HTML> = HTMLElement<HTMLTag.ul, Content>
+public typealias ol<Content: HTML> = HTMLElement<HTMLTag.ol, Content>
+public typealias li<Content: HTML> = HTMLElement<HTMLTag.li, Content>
+public typealias dl<Content: HTML> = HTMLElement<HTMLTag.dl, Content>
+public typealias dt<Content: HTML> = HTMLElement<HTMLTag.dt, Content>
+public typealias dd<Content: HTML> = HTMLElement<HTMLTag.dd, Content>
 
 // Tables
-public typealias table<Content: Html> = HtmlElement<HtmlTag.table, Content>
-public typealias caption<Content: Html> = HtmlElement<HtmlTag.caption, Content>
-public typealias th<Content: Html> = HtmlElement<HtmlTag.th, Content>
-public typealias tr<Content: Html> = HtmlElement<HtmlTag.tr, Content>
-public typealias td<Content: Html> = HtmlElement<HtmlTag.td, Content>
-public typealias thead<Content: Html> = HtmlElement<HtmlTag.thead, Content>
-public typealias tbody<Content: Html> = HtmlElement<HtmlTag.tbody, Content>
-public typealias tfoot<Content: Html> = HtmlElement<HtmlTag.tfoot, Content>
-public typealias col = HtmlVoidElement<HtmlTag.col>
-public typealias colgroup<Content: Html> = HtmlElement<HtmlTag.colgroup, Content>
+public typealias table<Content: HTML> = HTMLElement<HTMLTag.table, Content>
+public typealias caption<Content: HTML> = HTMLElement<HTMLTag.caption, Content>
+public typealias th<Content: HTML> = HTMLElement<HTMLTag.th, Content>
+public typealias tr<Content: HTML> = HTMLElement<HTMLTag.tr, Content>
+public typealias td<Content: HTML> = HTMLElement<HTMLTag.td, Content>
+public typealias thead<Content: HTML> = HTMLElement<HTMLTag.thead, Content>
+public typealias tbody<Content: HTML> = HTMLElement<HTMLTag.tbody, Content>
+public typealias tfoot<Content: HTML> = HTMLElement<HTMLTag.tfoot, Content>
+public typealias col = HTMLVoidElement<HTMLTag.col>
+public typealias colgroup<Content: HTML> = HTMLElement<HTMLTag.colgroup, Content>
 
 // Styles and Semantics
-public typealias style<Content: Html> = HtmlElement<HtmlTag.style, Content>
-public typealias div<Content: Html> = HtmlElement<HtmlTag.div, Content>
-public typealias span<Content: Html> = HtmlElement<HtmlTag.span, Content>
-public typealias header<Content: Html> = HtmlElement<HtmlTag.header, Content>
-public typealias hgroup<Content: Html> = HtmlElement<HtmlTag.hgroup, Content>
-public typealias footer<Content: Html> = HtmlElement<HtmlTag.footer, Content>
-public typealias main<Content: Html> = HtmlElement<HtmlTag.main, Content>
-public typealias section<Content: Html> = HtmlElement<HtmlTag.section, Content>
-public typealias article<Content: Html> = HtmlElement<HtmlTag.article, Content>
-public typealias aside<Content: Html> = HtmlElement<HtmlTag.aside, Content>
-public typealias details<Content: Html> = HtmlElement<HtmlTag.details, Content>
-public typealias dialog<Content: Html> = HtmlElement<HtmlTag.dialog, Content>
-public typealias summary<Content: Html> = HtmlElement<HtmlTag.summary, Content>
-public typealias data<Content: Html> = HtmlElement<HtmlTag.data, Content>
+public typealias style<Content: HTML> = HTMLElement<HTMLTag.style, Content>
+public typealias div<Content: HTML> = HTMLElement<HTMLTag.div, Content>
+public typealias span<Content: HTML> = HTMLElement<HTMLTag.span, Content>
+public typealias header<Content: HTML> = HTMLElement<HTMLTag.header, Content>
+public typealias hgroup<Content: HTML> = HTMLElement<HTMLTag.hgroup, Content>
+public typealias footer<Content: HTML> = HTMLElement<HTMLTag.footer, Content>
+public typealias main<Content: HTML> = HTMLElement<HTMLTag.main, Content>
+public typealias section<Content: HTML> = HTMLElement<HTMLTag.section, Content>
+public typealias article<Content: HTML> = HTMLElement<HTMLTag.article, Content>
+public typealias aside<Content: HTML> = HTMLElement<HTMLTag.aside, Content>
+public typealias details<Content: HTML> = HTMLElement<HTMLTag.details, Content>
+public typealias dialog<Content: HTML> = HTMLElement<HTMLTag.dialog, Content>
+public typealias summary<Content: HTML> = HTMLElement<HTMLTag.summary, Content>
+public typealias data<Content: HTML> = HTMLElement<HTMLTag.data, Content>
 
 // Meta Info
-public typealias meta = HtmlVoidElement<HtmlTag.meta>
-public typealias base = HtmlVoidElement<HtmlTag.base>
+public typealias meta = HTMLVoidElement<HTMLTag.meta>
+public typealias base = HTMLVoidElement<HTMLTag.base>
 
 // Programming
-public typealias script<Content: Html> = HtmlElement<HtmlTag.script, Content>
-public typealias noscript<Content: Html> = HtmlElement<HtmlTag.noscript, Content>
-public typealias embed = HtmlVoidElement<HtmlTag.embed>
-public typealias object<Content: Html> = HtmlElement<HtmlTag.object, Content>
-public typealias param = HtmlVoidElement<HtmlTag.param>
+public typealias script<Content: HTML> = HTMLElement<HTMLTag.script, Content>
+public typealias noscript<Content: HTML> = HTMLElement<HTMLTag.noscript, Content>
+public typealias embed = HTMLVoidElement<HTMLTag.embed>
+public typealias object<Content: HTML> = HTMLElement<HTMLTag.object, Content>
+public typealias param = HTMLVoidElement<HTMLTag.param>

@@ -29,11 +29,11 @@ enum AttributeStorage {
         self = .none
     }
 
-    init(_ attribute: HtmlAttribute<some HtmlTagDefinition>) {
+    init(_ attribute: HTMLAttribute<some HTMLTagDefinition>) {
         self = .single(attribute.htmlAttribute)
     }
 
-    init(_ attributes: [HtmlAttribute<some HtmlTagDefinition>]) {
+    init(_ attributes: [HTMLAttribute<some HTMLTagDefinition>]) {
         switch attributes.count {
         case 0: self = .none
         case 1: self = .single(attributes[0].htmlAttribute)

@@ -1,15 +1,15 @@
-public struct HtmlElement<Tag: HtmlTagDefinition, Content: Html>: Html where Tag: HtmlTrait.Paired {
+public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag: HTMLTrait.Paired {
     public typealias Tag = Tag
-    @HtmlBuilder public var content: Content
+    @HTMLBuilder public var content: Content
     var attributes: AttributeStorage
 
-    public init(@HtmlBuilder content: () -> Content) {
+    public init(@HTMLBuilder content: () -> Content) {
         attributes = .init()
         self.content = content()
     }
 
     @_spi(Rendering)
-    public static func _render<Renderer: _HtmlRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         html.attributes.append(context.attributes)
         renderer.appendStartTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: false, renderType: Tag.renderingType)
 
@@ -19,7 +19,7 @@ public struct HtmlElement<Tag: HtmlTagDefinition, Content: Html>: Html where Tag
     }
 }
 
-public struct HtmlVoidElement<Tag: HtmlTagDefinition>: Html where Tag: HtmlTrait.Unpaired {
+public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait.Unpaired {
     public typealias Tag = Tag
     var attributes: AttributeStorage
 
@@ -28,13 +28,13 @@ public struct HtmlVoidElement<Tag: HtmlTagDefinition>: Html where Tag: HtmlTrait
     }
 
     @_spi(Rendering)
-    public static func _render<Renderer: _HtmlRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         html.attributes.append(context.attributes)
         renderer.appendStartTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: true, renderType: Tag.renderingType)
     }
 }
 
-public struct HtmlComment: Html {
+public struct HTMLComment: HTML {
     public var text: String
 
     public init(_ text: String) {
@@ -42,13 +42,13 @@ public struct HtmlComment: Html {
     }
 
     @_spi(Rendering)
-    public static func _render<Renderer: _HtmlRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
         renderer.appendToken(.comment(html.text))
     }
 }
 
-public struct HtmlRaw: Html {
+public struct HTMLRaw: HTML {
     public var text: String
 
     public init(_ text: String) {
@@ -56,15 +56,15 @@ public struct HtmlRaw: Html {
     }
 
     @_spi(Rendering)
-    public static func _render<Renderer: _HtmlRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
         renderer.appendToken(.raw(html.text))
     }
 }
 
-private extension _HtmlRendering {
+private extension _HTMLRendering {
     // TODO: maybe we could get by without allocating attribute lists and iterate them in somehow
-    mutating func appendStartTag(_ tagName: String, attributes: [StoredAttribute], isUnpaired: Bool, renderType: _HtmlRenderToken.RenderingType) {
+    mutating func appendStartTag(_ tagName: String, attributes: [StoredAttribute], isUnpaired: Bool, renderType: _HTMLRenderToken.RenderingType) {
         appendToken(.startTagOpen(tagName, type: renderType))
         for attribute in attributes {
             appendToken(.attribute(name: attribute.name, value: attribute.value))
@@ -73,8 +73,8 @@ private extension _HtmlRendering {
     }
 }
 
-extension HtmlTagDefinition {
-    static var renderingType: _HtmlRenderToken.RenderingType {
+extension HTMLTagDefinition {
+    static var renderingType: _HTMLRenderToken.RenderingType {
         _rendersInline ? .inline : .block
     }
 }

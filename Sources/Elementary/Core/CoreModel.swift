@@ -1,22 +1,22 @@
-public protocol Html<Tag> {
-    associatedtype Tag: HtmlTagDefinition = Content.Tag
-    associatedtype Content: Html = Never
+public protocol HTML<Tag> {
+    associatedtype Tag: HTMLTagDefinition = Content.Tag
+    associatedtype Content: HTML = Never
 
-    @HtmlBuilder var content: Content { get }
+    @HTMLBuilder var content: Content { get }
 
     @_spi(Rendering)
-    static func _render<Renderer: _HtmlRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext)
+    static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext)
 }
 
-public protocol HtmlTagDefinition {
+public protocol HTMLTagDefinition {
     static var name: String { get }
 
     @_spi(Rendering)
     static var _rendersInline: Bool { get }
 }
 
-extension Never: HtmlTagDefinition {
-    public static var name: String { fatalError("HtmlTag.name was called on Never") }
+extension Never: HTMLTagDefinition {
+    public static var name: String { fatalError("HTMLTag.name was called on Never") }
 }
 
 public struct _RenderingContext {
@@ -26,7 +26,7 @@ public struct _RenderingContext {
 }
 
 // TODO: think about this interface... seems not ideal
-public enum _HtmlRenderToken {
+public enum _HTMLRenderToken {
     public enum RenderingType {
         case block
         case inline
@@ -41,17 +41,17 @@ public enum _HtmlRenderToken {
     case comment(String)
 }
 
-public protocol _HtmlRendering {
-    mutating func appendToken(_ token: consuming _HtmlRenderToken)
+public protocol _HTMLRendering {
+    mutating func appendToken(_ token: consuming _HTMLRenderToken)
 }
 
-public extension Html {
-    static func _render<Renderer: _HtmlRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+public extension HTML {
+    static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         Content._render(html.content, into: &renderer, with: context)
     }
 }
 
-public extension HtmlTagDefinition {
+public extension HTMLTagDefinition {
     @_spi(Rendering)
     static var _rendersInline: Bool { false }
 }

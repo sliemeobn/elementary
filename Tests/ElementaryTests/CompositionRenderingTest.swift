@@ -3,31 +3,31 @@ import XCTest
 
 final class CompositionRenderingTests: XCTestCase {
     func testRendersADocument() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             MyPage(text: "my text"),
             #"<!DOCTYPE html><html><head><title>Foo</title><meta name="author" content="Me"><meta name="description" content="Test page"></head><body><div><h1>Hello, world!</h1><p>my text</p></div></body></html>"#
         )
     }
 
     func testRendersAComponent() {
-        HtmlAssertEqual(
+        HTMLAssertEqual(
             MyList(items: ["one", "two"], selectedIndex: 1),
             #"<ul><li id="1">one</li><li class="selected" id="2">two</li></ul>"#
         )
     }
 }
 
-struct MyPage: HtmlDocument {
+struct MyPage: HTMLDocument {
     var text: String
 
     var title: String = "Foo"
 
-    var head: some Html {
+    var head: some HTML {
         meta(.name(.author), .content("Me"))
         meta(.name(.description), .content("Test page"))
     }
 
-    var body: some Html {
+    var body: some HTML {
         div {
             h1 { "Hello, world!" }
             p { text }
@@ -35,11 +35,11 @@ struct MyPage: HtmlDocument {
     }
 }
 
-struct MyList: Html {
+struct MyList: HTML {
     var items: [String]
     var selectedIndex: Int
 
-    var content: some Html {
+    var content: some HTML {
         ul {
             for (index, item) in items.enumerated() {
                 MyListItem(text: item, isSelected: index == selectedIndex)
@@ -49,11 +49,11 @@ struct MyList: Html {
     }
 }
 
-struct MyListItem: Html {
+struct MyListItem: HTML {
     var text: String
     var isSelected: Bool = false
 
-    var content: some Html<HtmlTag.li> {
+    var content: some HTML<HTMLTag.li> {
         li { text }
             .attributes(.class("selected"), when: isSelected)
     }

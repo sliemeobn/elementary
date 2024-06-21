@@ -1,15 +1,15 @@
-public protocol HtmlDocument: Html {
-    associatedtype HtmlHead: Html
-    associatedtype HtmlBody: Html
+public protocol HTMLDocument: HTML {
+    associatedtype HTMLHead: HTML
+    associatedtype HTMLBody: HTML
 
     var title: String { get }
-    @HtmlBuilder var head: HtmlHead { get }
-    @HtmlBuilder var body: HtmlBody { get }
+    @HTMLBuilder var head: HTMLHead { get }
+    @HTMLBuilder var body: HTMLBody { get }
 }
 
-public extension HtmlDocument {
-    @HtmlBuilder var content: some Html {
-        HtmlRaw("<!DOCTYPE html>")
+public extension HTMLDocument {
+    @HTMLBuilder var content: some HTML {
+        HTMLRaw("<!DOCTYPE html>")
         html {
             Elementary.head {
                 Elementary.title { self.title }

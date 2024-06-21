@@ -7,14 +7,14 @@
 🚧 Work In Progress 🚧 - don't bet your future on it just yet ;)
 
 ```swift
-struct MainPage: HtmlDocument {
+struct MainPage: HTMLDocument {
     var title: String = "Elementary"
 
-    var head: some Html {
+    var head: some HTML {
         meta(.name(.description), .content("Typesafe HTML in modern Swift"))
     }
 
-    var body: some Html {
+    var body: some HTML {
         main {
             h1 { "Features" }
 
@@ -32,10 +32,10 @@ struct MainPage: HtmlDocument {
     }
 }
 
-struct FeatureList: Html {
+struct FeatureList: HTML {
     var features: [String]
 
-    var content: some Html {
+    var content: some HTML {
         ul {
             for feature in features {
                 li { feature }
@@ -59,8 +59,8 @@ Any element can be rendered individually, ideal for [htmx](https://htmx.org/).
 let html = div(.class("pretty")) { "Hello" }.render()
 // <div class="pretty">Hello</div>
 
-let fragment = FeatureList(features: ["Anything conforming to Html can be rendered"]).render()
-// <ul><li>Anything conforming to Html can be rendered</li></ul>
+let fragment = FeatureList(features: ["Anything conforming to HTML can be rendered"]).render()
+// <ul><li>Anything conforming to HTML can be rendered</li></ul>
 ```
 
 Optionally you can render formatted output, or stream the rendered HTML without collecting it in a string first.
@@ -93,11 +93,11 @@ By design, it does not come with a layout engine, reactive state tracking, or bu
 Structure your HTML with a SwiftUI-inspired composition API.
 
 ```swift
-struct List: Html {
+struct List: HTML {
     var items: [String]
     var importantIndex: Int
 
-    var content: some Html {
+    var content: some HTML {
         // conditional rendering
         if items.isEmpty {
             p { "No items" }
@@ -113,11 +113,11 @@ struct List: Html {
     }
 }
 
-struct ListItem: Html {
+struct ListItem: HTML {
     var text: String
     var isimportant: Bool = false
 
-    var content: some Html {
+    var content: some HTML {
         // conditional attributes
         li { text }
             .attributes(.class("important"), when: isimportant)
@@ -154,11 +154,11 @@ div {
 By exposing the tag type of `content`, attributes will fall through and be applied correctly.
 
 ```swift
-struct Button: Html {
+struct Button: HTML {
     var text: String
 
-    // by exposing the HtmlTag type information...
-    var content: some Html<HtmlTag.input> {
+    // by exposing the HTMLTag type information...
+    var content: some HTML<HTMLTag.input> {
         input(.type(.button), .value(text))
     }
 }
@@ -198,5 +198,5 @@ My main motivation for Elementary was to create an experience like these, but
 ## Future directions
 
 - Try out a **_hummingbird + elementary + htmx + tailwind_** stack for fully-featured web apps (without too much client javascript or wasm)
-- Experiment with an `AsyncHtml` type, that can include `await` in bodies and stream html and an async sequence
+- Experiment with an `AsyncHTML` type, that can include `await` in bodies and stream html and an async sequence
 - Experiment with embedded swift for wasm and bolt a lean state tracking/reconciler for reactive DOM manipulation on top

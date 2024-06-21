@@ -1,46 +1,46 @@
-public enum HtmlAttributeValue {}
+public enum HTMLAttributeValue {}
 
 // global attributes
-public extension HtmlAttribute where Tag: HtmlTrait.Attributes.Global {
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     static func custom(name: String, value: String) -> Self {
-        HtmlAttribute(name: name, value: value)
+        HTMLAttribute(name: name, value: value)
     }
 
     static func id(_ value: String) -> Self {
-        HtmlAttribute(name: "id", value: value)
+        HTMLAttribute(name: "id", value: value)
     }
 
     static func `class`(_ value: String) -> Self {
-        HtmlAttribute(name: "class", value: value, mergeMode: .appendValue(" "))
+        HTMLAttribute(name: "class", value: value, mergeMode: .appendValue(" "))
     }
 
     static func data(_ key: String, value: String) -> Self {
-        HtmlAttribute(name: "data-\(key)", value: value)
+        HTMLAttribute(name: "data-\(key)", value: value)
     }
 
     static func style(_ value: String) -> Self {
-        HtmlAttribute(name: "style", value: value, mergeMode: .appendValue(";"))
+        HTMLAttribute(name: "style", value: value, mergeMode: .appendValue(";"))
     }
 
     static func title(_ value: String) -> Self {
-        HtmlAttribute(name: "title", value: value)
+        HTMLAttribute(name: "title", value: value)
     }
 
     static func lang(_ value: String) -> Self {
-        HtmlAttribute(name: "lang", value: value)
+        HTMLAttribute(name: "lang", value: value)
     }
 
     static var hidden: Self {
-        HtmlAttribute(name: "hidden", value: nil)
+        HTMLAttribute(name: "hidden", value: nil)
     }
 
     static func tabindex(_ index: Int) -> Self {
-        HtmlAttribute(name: "tabindex", value: "\(index)")
+        HTMLAttribute(name: "tabindex", value: "\(index)")
     }
 }
 
 // meta tag attributes
-public extension HtmlAttribute where Tag == HtmlTag.meta {
+public extension HTMLAttribute where Tag == HTMLTag.meta {
     struct Name: Sendable {
         var value: String
 
@@ -51,62 +51,62 @@ public extension HtmlAttribute where Tag == HtmlTag.meta {
     }
 
     static func name(_ name: Name) -> Self {
-        HtmlAttribute(name: "name", value: name.value)
+        HTMLAttribute(name: "name", value: name.value)
     }
 
     static func content(_ value: String) -> Self {
-        HtmlAttribute(name: "content", value: value)
+        HTMLAttribute(name: "content", value: value)
     }
 }
 
 // href attribute
-public extension HtmlTrait.Attributes {
+public extension HTMLTrait.Attributes {
     protocol href {}
 }
 
-extension HtmlTag.a: HtmlTrait.Attributes.href {}
-extension HtmlTag.area: HtmlTrait.Attributes.href {}
-extension HtmlTag.base: HtmlTrait.Attributes.href {}
-extension HtmlTag.link: HtmlTrait.Attributes.href {}
+extension HTMLTag.a: HTMLTrait.Attributes.href {}
+extension HTMLTag.area: HTMLTrait.Attributes.href {}
+extension HTMLTag.base: HTMLTrait.Attributes.href {}
+extension HTMLTag.link: HTMLTrait.Attributes.href {}
 
-public extension HtmlAttribute where Tag: HtmlTrait.Attributes.href {
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.href {
     static func href(_ value: String) -> Self {
-        HtmlAttribute(name: "href", value: value)
+        HTMLAttribute(name: "href", value: value)
     }
 }
 
 // src attribute
-public extension HtmlTrait.Attributes {
+public extension HTMLTrait.Attributes {
     protocol src {}
 }
 
-extension HtmlTag.audio: HtmlTrait.Attributes.src {}
-extension HtmlTag.embed: HtmlTrait.Attributes.src {}
-extension HtmlTag.iframe: HtmlTrait.Attributes.src {}
-extension HtmlTag.img: HtmlTrait.Attributes.src {}
-extension HtmlTag.input: HtmlTrait.Attributes.src {}
-extension HtmlTag.script: HtmlTrait.Attributes.src {}
-extension HtmlTag.source: HtmlTrait.Attributes.src {}
-extension HtmlTag.track: HtmlTrait.Attributes.src {}
-extension HtmlTag.video: HtmlTrait.Attributes.src {}
+extension HTMLTag.audio: HTMLTrait.Attributes.src {}
+extension HTMLTag.embed: HTMLTrait.Attributes.src {}
+extension HTMLTag.iframe: HTMLTrait.Attributes.src {}
+extension HTMLTag.img: HTMLTrait.Attributes.src {}
+extension HTMLTag.input: HTMLTrait.Attributes.src {}
+extension HTMLTag.script: HTMLTrait.Attributes.src {}
+extension HTMLTag.source: HTMLTrait.Attributes.src {}
+extension HTMLTag.track: HTMLTrait.Attributes.src {}
+extension HTMLTag.video: HTMLTrait.Attributes.src {}
 
-public extension HtmlAttribute where Tag: HtmlTrait.Attributes.src {
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.src {
     static func src(_ url: String) -> Self {
-        HtmlAttribute(name: "src", value: url)
+        HTMLAttribute(name: "src", value: url)
     }
 }
 
 // target attribute
-public extension HtmlTrait.Attributes {
+public extension HTMLTrait.Attributes {
     protocol target {}
 }
 
-extension HtmlTag.a: HtmlTrait.Attributes.target {}
-extension HtmlTag.area: HtmlTrait.Attributes.target {}
-extension HtmlTag.base: HtmlTrait.Attributes.target {}
-extension HtmlTag.form: HtmlTrait.Attributes.target {}
+extension HTMLTag.a: HTMLTrait.Attributes.target {}
+extension HTMLTag.area: HTMLTrait.Attributes.target {}
+extension HTMLTag.base: HTMLTrait.Attributes.target {}
+extension HTMLTag.form: HTMLTrait.Attributes.target {}
 
-public extension HtmlAttributeValue {
+public extension HTMLAttributeValue {
     struct Target: ExpressibleByStringLiteral, Sendable, Equatable {
         public var value: String
         public init(stringLiteral value: String) {
@@ -120,31 +120,31 @@ public extension HtmlAttributeValue {
     }
 }
 
-public extension HtmlAttribute where Tag: HtmlTrait.Attributes.target {
-    static func target(_ target: HtmlAttributeValue.Target) -> Self {
-        HtmlAttribute(name: "target", value: target.value)
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.target {
+    static func target(_ target: HTMLAttributeValue.Target) -> Self {
+        HTMLAttribute(name: "target", value: target.value)
     }
 }
 
 // autofocus attribute
-public extension HtmlTrait.Attributes {
+public extension HTMLTrait.Attributes {
     protocol autofocus {}
 }
 
-extension HtmlTag.button: HtmlTrait.Attributes.autofocus {}
-extension HtmlTag.input: HtmlTrait.Attributes.autofocus {}
-extension HtmlTag.select: HtmlTrait.Attributes.autofocus {}
-extension HtmlTag.textarea: HtmlTrait.Attributes.autofocus {}
+extension HTMLTag.button: HTMLTrait.Attributes.autofocus {}
+extension HTMLTag.input: HTMLTrait.Attributes.autofocus {}
+extension HTMLTag.select: HTMLTrait.Attributes.autofocus {}
+extension HTMLTag.textarea: HTMLTrait.Attributes.autofocus {}
 
-public extension HtmlAttribute where Tag: HtmlTrait.Attributes.autofocus {
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.autofocus {
     static var autofocus: Self {
-        HtmlAttribute(name: "autofocus", value: nil)
+        HTMLAttribute(name: "autofocus", value: nil)
     }
 }
 
 // form tag attributes
 
-public extension HtmlAttribute where Tag == HtmlTag.form {
+public extension HTMLAttribute where Tag == HTMLTag.form {
     struct Method: Sendable, Equatable {
         var value: String
 
@@ -153,16 +153,16 @@ public extension HtmlAttribute where Tag == HtmlTag.form {
     }
 
     static func action(_ url: String) -> Self {
-        HtmlAttribute(name: "action", value: url)
+        HTMLAttribute(name: "action", value: url)
     }
 
     static func method(_ method: Method) -> Self {
-        HtmlAttribute(name: "method", value: method.value)
+        HTMLAttribute(name: "method", value: method.value)
     }
 }
 
 // input tag attributes
-public extension HtmlAttribute where Tag == HtmlTag.input {
+public extension HTMLAttribute where Tag == HTMLTag.input {
     struct InputType: Sendable, Equatable {
         var value: String
 
@@ -191,21 +191,21 @@ public extension HtmlAttribute where Tag == HtmlTag.input {
     }
 
     static func type(_ type: InputType) -> Self {
-        HtmlAttribute(name: "type", value: type.value)
+        HTMLAttribute(name: "type", value: type.value)
     }
 
     static func name(_ name: String) -> Self {
-        HtmlAttribute(name: "name", value: name)
+        HTMLAttribute(name: "name", value: name)
     }
 
     static func value(_ value: String) -> Self {
-        HtmlAttribute(name: "value", value: value)
+        HTMLAttribute(name: "value", value: value)
     }
 }
 
 // label tag attributes
-public extension HtmlAttribute where Tag == HtmlTag.label {
+public extension HTMLAttribute where Tag == HTMLTag.label {
     static func `for`(_ id: String) -> Self {
-        HtmlAttribute(name: "for", value: id)
+        HTMLAttribute(name: "for", value: id)
     }
 }

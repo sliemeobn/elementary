@@ -3,7 +3,7 @@ import Hummingbird
 
 extension MainLayout: ResponseGenerator {}
 
-extension Html {
+extension HTML {
     func response(from request: Request, context: some RequestContext) throws -> Response {
         .init(
             status: .ok,
