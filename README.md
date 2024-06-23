@@ -184,7 +184,7 @@ Feel free to open a PR with additional attributes that are missing from the mode
 
 [Plot](https://github.com/JohnSundell/Plot), [HTMLKit](https://github.com/vapor-community/HTMLKit), and [Swim](https://github.com/robb/Swim) are all excellent packages for doing a similar thing.
 
-My main motivation for Elementary was to create an experience like these, but
+My main motivation for Elementary was to create an experience like these ([Swift Forums post](https://forums.swift.org/t/elementary-a-modern-and-efficient-html-rendering-library-inspired-by-swiftui-built-for-the-web/72647) for more context), but
 
 - stay true to HTML tag names and conventions (including the choice of lowercase types)
 - avoid allocating an intermedate structure and go straght to text
