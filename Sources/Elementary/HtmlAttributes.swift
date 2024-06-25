@@ -11,7 +11,7 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     }
 
     static func `class`(_ value: String) -> Self {
-        HTMLAttribute(name: "class", value: value, mergeMode: .appendValue(" "))
+        HTMLAttribute(name: "class", value: value, mergedBy: .appending(seperatedBy: " "))
     }
 
     static func data(_ key: String, value: String) -> Self {
@@ -19,7 +19,7 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     }
 
     static func style(_ value: String) -> Self {
-        HTMLAttribute(name: "style", value: value, mergeMode: .appendValue(";"))
+        HTMLAttribute(name: "style", value: value, mergedBy: .appending(seperatedBy: ";"))
     }
 
     static func title(_ value: String) -> Self {
