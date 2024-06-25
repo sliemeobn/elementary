@@ -142,8 +142,37 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.autofocus {
     }
 }
 
-// form tag attributes
+// charset attribute
+public extension HTMLTrait.Attributes {
+    protocol charset {}
+}
 
+extension HTMLTag.meta: HTMLTrait.Attributes.charset {}
+extension HTMLTag.script: HTMLTrait.Attributes.charset {}
+
+public extension HTMLAttributeValue {
+    struct CharacterSet: ExpressibleByStringLiteral, RawRepresentable, Sendable, Equatable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
+        public init(stringLiteral value: String) {
+            rawValue = value
+        }
+
+        public static var utf8: Self { "UTF-8" }
+    }
+}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.charset {
+    static func charset(_ value: HTMLAttributeValue.CharacterSet) -> Self {
+        HTMLAttribute(name: "charset", value: value.rawValue)
+    }
+}
+
+// form tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.form {
     struct Method: Sendable, Equatable {
         var value: String

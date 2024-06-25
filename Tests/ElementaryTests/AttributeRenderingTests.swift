@@ -88,4 +88,11 @@ final class AttributeRenderingTests: XCTestCase {
             #"<p onblur="doIt()"></p>"#
         )
     }
+
+    func testRendersMetaCharset() {
+        HTMLAssertEqual(
+            meta(.charset(.utf8)),
+            #"<meta charset="UTF-8">"#
+        )
+    }
 }
