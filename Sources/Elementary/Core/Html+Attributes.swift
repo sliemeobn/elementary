@@ -1,12 +1,26 @@
 public struct HTMLAttribute<Tag: HTMLTagDefinition> {
     var htmlAttribute: StoredAttribute
 
-    init(name: String, value: String?, mergeMode: StoredAttribute.MergeMode = .replaceValue) {
-        htmlAttribute = .init(name: name, value: value, mergeMode: mergeMode)
-    }
-
     public var name: String { htmlAttribute.name }
     public var value: String? { htmlAttribute.value }
+}
+
+public struct HTMLAttributeMergeAction {
+    var mergeMode: StoredAttribute.MergeMode
+
+    public static var replacing: Self { .init(mergeMode: .replaceValue) }
+    public static var ignoring: Self { .init(mergeMode: .ignoreIfSet) }
+    public static func appending(seperatedBy: String) -> Self { .init(mergeMode: .appendValue(seperatedBy)) }
+}
+
+public extension HTMLAttribute {
+    init(name: String, value: String?, mergedBy action: HTMLAttributeMergeAction = .replacing) {
+        htmlAttribute = .init(name: name, value: value, mergeMode: action.mergeMode)
+    }
+
+    consuming func mergedBy(_ action: HTMLAttributeMergeAction) -> HTMLAttribute {
+        .init(name: name, value: value, mergedBy: action)
+    }
 }
 
 public struct _AttributedElement<Content: HTML>: HTML {

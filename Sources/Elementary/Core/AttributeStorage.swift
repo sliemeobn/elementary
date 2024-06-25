@@ -89,7 +89,7 @@ private func flattenAttributes(_ attributes: consuming [StoredAttribute]) -> [St
         guard attribute != blankedOut else { continue }
 
         for j in attributes.indices[(i + 1)...] where attributes[j].name == attribute.name {
-            switch attribute.mergeMode {
+            switch attributes[j].mergeMode {
             case let .appendValue(separator):
                 attribute.appending(value: attributes[j].value, separatedBy: separator)
             case .replaceValue:
