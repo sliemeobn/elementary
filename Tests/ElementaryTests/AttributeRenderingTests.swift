@@ -67,4 +67,25 @@ final class AttributeRenderingTests: XCTestCase {
             #"<br id="1-2" data-bar="bazbaq">"#
         )
     }
+
+    func testRendersMouseEventAttribute() {
+        HTMLAssertEqual(
+            p(.on(.click, "doIt()")) {},
+            #"<p onclick="doIt()"></p>"#
+        )
+    }
+
+    func testRendersKeyboardEventAttribute() {
+        HTMLAssertEqual(
+            p(.on(.keydown, "doIt()")) {},
+            #"<p onkeydown="doIt()"></p>"#
+        )
+    }
+
+    func testRendersFormEventAttribute() {
+        HTMLAssertEqual(
+            p(.on(.blur, "doIt()")) {},
+            #"<p onblur="doIt()"></p>"#
+        )
+    }
 }
