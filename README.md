@@ -49,7 +49,9 @@ struct FeatureList: HTML {
 
 ## Play with it
 
-Check out the [Hummingbird example app](https://github.com/sliemeobn/elementary/tree/main/Examples/HummingbirdDemo).
+Check out the [Hummingbird + Tailwind example app](https://github.com/sliemeobn/elementary/tree/main/Examples/HummingbirdDemo).
+
+For a demo of [ElementaryHTMX](https://github.com/sliemeobn/elementary-htmx), see this [Hummingbird + HTMX Demo](https://github.com/sliemeobn/elementary-htmx/tree/main/Examples/HummingbirdDemo).
 
 ## Lightweight and fast
 
