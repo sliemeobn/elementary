@@ -95,4 +95,11 @@ final class AttributeRenderingTests: XCTestCase {
             #"<meta charset="UTF-8">"#
         )
     }
+
+    func testRendersRequired() {
+        HTMLAssertEqual(
+            input(.type(.text), .required),
+            #"<input type="text" required>"#
+        )
+    }
 }
