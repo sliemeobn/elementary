@@ -107,10 +107,15 @@ extension HTMLTag.base: HTMLTrait.Attributes.target {}
 extension HTMLTag.form: HTMLTrait.Attributes.target {}
 
 public extension HTMLAttributeValue {
-    struct Target: ExpressibleByStringLiteral, Sendable, Equatable {
-        public var value: String
+    struct Target: ExpressibleByStringLiteral, RawRepresentable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
         public init(stringLiteral value: String) {
-            self.value = value
+            rawValue = value
         }
 
         public static var blank: Self { "_blank" }
@@ -122,7 +127,7 @@ public extension HTMLAttributeValue {
 
 public extension HTMLAttribute where Tag: HTMLTrait.Attributes.target {
     static func target(_ target: HTMLAttributeValue.Target) -> Self {
-        HTMLAttribute(name: "target", value: target.value)
+        HTMLAttribute(name: "target", value: target.rawValue)
     }
 }
 
@@ -169,6 +174,39 @@ public extension HTMLAttributeValue {
 public extension HTMLAttribute where Tag: HTMLTrait.Attributes.charset {
     static func charset(_ value: HTMLAttributeValue.CharacterSet) -> Self {
         HTMLAttribute(name: "charset", value: value.rawValue)
+    }
+}
+
+// rel attribute
+public extension HTMLTrait.Attributes {
+    protocol rel {}
+}
+
+extension HTMLTag.a: HTMLTrait.Attributes.rel {}
+extension HTMLTag.area: HTMLTrait.Attributes.rel {}
+extension HTMLTag.link: HTMLTrait.Attributes.rel {}
+extension HTMLTag.form: HTMLTrait.Attributes.rel {}
+
+public extension HTMLAttributeValue {
+    struct Relationship: ExpressibleByStringLiteral, RawRepresentable, Sendable, Equatable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
+        public init(stringLiteral value: String) {
+            rawValue = value
+        }
+
+        public static var icon: Self { "icon" }
+        public static var stylesheet: Self { "stylesheet" }
+    }
+}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.rel {
+    static func rel(_ value: HTMLAttributeValue.Relationship) -> Self {
+        HTMLAttribute(name: "rel", value: value.rawValue)
     }
 }
 
