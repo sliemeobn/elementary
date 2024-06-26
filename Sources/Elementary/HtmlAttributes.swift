@@ -210,6 +210,21 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.rel {
     }
 }
 
+// required attribute
+public extension HTMLTrait.Attributes {
+    protocol required {}
+}
+
+extension HTMLTag.input: HTMLTrait.Attributes.required {}
+extension HTMLTag.select: HTMLTrait.Attributes.required {}
+extension HTMLTag.textarea: HTMLTrait.Attributes.required {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.required {
+    static var required: Self {
+        HTMLAttribute(name: "required", value: nil)
+    }
+}
+
 // form tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.form {
     struct Method: Sendable, Equatable {
