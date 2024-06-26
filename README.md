@@ -53,6 +53,8 @@ Check out the [Hummingbird + Tailwind example app](https://github.com/sliemeobn/
 
 For a demo of [ElementaryHTMX](https://github.com/sliemeobn/elementary-htmx), see this [Hummingbird + HTMX Demo](https://github.com/sliemeobn/elementary-htmx/tree/main/Examples/HummingbirdDemo).
 
+For a Vapor example, see the [Vapor + HTMX Demo](https://github.com/sliemeobn/elementary-htmx/tree/main/Examples/VaporDemo).
+
 ## Lightweight and fast
 
 Elementary renders straight to text, ideal for serving generated HTML from a [Hummingbird](https://github.com/hummingbird-project/hummingbird) or [Vapor](https://vapor.codes/) server app.
