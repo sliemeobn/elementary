@@ -1,3 +1,4 @@
+/// A result builder for building HTML components.
 @resultBuilder public struct HTMLBuilder {
     public static func buildExpression<Content>(_ content: Content) -> Content where Content: HTML {
         content
@@ -66,6 +67,7 @@ extension Optional: HTML where Wrapped: HTML {
     }
 }
 
+/// A type that represents empty HTML.
 public struct EmptyHTML: HTML {
     public init() {}
 
@@ -80,9 +82,14 @@ public struct EmptyHTML: HTML {
     }
 }
 
+/// A type that represents text content in an HTML document.
+///
+/// The text will be escaped when rendered.
 public struct HTMLText: HTML {
+    /// The text content.
     public var text: String
 
+    /// Creates a new text content with the specified text.
     public init(_ text: some StringProtocol) {
         self.text = String(text)
     }
