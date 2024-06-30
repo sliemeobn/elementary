@@ -2,29 +2,29 @@ import Elementary
 import XCTest
 
 final class TextRenderingTests: XCTestCase {
-    func testRendersText() {
-        HTMLAssertEqual(
+    func testRendersText() async throws {
+        try await HTMLAssertEqual(
             h1 { "Hello, World!" },
             "<h1>Hello, World!</h1>"
         )
     }
 
-    func testEscapesText() {
-        HTMLAssertEqual(
+    func testEscapesText() async throws {
+        try await HTMLAssertEqual(
             h1 { #""Hello" 'World' & <FooBar>"# },
             #"<h1>"Hello" 'World' &amp; &lt;FooBar&gt;</h1>"#
         )
     }
 
-    func testDoesNotEscapeRawText() {
-        HTMLAssertEqual(
+    func testDoesNotEscapeRawText() async throws {
+        try await HTMLAssertEqual(
             h1 { HTMLRaw(#""Hello" 'World' & <FooBar>"#) },
             #"<h1>"Hello" 'World' & <FooBar></h1>"#
         )
     }
 
-    func testRendersListsOfText() {
-        HTMLAssertEqual(
+    func testRendersListsOfText() async throws {
+        try await HTMLAssertEqual(
             div {
                 "Hello, "
                 "World!"
@@ -33,8 +33,8 @@ final class TextRenderingTests: XCTestCase {
         )
     }
 
-    func testRendersTextWithInlineTags() {
-        HTMLAssertEqual(
+    func testRendersTextWithInlineTags() async throws {
+        try await HTMLAssertEqual(
             div {
                 "He"
                 b { "llo" }
@@ -45,8 +45,8 @@ final class TextRenderingTests: XCTestCase {
         )
     }
 
-    func testRendersComment() {
-        HTMLAssertEqual(
+    func testRendersComment() async throws {
+        try await HTMLAssertEqual(
             div {
                 HTMLComment("Hello !--> World")
             },
@@ -54,12 +54,24 @@ final class TextRenderingTests: XCTestCase {
         )
     }
 
-    func testRendersRaw() {
-        HTMLAssertEqual(
+    func testRendersRaw() async throws {
+        try await HTMLAssertEqual(
             div {
                 HTMLRaw(#"<my-tag>"&amp;"</my-tag>"#)
             },
             #"<div><my-tag>"&amp;"</my-tag></div>"#
         )
+    }
+}
+
+class Bar {
+    var foo: String = ""
+}
+
+class JO: HTML {
+    var bar: Bar = .init()
+
+    var content: some HTML {
+        "Hello, World!"
     }
 }

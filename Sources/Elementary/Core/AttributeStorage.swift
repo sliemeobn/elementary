@@ -1,5 +1,3 @@
-// add enough tags and attributes for an example
-// finalize name and push to github
 struct StoredAttribute: Equatable {
     enum MergeMode: Equatable {
         case appendValue(_ separator: String = " ")
@@ -70,38 +68,89 @@ enum AttributeStorage {
         }
     }
 
-    consuming func flattened() -> [StoredAttribute] {
-        // NOTE: maybe return a fancy sequence instead so we can iterate over it and avoid array allocations
-        switch self {
-        case .none: return []
-        case let .single(attribute): return [attribute]
-        case let .multiple(attributes): return flattenAttributes(attributes)
+    consuming func flattened() -> FlattenedAttributeView {
+        .init(storage: self)
+    }
+}
+
+extension AttributeStorage {
+    struct FlattenedAttributeView: Sequence {
+        typealias Element = StoredAttribute
+        var storage: AttributeStorage
+
+        consuming func makeIterator() -> Iterator {
+            Iterator(storage)
+        }
+
+        struct Iterator: IteratorProtocol {
+            enum State {
+                case empty
+                case single(StoredAttribute)
+                case flattening([StoredAttribute], Int)
+                case _temporaryNothing
+            }
+
+            var state: State
+
+            init(_ storage: consuming AttributeStorage) {
+                switch storage {
+                case .none: state = .empty
+                case let .single(attribute): state = .single(attribute)
+                case let .multiple(attributes): state = .flattening(attributes, 0)
+                }
+            }
+
+            mutating func next() -> StoredAttribute? {
+                switch state {
+                case .empty: return nil
+                case let .single(attribute):
+                    state = .empty
+                    return attribute
+                case .flattening(var list, let index):
+                    state = ._temporaryNothing
+                    let (attribute, newIndex) = nextflattenedAttribute(attributes: &list, from: index)
+
+                    if let newIndex {
+                        state = .flattening(list, newIndex)
+                    } else {
+                        state = .empty
+                    }
+
+                    return attribute
+                case ._temporaryNothing:
+                    fatalError("unexpected _temporaryNothing state")
+                }
+            }
         }
     }
 }
 
-private func flattenAttributes(_ attributes: consuming [StoredAttribute]) -> [StoredAttribute] {
-    let blankedOut = StoredAttribute(name: "")
-    var result: [StoredAttribute] = []
+private let blankedOut = StoredAttribute(name: "")
+private func nextflattenedAttribute(attributes: inout [StoredAttribute], from index: Int) -> (StoredAttribute, Int?) {
+    var attribute = attributes[index]
+    attributes[index] = blankedOut
 
-    for i in attributes.indices {
-        var attribute = attributes[i]
-        guard attribute != blankedOut else { continue }
+    var nextIndex: Int?
 
-        for j in attributes.indices[(i + 1)...] where attributes[j].name == attribute.name {
-            switch attributes[j].mergeMode {
-            case let .appendValue(separator):
-                attribute.appending(value: attributes[j].value, separatedBy: separator)
-            case .replaceValue:
-                attribute.value = attributes[j].value
-            case .ignoreIfSet:
-                break
-            }
-            attributes[j] = blankedOut
+    for j in attributes.indices[(index + 1)...] {
+        // fast-skip blanked out attributes
+        guard !attributes[j].name.isEmpty else { continue }
+
+        guard attributes[j].name == attribute.name else {
+            if nextIndex == nil { nextIndex = j }
+            continue
         }
 
-        result.append(attribute)
+        switch attributes[j].mergeMode {
+        case let .appendValue(separator):
+            attribute.appending(value: attributes[j].value, separatedBy: separator)
+        case .replaceValue:
+            attribute.value = attributes[j].value
+        case .ignoreIfSet:
+            break
+        }
+        attributes[j] = blankedOut
     }
 
-    return result
+    return (attribute, nextIndex)
 }

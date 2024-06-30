@@ -1,15 +1,16 @@
-// NOTE: an async version of this could be interesteing, where the components content can by asnc, and the renderer is an async stream... probably a bit complex though
-// TODO: clean this up a bit
-
 struct HTMLTextRenderer: _HTMLRendering {
-    private var result: String = ""
+    private var result = ""
+
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
-        result += token.renderedValue
+        result.append(token.renderedValue)
     }
 
-    consuming func collect() -> String { result }
+    consuming func collect() -> String {
+        result
+    }
 }
 
+@available(*, deprecated, message: "will be removed")
 struct HTMLStreamRenderer: _HTMLRendering {
     let writer: (String) -> Void
 
@@ -135,31 +136,6 @@ extension PrettyHTMLTextRenderer: _HTMLRendering {
 }
 
 extension _HTMLRenderToken {
-    var renderedValue: String {
-        switch self {
-        case let .startTagOpen(tagName, _):
-            return "<\(tagName)"
-        case let .attribute(name, value):
-            if let value = value {
-                return " \(name)=\"\(value.htmlEscaped(for: .attribute))\""
-            } else {
-                return " \(name)"
-            }
-        case .startTagClose:
-            return ">"
-        case let .endTag(tagName, _):
-            return "</\(tagName)>"
-        case let .text(text):
-            return text.htmlEscaped(for: .content)
-        case let .raw(raw):
-            return raw
-        case let .comment(comment):
-            return "<!--\(comment.htmlEscaped(for: .content))-->"
-        }
-    }
-}
-
-extension _HTMLRenderToken {
     func shouldInline(currentlyInlined: Bool) -> Bool {
         switch self {
         case .startTagOpen(_, .inline), .endTag(_, .inline), .text, .raw, .comment:
@@ -169,36 +145,5 @@ extension _HTMLRenderToken {
         default:
             return false
         }
-    }
-}
-
-extension String {
-    enum HTMLEscapingMode {
-        case attribute
-        case content
-    }
-
-    func htmlEscaped(for mode: HTMLEscapingMode) -> String {
-        var result = [UInt8]()
-        result.reserveCapacity(utf8.count)
-
-        // Iterate over each UTF-8 code unit in the string
-        for byte in utf8 {
-            switch (byte, mode) {
-            case (38, _): // &
-                result.append(contentsOf: "&amp;".utf8)
-            case (34, .attribute): // "
-                result.append(contentsOf: "&quot;".utf8)
-            case (60, .content): // <
-                result.append(contentsOf: "&lt;".utf8)
-            case (62, .content): // >
-                result.append(contentsOf: "&gt;".utf8)
-            default:
-                result.append(byte)
-            }
-        }
-
-        // Convert the UTF-8 byte array back to a String
-        return String(decoding: result, as: UTF8.self)
     }
 }

@@ -5,6 +5,7 @@ struct MainLayout<Body: HTML>: HTMLDocument {
     @HTMLBuilder var pageContent: Body
 
     var head: some HTML {
+        meta(.charset(.utf8))
         meta(.name(.viewport), .content("width=device-width, initial-scale=1.0"))
         HTMLComment("Do not use this in production, use the tailwind CLI to generate a production build from your swift files.")
         script(.src("https://cdn.tailwindcss.com")) {}

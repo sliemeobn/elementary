@@ -2,15 +2,15 @@ import Elementary
 import XCTest
 
 final class CompositionRenderingTests: XCTestCase {
-    func testRendersADocument() {
-        HTMLAssertEqual(
+    func testRendersADocument() async throws {
+        try await HTMLAssertEqual(
             MyPage(text: "my text"),
             #"<!DOCTYPE html><html><head><title>Foo</title><meta name="author" content="Me"><meta name="description" content="Test page"></head><body><div><h1>Hello, world!</h1><p>my text</p></div></body></html>"#
         )
     }
 
-    func testRendersAComponent() {
-        HTMLAssertEqual(
+    func testRendersAComponent() async throws {
+        try await HTMLAssertEqual(
             MyList(items: ["one", "two"], selectedIndex: 1),
             #"<ul><li id="1">one</li><li class="selected" id="2">two</li></ul>"#
         )
