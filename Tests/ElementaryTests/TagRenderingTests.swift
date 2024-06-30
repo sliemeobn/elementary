@@ -2,29 +2,29 @@ import Elementary
 import XCTest
 
 final class TagRenderingTests: XCTestCase {
-    func testRendersEmptyTag() {
-        HTMLAssertEqual(
+    func testRendersEmptyTag() async throws {
+        try await HTMLAssertEqual(
             p {},
             "<p></p>"
         )
     }
 
-    func testRendersNestedTags() {
-        HTMLAssertEqual(
+    func testRendersNestedTags() async throws {
+        try await HTMLAssertEqual(
             div { p {} },
             "<div><p></p></div>"
         )
     }
 
-    func testRendersSelfClosingTag() {
-        HTMLAssertEqual(
+    func testRendersSelfClosingTag() async throws {
+        try await HTMLAssertEqual(
             br(),
             "<br>"
         )
     }
 
-    func testRendersTuples() {
-        HTMLAssertEqual(
+    func testRendersTuples() async throws {
+        try await HTMLAssertEqual(
             div {
                 h1 {}
                 p {}
@@ -32,8 +32,8 @@ final class TagRenderingTests: XCTestCase {
         )
     }
 
-    func testRendersOptionals() {
-        HTMLAssertEqual(
+    func testRendersOptionals() async throws {
+        try await HTMLAssertEqual(
             div {
                 if true {
                     p {}
@@ -41,7 +41,7 @@ final class TagRenderingTests: XCTestCase {
             }, "<div><p></p></div>"
         )
 
-        HTMLAssertEqual(
+        try await HTMLAssertEqual(
             div {
                 if false {
                     p {}
@@ -50,8 +50,8 @@ final class TagRenderingTests: XCTestCase {
         )
     }
 
-    func testRendersConditionals() {
-        HTMLAssertEqual(
+    func testRendersConditionals() async throws {
+        try await HTMLAssertEqual(
             div {
                 if true {
                     p {}
@@ -61,7 +61,7 @@ final class TagRenderingTests: XCTestCase {
             }, "<div><p></p></div>"
         )
 
-        HTMLAssertEqual(
+        try await HTMLAssertEqual(
             div {
                 if false {
                     p {}
@@ -72,8 +72,8 @@ final class TagRenderingTests: XCTestCase {
         )
     }
 
-    func testRendersLists() {
-        HTMLAssertEqual(
+    func testRendersLists() async throws {
+        try await HTMLAssertEqual(
             div {
                 for _ in 0 ..< 3 {
                     p {}
