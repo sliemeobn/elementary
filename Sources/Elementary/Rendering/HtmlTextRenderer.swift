@@ -2,7 +2,6 @@ struct HTMLTextRenderer: _HTMLRendering {
     private var result = ""
 
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
-        print("appending \(token.renderedValue)")
         result.append(token.renderedValue)
     }
 
