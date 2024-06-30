@@ -33,6 +33,12 @@ public struct _AttributedElement<Content: HTML>: HTML {
         context.prependAttributes(html.attributes)
         Content._render(html.content, into: &renderer, with: context)
     }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        context.prependAttributes(html.attributes)
+        try await Content._render(html.content, into: &renderer, with: context)
+    }
 }
 
 public extension HTMLElement {
@@ -71,7 +77,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     }
 }
 
-extension _RenderingContext {
+private extension _RenderingContext {
     mutating func prependAttributes(_ attributes: consuming AttributeStorage) {
         attributes.append(self.attributes)
         self.attributes = attributes

@@ -3,6 +3,7 @@ import PackageDescription
 
 let featureFlags: [SwiftSetting] = [
     .enableExperimentalFeature("StrictConcurrency=complete"),
+    .enableUpcomingFeature("StrictConcurrency=complete"),
     .enableUpcomingFeature("ExistentialAny"),
     .enableUpcomingFeature("ConciseMagicFile"),
     .enableUpcomingFeature("ImplicitOpenExistentials"),

@@ -3,7 +3,7 @@
         content
     }
 
-    public static func buildExpression<Content>(_ content: Content) -> HTMLText<Content> where Content: StringProtocol {
+    public static func buildExpression<Content>(_ content: Content) -> HTMLText where Content: StringProtocol {
         HTMLText(content)
     }
 
@@ -56,6 +56,14 @@ extension Optional: HTML where Wrapped: HTML {
         case let .some(value): Wrapped._render(value, into: &renderer, with: context)
         }
     }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        switch html {
+        case .none: break
+        case let .some(value): try await Wrapped._render(value, into: &renderer, with: context)
+        }
+    }
 }
 
 public struct EmptyHTML: HTML {
@@ -65,19 +73,30 @@ public struct EmptyHTML: HTML {
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
     }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        context.assertNoAttributes(self)
+    }
 }
 
-public struct HTMLText<SP: StringProtocol>: HTML {
-    public var text: SP
+public struct HTMLText: HTML {
+    public var text: String
 
-    public init(_ text: SP) {
-        self.text = text
+    public init(_ text: some StringProtocol) {
+        self.text = String(text)
     }
 
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
-        renderer.appendToken(.text(String(html.text)))
+        renderer.appendToken(.text(html.text))
+    }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        context.assertNoAttributes(self)
+        try await renderer.appendToken(.text(html.text))
     }
 }
 
@@ -100,6 +119,14 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
         case let .falseContent(content): return FalseContent._render(content, into: &renderer, with: context)
         }
     }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        switch html.value {
+        case let .trueContent(content): try await TrueContent._render(content, into: &renderer, with: context)
+        case let .falseContent(content): try await FalseContent._render(content, into: &renderer, with: context)
+        }
+    }
 }
 
 public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
@@ -117,10 +144,22 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
-        func renderElement<Element: HTML>(_ element: Element, _ renderer: inout some _HTMLRendering) {
+        // NOTE: use iteration in swift 6
+        func renderElement<Element: HTML>(_ element: Element, _ renderer: inout Renderer) {
             Element._render(element, into: &renderer, with: copy context)
         }
         repeat renderElement(each html.value, &renderer)
+    }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        context.assertNoAttributes(self)
+
+        // NOTE: use iteration in swift 6
+        func renderElement<Element: HTML>(_ element: Element, _ renderer: inout Renderer) async throws {
+            try await Element._render(element, into: &renderer, with: copy context)
+        }
+        repeat try await renderElement(each html.value, &renderer)
     }
 }
 
@@ -137,6 +176,15 @@ public struct _HTMLArray<Element: HTML>: HTML {
 
         for element in html.value {
             Element._render(element, into: &renderer, with: copy context)
+        }
+    }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        context.assertNoAttributes(self)
+
+        for element in html.value {
+            try await Element._render(element, into: &renderer, with: copy context)
         }
     }
 }

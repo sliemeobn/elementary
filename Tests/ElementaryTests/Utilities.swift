@@ -8,3 +8,6 @@ func HTMLAssertEqual(_ html: some HTML, _ expected: String, file: StaticString =
 func HTMLFormattedAssertEqual(_ html: some HTML, _ expected: String, file: StaticString = #filePath, line: UInt = #line) {
     XCTAssertEqual(expected, html.renderFormatted(), file: file, line: line)
 }
+
+@inline(never)
+func blackHole<T>(_: T) {}

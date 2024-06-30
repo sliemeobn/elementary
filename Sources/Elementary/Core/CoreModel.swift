@@ -6,6 +6,9 @@ public protocol HTML<Tag> {
 
     @_spi(Rendering)
     static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext)
+
+    @_spi(Rendering)
+    static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws
 }
 
 public protocol HTMLTagDefinition {
@@ -45,9 +48,17 @@ public protocol _HTMLRendering {
     mutating func appendToken(_ token: consuming _HTMLRenderToken)
 }
 
+public protocol _AsyncHTMLRendering {
+    mutating func appendToken(_ token: consuming _HTMLRenderToken) async throws
+}
+
 public extension HTML {
     static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         Content._render(html.content, into: &renderer, with: context)
+    }
+
+    static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        try await Content._render(html.content, into: &renderer, with: context)
     }
 }
 

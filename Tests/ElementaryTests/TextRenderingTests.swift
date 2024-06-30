@@ -63,3 +63,15 @@ final class TextRenderingTests: XCTestCase {
         )
     }
 }
+
+class Bar {
+    var foo: String = ""
+}
+
+class JO: HTML {
+    var bar: Bar = .init()
+
+    var content: some HTML {
+        "Hello, World!"
+    }
+}
