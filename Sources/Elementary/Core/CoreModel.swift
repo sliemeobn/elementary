@@ -1,19 +1,13 @@
 /// A type that represents HTML content that can be rendered.
 ///
 /// You can create reusable HTML components by conforming to this protocol
-/// and implementing the `content` property.
-///
-/// struct MyComponent: HTML {
-///   var content: some HTML {
-///     p(.class("my-component")) { "Hello, world!" }
-///  }
-/// }
+/// and implementing the ``content`` property.
 public protocol HTML<Tag> {
     /// The HTML tag this component represents, if any.
     ///
     /// The Tag type defines which attributes can be attached to an HTML element.
     /// If an element does not represent a specific HTML tag, the Tag type will
-    // be `Never` and the element cannot be attributed.
+    /// be ``Swift/Never`` and the element cannot be attributed.
     associatedtype Tag: HTMLTagDefinition = Content.Tag
 
     /// The type of the HTML content this component represents.

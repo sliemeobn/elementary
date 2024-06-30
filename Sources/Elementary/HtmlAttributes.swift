@@ -1,3 +1,4 @@
+/// A namespace for value types used in attributes.
 public enum HTMLAttributeValue {}
 
 // global attributes

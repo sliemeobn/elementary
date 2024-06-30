@@ -1,4 +1,4 @@
-/// An HTML attribute that can be applied to an HTML tag.
+/// An HTML attribute that can be applied to an HTML element of the associated tag.
 public struct HTMLAttribute<Tag: HTMLTagDefinition> {
     var htmlAttribute: StoredAttribute
 
@@ -72,7 +72,7 @@ public extension HTMLElement {
     /// Creates a new HTML element with the specified attributes and content.
     /// - Parameters:
     ///  - attributes: The attributes to apply to the element.
-    /// - content: The content of the element.
+    ///  - content: The content of the element.
     init(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: () -> Content) {
         self.attributes = .init(attributes)
         self.content = content()
@@ -96,8 +96,8 @@ public extension HTMLVoidElement {
 public extension HTML where Tag: HTMLTrait.Attributes.Global {
     /// Adds the specified attribute to the element.
     /// - Parameters:
-    ///  - attribute: The attribute to add to the element.
-    /// - condition: If set to false, the attribute will not be added.
+    ///   - attribute: The attribute to add to the element.
+    ///   - condition: If set to false, the attribute will not be added.
     /// - Returns: A new element with the specified attribute added.
     func attributes(_ attribute: HTMLAttribute<Tag>, when condition: Bool = true) -> _AttributedElement<Self> {
         if condition {
@@ -109,8 +109,8 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
 
     /// Adds the specified attributes to the element.
     /// - Parameters:
-    /// - attributes: The attributes to add to the element.
-    /// - condition: If set to false, the attributes will not be added.
+    ///   - attributes: The attributes to add to the element.
+    ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
     func attributes(_ attributes: HTMLAttribute<Tag>..., when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))

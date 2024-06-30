@@ -29,7 +29,7 @@ public extension HTML {
     /// Renders the HTML content into an stream writer.
     /// - Parameters:
     ///  - writer: The stream writer to write the rendered content to.
-    /// - chunkSize: The maximum size of the chunks to write to the stream.
+    ///  - chunkSize: The maximum size of the chunks to write to the stream.
     ///
     /// This is the primary API for server-side applications to stream HTML content in HTTP responses.
     consuming func render(into writer: some HTMLStreamWriter, chunkSize: Int = 1024) async throws {
