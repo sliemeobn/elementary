@@ -2,6 +2,20 @@
 ///
 /// You can create reusable HTML components by conforming to this protocol
 /// and implementing the ``content`` property.
+///
+/// ```swift
+/// struct FeatureList: HTML {
+///   var features: [String]
+///
+///   var content: some HTML {
+///     ul {
+///       for feature in features {
+///         li { feature }
+///       }
+///     }
+///   }
+/// }
+/// ```
 public protocol HTML<Tag> {
     /// The HTML tag this component represents, if any.
     ///

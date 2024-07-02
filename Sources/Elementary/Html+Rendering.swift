@@ -3,7 +3,7 @@ public extension HTML {
     /// - Returns: The rendered HTML content.
     ///
     /// This method is synchronous and collects the entire rendered content into a single string.
-    /// For server-side applications, use the async API `render(into:chunkSize:)` instead.
+    /// For server applications, use the async API ``render(into:chunkSize:)`` instead.
     consuming func render() -> String {
         var renderer = HTMLTextRenderer()
         Self._render(self, into: &renderer, with: .emptyContext)
@@ -26,10 +26,10 @@ public extension HTML {
         Self._render(self, into: &renderer, with: .emptyContext)
     }
 
-    /// Renders the HTML content into an stream writer.
+    /// Renders the HTML content into a stream writer.
     /// - Parameters:
-    ///  - writer: The stream writer to write the rendered content to.
-    ///  - chunkSize: The maximum size of the chunks to write to the stream.
+    ///   - writer: The ``HTMLStreamWriter`` to write the rendered content to.
+    ///   - chunkSize: The maximum size of the chunks to write to the stream.
     ///
     /// This is the primary API for server-side applications to stream HTML content in HTTP responses.
     consuming func render(into writer: some HTMLStreamWriter, chunkSize: Int = 1024) async throws {
@@ -53,5 +53,6 @@ public extension HTML {
 ///
 /// Conform to this protocol to stream HTML responses efficiently.
 public protocol HTMLStreamWriter {
+    /// Writes a chunk of rendered HTML.
     func write(_ bytes: ArraySlice<UInt8>) async throws
 }
