@@ -18,7 +18,7 @@ let package = Package(
             name: "App",
             dependencies: [
                 .product(name: "Hummingbird", package: "hummingbird"),
-                .product(name: "Elementary", package: "Elementary"),
+                .product(name: "Elementary", package: "elementary"),
             ]
         ),
     ]

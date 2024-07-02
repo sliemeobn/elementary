@@ -10,7 +10,7 @@ let featureFlags: [SwiftSetting] = [
 ]
 
 let package = Package(
-    name: "Elementary",
+    name: "elementary",
     platforms: [
         .macOS(.v14),
         .iOS(.v17),
