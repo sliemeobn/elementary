@@ -6,8 +6,6 @@
 
 [Examples](#play-with-it) | [Motivation](#motivation-and-other-packages) | [Discussion](https://github.com/sliemeobn/elementary/discussions)
 
-🚧 Work In Progress 🚧 - don't bet your future on it just yet ;)
-
 ```swift
 struct MainPage: HTMLDocument {
     var title: String = "Elementary"
@@ -57,21 +55,27 @@ For a Vapor example, see the [Vapor + HTMX Demo](https://github.com/sliemeobn/el
 
 ## Lightweight and fast
 
-Elementary renders straight to text, ideal for serving generated HTML from a [Hummingbird](https://github.com/hummingbird-project/hummingbird) or [Vapor](https://vapor.codes/) server app.
+Elementary renders straight to text, optimized for serving generated HTML from a [Hummingbird](https://github.com/hummingbird-project/hummingbird) or [Vapor](https://vapor.codes/) server app.
 
-Any element can be rendered individually, ideal for [htmx](https://htmx.org/).
+Any type conforming to `HTML` can be rendered individually, ideal for testing or for sending fragments with [htmx](https://github.com/sliemeobn/elementary-htmx).
+
+The default rendering mechanism produces chunks of HTML for efficient response streaming, so the browser can start loading a page while the server is still producing the rest of it. Swift concurrency is used to handle back pressure, so you your memory footprint stays low even for large pages.
 
 ```swift
-let html = div(.class("pretty")) { "Hello" }.render()
-// <div class="pretty">Hello</div>
-
-let fragment = FeatureList(features: ["Anything conforming to HTML can be rendered"]).render()
-// <ul><li>Anything conforming to HTML can be rendered</li></ul>
+// Stream HTML, optimized for responsiveness and back pressure-aware
+try await MainPage().render(into: responseStreamWriter)
 ```
 
-Optionally you can render formatted output, or stream the rendered HTML without collecting it in a string first.
+Alternatively, you can simply collect the rendered HTML in a string.
 
 ```swift
+let html: String = div(.class("pretty")) { "Hello" }.render()
+// <div class="pretty">Hello</div>
+
+let fragment: String = FeatureList(features: ["Anything conforming to HTML can be rendered"]).render()
+// <ul><li>Anything conforming to HTML can be rendered</li></ul>
+
+// For testing purposes, there is also a formatted version
 print(
     div {
         p(.class("greeting")) { "Hi mom!" }
@@ -83,11 +87,6 @@ print(
 //   <p class="greeting">Hi mom!</p>
 //   <p>Look how pretty.</p>
 // </div>
-```
-
-```swift
-// Have HTML arrive at the browser before the full page is rendered out.
-MainPage().render(into: responseStream)
 ```
 
 Elementary has zero dependencies (not even Foundation) and does not use runtime reflection or existential containers (there is not a single `any` in the code base).
@@ -180,7 +179,7 @@ As a sensible default, _class_ and _style_ attributes are merged (with a blank s
 
 ### 🚧 Work in progress 🚧
 
-The list of built-in attributes is quite short still, but adding them is quite easy (and can be done in external packages as well).
+The list of built-in attributes is rather short still, but adding them is really simple (and can be done in external packages as well).
 
 Feel free to open a PR with additional attributes that are missing from the model.
 
@@ -191,7 +190,7 @@ Feel free to open a PR with additional attributes that are missing from the mode
 My main motivation for Elementary was to create an experience like these ([Swift Forums post](https://forums.swift.org/t/elementary-a-modern-and-efficient-html-rendering-library-inspired-by-swiftui-built-for-the-web/72647) for more context), but
 
 - stay true to HTML tag names and conventions (including the choice of lowercase types)
-- avoid allocating an intermedate structure and go straght to text
+- avoid allocating an intermedate structure and go straight to streaming HTML
 - using generics to stay away from allocating a ton of lists of existential `any`s
 - have a list of attributes go before the content block
 - provide _attribute fallthrough_ and merging
@@ -203,6 +202,5 @@ My main motivation for Elementary was to create an experience like these ([Swift
 
 ## Future directions
 
-- Try out a **_hummingbird + elementary + htmx + tailwind_** stack for fully-featured web apps (without too much client javascript or wasm)
-- Experiment with an `AsyncHTML` type, that can include `await` in bodies and stream html and an async sequence
+- Experiment with an `AsyncHTML` type, that can include `await` in bodies, and a `ForEach` type that takes an async sequence
 - Experiment with embedded swift for wasm and bolt a lean state tracking/reconciler for reactive DOM manipulation on top
