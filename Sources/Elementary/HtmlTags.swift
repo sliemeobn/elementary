@@ -1,13 +1,22 @@
+/// A namespace for HTML tag definitions.
 public enum HTMLTag {}
 
+/// A namespace for trait protocols that control the behavior a capabilities of HTML elements.
 public enum HTMLTrait {
+    /// A namespace for traits that controls which attributes can go with a certain tag.
     public enum Attributes {}
+    /// A marker that indicates that an HTML tag is paired.
     public protocol Paired: HTMLTagDefinition, Attributes.Global {}
+    /// A marker that indicates that an HTML tag is unpaired.
     public protocol Unpaired: HTMLTagDefinition, Attributes.Global {}
+    /// A marker that indicates that an HTML tag should be rendered inline (only controls whitespaces in formatted rendering).
     public protocol RenderedInline {}
 }
 
 public extension HTMLTrait.Attributes {
+    /// A marker that indicates that an HTML tag can have global attributes.
+    ///
+    /// Every HTML tag conforms to this.
     protocol Global {}
 }
 

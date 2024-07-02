@@ -1,8 +1,14 @@
+/// An HTML element that can contain content.
 public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag: HTMLTrait.Paired {
+    /// The type of the HTML tag this element represents.
     public typealias Tag = Tag
     var attributes: AttributeStorage
+
+    // The content of the element.
     public var content: Content
 
+    /// Creates a new HTML element with the specified content.
+    /// - Parameter content: The content of the element.
     public init(@HTMLBuilder content: () -> Content) {
         attributes = .init()
         self.content = content()
@@ -25,10 +31,13 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     }
 }
 
+/// An HTML element that does not contain content.
 public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait.Unpaired {
+    /// The type of the HTML tag this element represents.
     public typealias Tag = Tag
     var attributes: AttributeStorage
 
+    /// Creates a new HTML void element.
     public init() {
         attributes = .init()
     }
@@ -46,9 +55,14 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
     }
 }
 
+/// A type that represents an HTML comment.
+///
+/// A comment is rendered as `<!--text-->` and the text will be escaped if necessary.
 public struct HTMLComment: HTML {
+    /// The text of the comment.
     public var text: String
 
+    /// Creates a new HTML comment with the specified text.
     public init(_ text: String) {
         self.text = text
     }
@@ -66,9 +80,14 @@ public struct HTMLComment: HTML {
     }
 }
 
+/// A type that represents custom raw, untyped HTML.
+///
+/// The text is rendered as-is without any validation or escaping.
 public struct HTMLRaw: HTML {
+    /// The raw HTML text.
     public var text: String
 
+    /// Creates a new raw HTML content with the specified text.
     public init(_ text: String) {
         self.text = text
     }
