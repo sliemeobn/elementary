@@ -38,7 +38,7 @@ public protocol HTML<Tag> {
 }
 
 /// A type that represents an HTML tag.
-public protocol HTMLTagDefinition {
+public protocol HTMLTagDefinition: Sendable {
     /// The name of the HTML tag as it is rendered in an HTML document.
     static var name: String { get }
 
