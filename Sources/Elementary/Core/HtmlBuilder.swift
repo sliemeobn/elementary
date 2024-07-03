@@ -32,7 +32,7 @@
         _HTMLConditional(.falseContent(second))
     }
 
-    public static func buildArray(_ components: [some HTML]) -> some HTML {
+    public static func buildArray<Element: HTML>(_ components: [Element]) -> _HTMLArray<Element> {
         return _HTMLArray(components)
     }
 }
