@@ -1,4 +1,4 @@
-struct StoredAttribute: Equatable {
+struct StoredAttribute: Equatable, Sendable {
     enum MergeMode: Equatable {
         case appendValue(_ separator: String = " ")
         case replaceValue
@@ -18,7 +18,7 @@ struct StoredAttribute: Equatable {
     }
 }
 
-enum AttributeStorage {
+enum AttributeStorage: Sendable {
     case none
     case single(StoredAttribute)
     case multiple([StoredAttribute])
@@ -74,7 +74,7 @@ enum AttributeStorage {
 }
 
 extension AttributeStorage {
-    struct FlattenedAttributeView: Sequence {
+    struct FlattenedAttributeView: Sequence, Sendable {
         typealias Element = StoredAttribute
         var storage: AttributeStorage
 

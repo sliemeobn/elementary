@@ -105,6 +105,11 @@ public struct HTMLRaw: HTML {
     }
 }
 
+extension HTMLElement: Sendable where Content: Sendable {}
+extension HTMLVoidElement: Sendable {}
+extension HTMLComment: Sendable {}
+extension HTMLRaw: Sendable {}
+
 private extension _HTMLRendering {
     mutating func appendStartTag(_ tagName: String, attributes: consuming AttributeStorage, isUnpaired: Bool, renderType: _HTMLRenderToken.RenderingType) {
         appendToken(.startTagOpen(tagName, type: renderType))

@@ -195,3 +195,10 @@ public struct _HTMLArray<Element: HTML>: HTML {
         }
     }
 }
+
+extension HTMLText: Sendable {}
+extension EmptyHTML: Sendable {}
+extension _HTMLConditional.Value: Sendable where TrueContent: Sendable, FalseContent: Sendable {}
+extension _HTMLConditional: Sendable where _HTMLConditional.Value: Sendable {}
+extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
+extension _HTMLArray: Sendable where Element: Sendable {}

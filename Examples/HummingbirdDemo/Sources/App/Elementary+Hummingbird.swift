@@ -12,12 +12,12 @@ struct HTMLResponseBodyWriter: HTMLStreamWriter {
     var writer: any ResponseBodyWriter
 }
 
-extension HTML {
+extension HTML where Self: Sendable {
     func response(from request: Request, context: some RequestContext) throws -> Response {
         .init(
             status: .ok,
             headers: [.contentType: "text/html; charset=utf-8"],
-            body: .init { writer in
+            body: .init { [self] writer in
                 try await self.render(into: HTMLResponseBodyWriter(allocator: context.allocator, writer: writer))
             }
         )

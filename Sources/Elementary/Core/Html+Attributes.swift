@@ -1,5 +1,5 @@
 /// An HTML attribute that can be applied to an HTML element of the associated tag.
-public struct HTMLAttribute<Tag: HTMLTagDefinition> {
+public struct HTMLAttribute<Tag: HTMLTagDefinition>: Sendable {
     var htmlAttribute: StoredAttribute
 
     /// The name of the attribute.
@@ -10,7 +10,7 @@ public struct HTMLAttribute<Tag: HTMLTagDefinition> {
 }
 
 /// The action to take when merging an attribute with the same name.
-public struct HTMLAttributeMergeAction {
+public struct HTMLAttributeMergeAction: Sendable {
     var mergeMode: StoredAttribute.MergeMode
 
     /// Replaces the value of the existing attribute with the new value.
@@ -58,6 +58,8 @@ public struct _AttributedElement<Content: HTML>: HTML {
         try await Content._render(html.content, into: &renderer, with: context)
     }
 }
+
+extension _AttributedElement: Sendable where Content: Sendable {}
 
 public extension HTMLElement {
     /// Creates a new HTML element with the specified attribute and content.
