@@ -42,8 +42,16 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
 
 // meta tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.meta {
-    struct Name: Sendable {
+    struct Name: Sendable, ExpressibleByStringLiteral {
         var value: String
+
+        init(value: String) {
+            self.value = value
+        }
+
+        public init(stringLiteral value: String) {
+            self.value = value
+        }
 
         public static let author = Name(value: "author")
         public static let description = Name(value: "description")
@@ -57,6 +65,10 @@ public extension HTMLAttribute where Tag == HTMLTag.meta {
 
     static func content(_ value: String) -> Self {
         HTMLAttribute(name: "content", value: value)
+    }
+
+    static func property(_ value: String) -> Self {
+        HTMLAttribute(name: "property", value: value)
     }
 }
 
