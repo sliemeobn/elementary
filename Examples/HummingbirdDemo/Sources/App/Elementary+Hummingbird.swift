@@ -4,7 +4,7 @@ import Hummingbird
 extension MainLayout: ResponseGenerator {}
 
 struct HTMLResponseBodyWriter: HTMLStreamWriter {
-    func write(_ bytes: ArraySlice<UInt8>) async throws {
+    mutating func write(_ bytes: ArraySlice<UInt8>) async throws {
         try await writer.write(allocator.buffer(bytes: bytes))
     }
 
@@ -18,7 +18,8 @@ extension HTML where Self: Sendable {
             status: .ok,
             headers: [.contentType: "text/html; charset=utf-8"],
             body: .init { [self] writer in
-                try await self.render(into: HTMLResponseBodyWriter(allocator: context.allocator, writer: writer))
+                try await self.render(into: HTMLResponseBodyWriter(allocator: ByteBufferAllocator(), writer: writer))
+                try await writer.finish(nil)
             }
         )
     }

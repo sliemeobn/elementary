@@ -54,5 +54,5 @@ public extension HTML {
 /// Conform to this protocol to stream HTML responses efficiently.
 public protocol HTMLStreamWriter {
     /// Writes a chunk of rendered HTML.
-    func write(_ bytes: ArraySlice<UInt8>) async throws
+    mutating func write(_ bytes: ArraySlice<UInt8>) async throws
 }
