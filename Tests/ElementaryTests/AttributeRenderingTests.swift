@@ -102,4 +102,25 @@ final class AttributeRenderingTests: XCTestCase {
             #"<input type="text" required>"#
         )
     }
+
+    func testRendersAttributesArray() async throws {
+        try await HTMLAssertEqual(
+            p(attributes: [.id("foo"), .class("foo"), .hidden]) {},
+            #"<p id="foo" class="foo" hidden></p>"#
+        )
+    }
+
+    func testRendersAttributesArrayOnVoidElement() async throws {
+        try await HTMLAssertEqual(
+            input(attributes: [.type(.text), .required]),
+            #"<input type="text" required>"#
+        )
+    }
+
+    func testRendersAppliedConditionalAttributesArray() async throws {
+        try await HTMLAssertEqual(
+            img(.id("1")).attributes(contentsOf: [.class("2"), .id("no")], when: false).attributes(contentsOf: [.style("2")], when: true),
+            #"<img id="1" style="2">"#
+        )
+    }
 }

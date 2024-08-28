@@ -84,7 +84,7 @@ public extension HTMLElement {
     /// - Parameters:
     ///  - attributes: The attributes to apply to the element as an array.
     ///  - content: The content of the element.
-    init(_ attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: () -> Content) {
+    init(attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: () -> Content) {
         self.attributes = .init(attributes)
         self.content = content()
     }
@@ -100,6 +100,12 @@ public extension HTMLVoidElement {
     /// Creates a new HTML void element with the specified attributes.
     /// - Parameter attributes: The attributes to apply to the element.
     init(_ attributes: HTMLAttribute<Tag>...) {
+        self.attributes = .init(attributes)
+    }
+
+    /// Creates a new HTML void element with the specified attributes.
+    /// - Parameter attributes: The attributes to apply to the element as an array.
+    init(attributes: [HTMLAttribute<Tag>]) {
         self.attributes = .init(attributes)
     }
 }
@@ -132,7 +138,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attributes: The attributes to add to the element as an array.
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
-    func attributes(_ attributes: [HTMLAttribute<Tag>], when condition: Bool = true) -> _AttributedElement<Self> {
+    func attributes(contentsOf attributes: [HTMLAttribute<Tag>], when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))
     }
 }
