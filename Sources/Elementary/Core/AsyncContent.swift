@@ -2,7 +2,7 @@
 ///
 /// The this element can only be rendered in an async context (ie: by calling ``HTML/render(into:chunkSize:)`` or ``HTML/renderAsync()``).
 /// All HTML tag types (``HTMLElement``) support async content closures in their initializers, so you don't need to use this element directly in most cases.
-public struct AsyncHTML<Content: HTML>: HTML, Sendable {
+public struct AsyncContent<Content: HTML>: HTML, Sendable {
     var content: @Sendable () async throws -> Content
     public typealias Tag = Content.Tag
 
@@ -12,7 +12,7 @@ public struct AsyncHTML<Content: HTML>: HTML, Sendable {
     ///   - content: The future content of the element.
     ///
     /// ```swift
-    /// AsyncHTML {
+    /// AsyncContent {
     ///    let value = await fetchValue()
     ///   "Waiting for "
     ///    span { value }

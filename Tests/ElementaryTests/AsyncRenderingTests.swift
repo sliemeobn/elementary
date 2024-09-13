@@ -2,16 +2,14 @@ import Elementary
 import XCTest
 
 final class AsyncRenderingTests: XCTestCase {
-    func testRendersAwaitedHTML() async throws {
+    func testRendersAsyncContent() async throws {
         try await HTMLAssertEqualAsyncOnly(
-            p {
-                AsyncHTML {
-                    let text = await getValue()
-                    "Waiting for "
-                    span { text }
-                }
+            AsyncContent {
+                let text = await getValue()
+                "Waiting for "
+                span { text }
             },
-            "<p>Waiting for <span>late response</span></p>"
+            "Waiting for <span>late response</span>"
         )
     }
 
@@ -26,7 +24,7 @@ final class AsyncRenderingTests: XCTestCase {
         )
     }
 
-    func testImplicitAsyncContent() async throws {
+    func testImplicitlyAsyncContent() async throws {
         try await HTMLAssertEqualAsyncOnly(
             p(.id("hello")) {
                 let text = await getValue()
@@ -39,15 +37,15 @@ final class AsyncRenderingTests: XCTestCase {
     func testNestedImplicitAsyncContent() async throws {
         try await HTMLAssertEqualAsyncOnly(
             div(attributes: [.class("c1")]) {
-                await getValue()
                 p {
-                    "again \(await getValue())"
+                    await getValue()
                 }
+                "again \(await getValue())"
                 p(.class("c2")) {
                     "and again \(await getValue())"
                 }
             },
-            #"<div class="c1">late response<p>again late response</p><p class="c2">and again late response</p></div>"#
+            #"<div class="c1"><p>late response</p>again late response<p class="c2">and again late response</p></div>"#
         )
     }
 }
@@ -55,7 +53,7 @@ final class AsyncRenderingTests: XCTestCase {
 private struct AwaitedP: HTML {
     var number: Int
     var content: some HTML {
-        AsyncHTML {
+        AsyncContent {
             let _ = try await Task.sleep(for: .milliseconds(1))
             p { "\(number)" }
         }
