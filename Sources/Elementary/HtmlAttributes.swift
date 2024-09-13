@@ -419,3 +419,73 @@ public extension HTMLAttribute where Tag == HTMLTag.option {
         HTMLAttribute(name: "selected", value: nil)
     }
 }
+
+// script tag attributes
+public extension HTMLAttribute where Tag == HTMLTag.button {
+    // type
+    struct ScriptType: Sendable, Equatable {
+        var value: String
+
+        public static var importmap: Self { .init(value: "importmap") }
+        public static var module: Self { .init(value: "module") }
+        public static var speculationrules: Self { .init(value: "speculationrules") }
+    }
+
+    static func type(_ type: ScriptType) -> Self {
+        self.type(type.value)
+    }
+
+    static func type(_ type: String) -> Self {
+        HTMLAttribute(name: "type", value: type)
+    }
+
+    // async
+    static var async: Self {
+        HTMLAttribute(name: "async", value: nil)
+    }
+
+    // crossorigin
+    struct CrossOriginType: Sendable, Equatable {
+        var value: String
+
+        public static var anonymous: Self { .init(value: "anonymous") }
+        public static var useCredentials: Self { .init(value: "use-credentials") }
+    }
+
+    static func crossorigin(_ type: CrossOriginType) -> Self {
+        HTMLAttribute(name: "crossorigin", value: type.value)
+    }
+
+    // defer
+    static var `defer`: Self {
+        HTMLAttribute(name: "defer", value: nil)
+    }
+
+    // integrity
+    static func integrity(_ value: String) -> Self {
+        HTMLAttribute(name: "integrity", value: value)
+    }
+
+    // nomodule
+    static var nomodule: Self {
+        HTMLAttribute(name: "nomodule", value: nil)
+    }
+
+    // referrerpolicy
+    struct ReferrerPolicyType: Sendable, Equatable {
+        var value: String
+
+        public static var noReferrer: Self { .init(value: "no-referrer") }
+        public static var noReferrerWhenDowngrade: Self { .init(value: "no-referrer-when-downgrade") }
+        public static var origin: Self { .init(value: "origin") }
+        public static var originWhenCrossOrigin: Self { .init(value: "origin-when-cross-origin") }
+        public static var sameOrigin: Self { .init(value: "same-origin") }
+        public static var strictOrigin: Self { .init(value: "strict-origin") }
+        public static var strictOriginWhenCrossOrigin: Self { .init(value: "strict-origin-when-cross-origin") }
+        public static var unsafeUrl: Self { .init(value: "unsafe-url") }
+    }
+
+    static func referrerPolicy(_ type: ReferrerPolicyType) -> Self {
+        HTMLAttribute(name: "referrerpolicy", value: type.value)
+    }
+}
