@@ -61,55 +61,6 @@ public struct _AttributedElement<Content: HTML>: HTML {
 
 extension _AttributedElement: Sendable where Content: Sendable {}
 
-public extension HTMLElement {
-    /// Creates a new HTML element with the specified attribute and content.
-    /// - Parameters:
-    ///   - attribute: The attribute to apply to the element.
-    ///   - content: The content of the element.
-    init(_ attribute: HTMLAttribute<Tag>, @HTMLBuilder content: () -> Content) {
-        attributes = .init(attribute)
-        self.content = content()
-    }
-
-    /// Creates a new HTML element with the specified attributes and content.
-    /// - Parameters:
-    ///  - attributes: The attributes to apply to the element.
-    ///  - content: The content of the element.
-    init(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: () -> Content) {
-        self.attributes = .init(attributes)
-        self.content = content()
-    }
-
-    /// Creates a new HTML element with the specified attributes and content.
-    /// - Parameters:
-    ///  - attributes: The attributes to apply to the element as an array.
-    ///  - content: The content of the element.
-    init(attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: () -> Content) {
-        self.attributes = .init(attributes)
-        self.content = content()
-    }
-}
-
-public extension HTMLVoidElement {
-    /// Creates a new HTML void element with the specified attribute.
-    /// - Parameter attribute: The attribute to apply to the element.
-    init(_ attribute: HTMLAttribute<Tag>) {
-        attributes = .init(attribute)
-    }
-
-    /// Creates a new HTML void element with the specified attributes.
-    /// - Parameter attributes: The attributes to apply to the element.
-    init(_ attributes: HTMLAttribute<Tag>...) {
-        self.attributes = .init(attributes)
-    }
-
-    /// Creates a new HTML void element with the specified attributes.
-    /// - Parameter attributes: The attributes to apply to the element as an array.
-    init(attributes: [HTMLAttribute<Tag>]) {
-        self.attributes = .init(attributes)
-    }
-}
-
 public extension HTML where Tag: HTMLTrait.Attributes.Global {
     /// Adds the specified attribute to the element.
     /// - Parameters:
