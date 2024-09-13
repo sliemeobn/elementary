@@ -48,6 +48,28 @@ final class AsyncRenderingTests: XCTestCase {
             #"<div class="c1"><p>late response</p>again late response<p class="c2">and again late response</p></div>"#
         )
     }
+
+    func testAsyncForEach() async throws {
+        try await HTMLAssertEqualAsyncOnly(
+            ul {
+                AsyncForEach(AsyncStream(testData: [1, 2, 3])) { number in
+                    li { "\(number)" }
+                }
+            },
+            "<ul><li>1</li><li>2</li><li>3</li></ul>"
+        )
+    }
+
+    func testAsyncForEachWithAsyncContent() async throws {
+        try await HTMLAssertEqualAsyncOnly(
+            AsyncForEach(AsyncStream(testData: ["foo", "bar"])) { text in
+                p {
+                    "\(await getValue()) \(text)"
+                }
+            },
+            "<p>late response foo</p><p>late response bar</p>"
+        )
+    }
 }
 
 private struct AwaitedP: HTML {
@@ -63,4 +85,14 @@ private struct AwaitedP: HTML {
 private func getValue() async -> String {
     await Task.yield() // just for fun
     return "late response"
+}
+
+private extension AsyncStream {
+    init(testData: [Element]) {
+        var iterator = testData.makeIterator()
+        self.init {
+            await Task.yield()
+            return iterator.next()
+        }
+    }
 }
