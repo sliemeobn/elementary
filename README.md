@@ -179,7 +179,7 @@ As a sensible default, _class_ and _style_ attributes are merged (with a blank s
 
 ## Fist class async support
 
-Elementary supports Swift Concurrency in HTML content. Simply `await` something needed for rendering, while the first bytes are already flying towards the browser.
+Elementary supports Swift Concurrency in HTML content. Simply `await` something inside your HTML, while the first bytes are already flying towards the browser.
 
 ```swift
 div {
@@ -197,9 +197,23 @@ struct MyComponent: HTML {
 }
 ```
 
+By using the `AsyncForEach` element, any `AsyncSequence` can be efficiently rendered straight to HTML.
+
+```swift
+ul {
+    // the full result never needs to be stored in memory...
+    let users = try await db.users.findAll()
+    // ...as each async sequence element...
+    AsyncForEach(users) { user in
+        // ...is immediately streamed out as HTML
+        li { "\(user.name) \(user.favoriteProgrammingLanguage)" }
+    }
+}
+```
+
 ### 🚧 Work in progress 🚧
 
-The list of built-in attributes is rather short still, but adding them is really simple (and can be done in external packages as well).
+The list of built-in attributes is far from complete, but adding them is really simple (and can be done in external packages as well).
 
 Feel free to open a PR with additional attributes that are missing from the model.
 

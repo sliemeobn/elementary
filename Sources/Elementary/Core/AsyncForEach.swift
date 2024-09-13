@@ -3,8 +3,8 @@
 /// The this element can only be rendered in an async context (ie: by calling ``HTML/render(into:chunkSize:)`` or ``HTML/renderAsync()``).
 ///
 /// ```swift
-/// let users = try await db.users.findAll()
 /// ul {
+///   let users = try await db.users.findAll()
 ///   AsyncForEach(users) { user in
 ///     li { "\(user.name) \(user.favoriteProgrammingLanguage)" }
 ///   }
