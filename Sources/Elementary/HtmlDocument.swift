@@ -1,7 +1,7 @@
 /// A type that represents a full HTML document.
 ///
 /// Provides a simple structure to model top-level HTML types.
-/// A default ``content`` implementation takes your ``title``, ``head`` and ``body``
+/// A default ``HTML/content`` implementation takes your ``title``, ``head`` and ``body``
 /// properties and renders them into a full HTML document.
 ///
 /// ```swift

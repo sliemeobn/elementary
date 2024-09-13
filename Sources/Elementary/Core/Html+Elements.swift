@@ -14,6 +14,33 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
         self.content = content()
     }
 
+    /// Creates a new HTML element with the specified attribute and content.
+    /// - Parameters:
+    ///   - attribute: The attribute to apply to the element.
+    ///   - content: The content of the element.
+    public init(_ attribute: HTMLAttribute<Tag>, @HTMLBuilder content: () -> Content) {
+        attributes = .init(attribute)
+        self.content = content()
+    }
+
+    /// Creates a new HTML element with the specified attributes and content.
+    /// - Parameters:
+    ///  - attributes: The attributes to apply to the element.
+    ///  - content: The content of the element.
+    public init(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: () -> Content) {
+        self.attributes = .init(attributes)
+        self.content = content()
+    }
+
+    /// Creates a new HTML element with the specified attributes and content.
+    /// - Parameters:
+    ///  - attributes: The attributes to apply to the element as an array.
+    ///  - content: The content of the element.
+    public init(attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: () -> Content) {
+        self.attributes = .init(attributes)
+        self.content = content()
+    }
+
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         html.attributes.append(context.attributes)
@@ -40,6 +67,24 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
     /// Creates a new HTML void element.
     public init() {
         attributes = .init()
+    }
+
+    /// Creates a new HTML void element with the specified attribute.
+    /// - Parameter attribute: The attribute to apply to the element.
+    public init(_ attribute: HTMLAttribute<Tag>) {
+        attributes = .init(attribute)
+    }
+
+    /// Creates a new HTML void element with the specified attributes.
+    /// - Parameter attributes: The attributes to apply to the element.
+    public init(_ attributes: HTMLAttribute<Tag>...) {
+        self.attributes = .init(attributes)
+    }
+
+    /// Creates a new HTML void element with the specified attributes.
+    /// - Parameter attributes: The attributes to apply to the element as an array.
+    public init(attributes: [HTMLAttribute<Tag>]) {
+        self.attributes = .init(attributes)
     }
 
     @_spi(Rendering)
