@@ -15,6 +15,24 @@ final class CompositionRenderingTests: XCTestCase {
             #"<ul><li id="1">one</li><li class="selected" id="2">two</li></ul>"#
         )
     }
+
+    func testRendersForEachWithRange() async throws {
+        try await HTMLAssertEqual(
+            ForEach(1 ... 3) { index in
+                li { "Item \(index)" }
+            },
+            #"<li>Item 1</li><li>Item 2</li><li>Item 3</li>"#
+        )
+    }
+
+    func testRendersForEachWithLazyMap() async throws {
+        try await HTMLAssertEqual(
+            ForEach([1, 2, 3].lazy.map { $0 * 10 }) { index in
+                li { "Item \(index)" }
+            },
+            #"<li>Item 10</li><li>Item 20</li><li>Item 30</li>"#
+        )
+    }
 }
 
 struct MyPage: HTMLDocument {

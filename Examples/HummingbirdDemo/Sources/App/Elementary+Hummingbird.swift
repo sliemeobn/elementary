@@ -1,6 +1,12 @@
 import Elementary
 import Hummingbird
 
+// ----------------------
+// NOTICE
+// For integrating with Hummingbird, please use https://github.com/hummingbird-community/hummingbird-elementary
+// You will not need the code in this file.
+// ----------------------
+
 extension MainLayout: ResponseGenerator {}
 
 struct HTMLResponseBodyWriter: HTMLStreamWriter {
