@@ -177,6 +177,26 @@ div {
 
 As a sensible default, _class_ and _style_ attributes are merged (with a blank space or semicolon respectively). All other attributes are overwritten by default.
 
+## Fist class async support
+
+Elementary supports Swift Concurrency in HTML content. Simply `await` something needed for rendering, while the first bytes are already flying towards the browser.
+
+```swift
+div {
+    let text = await getMyData()
+    p { "This totally works: \(text)" }
+    MyComponent()
+}
+
+struct MyComponent: HTML {
+    var content: some HTML {
+        AsyncContent {
+            "So does this: \(await getMoreData())"
+        }
+    }
+}
+```
+
 ### 🚧 Work in progress 🚧
 
 The list of built-in attributes is rather short still, but adding them is really simple (and can be done in external packages as well).
@@ -202,5 +222,4 @@ My main motivation for Elementary was to create an experience like these ([Swift
 
 ## Future directions
 
-- Experiment with an `AsyncHTML` type, that can include `await` in bodies, and a `ForEach` type that takes an async sequence
 - Experiment with embedded swift for wasm and bolt a lean state tracking/reconciler for reactive DOM manipulation on top
