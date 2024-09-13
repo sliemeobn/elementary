@@ -45,4 +45,4 @@ public struct ForEach<Data, Content>: HTML
     }
 }
 
-extension ForEach: Sendable where Data: Sendable, Content: Sendable {}
+extension ForEach: Sendable where Data: Sendable {}

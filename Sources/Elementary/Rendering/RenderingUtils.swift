@@ -58,6 +58,13 @@ extension _RenderingContext {
     func assertNoAttributes(_ type: (some HTML).Type) {
         assert(attributes.isEmpty, "Attributes are not supported on \(type)")
     }
+
+    @inline(__always)
+    func assertionFailureNoAsyncContext(_ type: (some HTML).Type) {
+        let message = "Cannot render \(type) in a synchronous context, please use .render(into:) or .renderAsync() instead."
+        print("Elementary rendering error: \(message)")
+        assertionFailure(message)
+    }
 }
 
 // NOTE: weirdly, using string interpolation tokens is faster than appending to the buffer directly. keeping this here for future experiments
