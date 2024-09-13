@@ -58,7 +58,7 @@ struct GreetingPage: HTML {
             }
         } else {
             ul {
-                for i in 0 ..< greetingCount {
+                ForEach(0 ..< greetingCount) { i in
                     li {
                         "Hello there, \(name)!"
                         // demo of conditional styling (should be done with CSS in real life)
