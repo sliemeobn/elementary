@@ -290,6 +290,58 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.autocomplete {
     }
 }
 
+// label attribute
+public extension HTMLTrait.Attributes {
+    protocol label {}
+}
+
+extension HTMLTag.optgroup: HTMLTrait.Attributes.label {}
+extension HTMLTag.option: HTMLTrait.Attributes.label {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.label {
+    static func label(_ value: String) -> Self {
+        HTMLAttribute(name: "label", value: value)
+    }
+}
+
+// form attribute
+public extension HTMLTrait.Attributes {
+    protocol form {}
+}
+
+extension HTMLTag.button: HTMLTrait.Attributes.form {}
+extension HTMLTag.fieldset: HTMLTrait.Attributes.form {}
+extension HTMLTag.input: HTMLTrait.Attributes.form {}
+extension HTMLTag.label: HTMLTrait.Attributes.form {}
+extension HTMLTag.option: HTMLTrait.Attributes.form {}
+extension HTMLTag.select: HTMLTrait.Attributes.form {}
+extension HTMLTag.textarea: HTMLTrait.Attributes.form {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.form {
+    static func form(_ id: String) -> Self {
+        HTMLAttribute(name: "form", value: id)
+    }
+}
+
+// name attribute (for basic string case, meta has its own typed name attribute)
+public extension HTMLTrait.Attributes {
+    protocol name {}
+}
+
+extension HTMLTag.button: HTMLTrait.Attributes.name {}
+extension HTMLTag.fieldset: HTMLTrait.Attributes.name {}
+extension HTMLTag.form: HTMLTrait.Attributes.name {}
+extension HTMLTag.iframe: HTMLTrait.Attributes.name {}
+extension HTMLTag.input: HTMLTrait.Attributes.name {}
+extension HTMLTag.select: HTMLTrait.Attributes.name {}
+extension HTMLTag.textarea: HTMLTrait.Attributes.name {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.name {
+    static func name(_ value: String) -> Self {
+        HTMLAttribute(name: "name", value: value)
+    }
+}
+
 // form tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.form {
     struct Method: Sendable, Equatable {
@@ -341,10 +393,6 @@ public extension HTMLAttribute where Tag == HTMLTag.input {
         HTMLAttribute(name: "type", value: type.value)
     }
 
-    static func name(_ name: String) -> Self {
-        HTMLAttribute(name: "name", value: name)
-    }
-
     static func value(_ value: String) -> Self {
         HTMLAttribute(name: "value", value: value)
     }
@@ -358,5 +406,16 @@ public extension HTMLAttribute where Tag == HTMLTag.input {
 public extension HTMLAttribute where Tag == HTMLTag.label {
     static func `for`(_ id: String) -> Self {
         HTMLAttribute(name: "for", value: id)
+    }
+}
+
+// option tag attributes
+public extension HTMLAttribute where Tag == HTMLTag.option {
+    static func value(_ value: String) -> Self {
+        HTMLAttribute(name: "value", value: value)
+    }
+
+    static var selected: Self {
+        HTMLAttribute(name: "selected", value: nil)
     }
 }
