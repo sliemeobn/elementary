@@ -238,6 +238,58 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.required {
     }
 }
 
+// disabled attribute
+public extension HTMLTrait.Attributes {
+    protocol disabled {}
+}
+
+extension HTMLTag.button: HTMLTrait.Attributes.disabled {}
+extension HTMLTag.fieldset: HTMLTrait.Attributes.disabled {}
+extension HTMLTag.input: HTMLTrait.Attributes.disabled {}
+extension HTMLTag.optgroup: HTMLTrait.Attributes.disabled {}
+extension HTMLTag.option: HTMLTrait.Attributes.disabled {}
+extension HTMLTag.select: HTMLTrait.Attributes.disabled {}
+extension HTMLTag.textarea: HTMLTrait.Attributes.disabled {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.disabled {
+    static var disabled: Self {
+        HTMLAttribute(name: "disabled", value: nil)
+    }
+}
+
+// autocomplete attribute
+public extension HTMLTrait.Attributes {
+    protocol autocomplete {}
+}
+
+extension HTMLTag.form: HTMLTrait.Attributes.autocomplete {}
+extension HTMLTag.input: HTMLTrait.Attributes.autocomplete {}
+extension HTMLTag.select: HTMLTrait.Attributes.autocomplete {}
+extension HTMLTag.textarea: HTMLTrait.Attributes.autocomplete {}
+
+public extension HTMLAttributeValue {
+    struct AutoComplete: ExpressibleByStringLiteral, RawRepresentable, Sendable, Equatable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
+        public init(stringLiteral value: String) {
+            rawValue = value
+        }
+
+        public static var on: Self { "on" }
+        public static var off: Self { "off" }
+    }
+}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.autocomplete {
+    static func autocomplete(_ value: HTMLAttributeValue.AutoComplete) -> Self {
+        HTMLAttribute(name: "autocomplete", value: value.rawValue)
+    }
+}
+
 // form tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.form {
     struct Method: Sendable, Equatable {
@@ -295,6 +347,10 @@ public extension HTMLAttribute where Tag == HTMLTag.input {
 
     static func value(_ value: String) -> Self {
         HTMLAttribute(name: "value", value: value)
+    }
+
+    static var checked: Self {
+        HTMLAttribute(name: "checked", value: nil)
     }
 }
 
