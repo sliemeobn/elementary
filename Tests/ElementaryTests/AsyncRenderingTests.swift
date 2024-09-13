@@ -25,6 +25,31 @@ final class AsyncRenderingTests: XCTestCase {
             "<div><p>1</p><p>2</p><p>3</p></div>"
         )
     }
+
+    func testImplicitAsyncContent() async throws {
+        try await HTMLAssertEqualAsyncOnly(
+            p(.id("hello")) {
+                let text = await getValue()
+                "Waiting for \(text)"
+            },
+            #"<p id="hello">Waiting for late response</p>"#
+        )
+    }
+
+    func testNestedImplicitAsyncContent() async throws {
+        try await HTMLAssertEqualAsyncOnly(
+            div(attributes: [.class("c1")]) {
+                await getValue()
+                p {
+                    "again \(await getValue())"
+                }
+                p(.class("c2")) {
+                    "and again \(await getValue())"
+                }
+            },
+            #"<div class="c1">late response<p>again late response</p><p class="c2">and again late response</p></div>"#
+        )
+    }
 }
 
 private struct AwaitedP: HTML {
