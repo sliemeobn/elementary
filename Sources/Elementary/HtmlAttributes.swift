@@ -342,6 +342,72 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.name {
     }
 }
 
+// crossorigin attribute
+public extension HTMLTrait.Attributes {
+    protocol crossorigin {}
+}
+
+extension HTMLTag.script: HTMLTrait.Attributes.crossorigin {}
+extension HTMLTag.link: HTMLTrait.Attributes.crossorigin {}
+
+public extension HTMLAttributeValue {
+    struct CrossOrigin: Sendable, Equatable {
+        var value: String
+
+        public static var anonymous: Self { .init(value: "anonymous") }
+        public static var useCredentials: Self { .init(value: "use-credentials") }
+    }
+}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.crossorigin {
+    static func crossorigin(_ type: HTMLAttributeValue.CrossOrigin) -> Self {
+        HTMLAttribute(name: "crossorigin", value: type.value)
+    }
+}
+
+// integrity attribute
+public extension HTMLTrait.Attributes {
+    protocol integrity {}
+}
+
+extension HTMLTag.script: HTMLTrait.Attributes.integrity {}
+extension HTMLTag.link: HTMLTrait.Attributes.integrity {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.integrity {
+    static func integrity(_ value: String) -> Self {
+        HTMLAttribute(name: "integrity", value: value)
+    }
+}
+
+// referrerpolicy attribute
+public extension HTMLTrait.Attributes {
+    protocol referrerpolicy {}
+}
+
+extension HTMLTag.script: HTMLTrait.Attributes.referrerpolicy {}
+extension HTMLTag.link: HTMLTrait.Attributes.referrerpolicy {}
+
+public extension HTMLAttributeValue {
+    struct ReferrerPolicy: Sendable, Equatable {
+        var value: String
+
+        public static var noReferrer: Self { .init(value: "no-referrer") }
+        public static var noReferrerWhenDowngrade: Self { .init(value: "no-referrer-when-downgrade") }
+        public static var origin: Self { .init(value: "origin") }
+        public static var originWhenCrossOrigin: Self { .init(value: "origin-when-cross-origin") }
+        public static var sameOrigin: Self { .init(value: "same-origin") }
+        public static var strictOrigin: Self { .init(value: "strict-origin") }
+        public static var strictOriginWhenCrossOrigin: Self { .init(value: "strict-origin-when-cross-origin") }
+        public static var unsafeUrl: Self { .init(value: "unsafe-url") }
+    }
+}
+
+extension HTMLAttribute where Tag: HTMLTrait.Attributes.referrerpolicy {
+    static func referrerPolicy(_ type: HTMLAttributeValue.ReferrerPolicy) -> Self {
+        HTMLAttribute(name: "referrerpolicy", value: type.value)
+    }
+}
+
 // form tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.form {
     struct Method: Sendable, Equatable {
@@ -417,5 +483,44 @@ public extension HTMLAttribute where Tag == HTMLTag.option {
 
     static var selected: Self {
         HTMLAttribute(name: "selected", value: nil)
+    }
+}
+
+// script tag attributes
+public extension HTMLAttribute where Tag == HTMLTag.script {
+    // type
+    struct ScriptType: Sendable, ExpressibleByStringLiteral {
+        var value: String
+
+        init(value: String) {
+            self.value = value
+        }
+
+        public init(stringLiteral value: String) {
+            self.value = value
+        }
+
+        public static var importmap: Self { .init(value: "importmap") }
+        public static var module: Self { .init(value: "module") }
+        public static var speculationrules: Self { .init(value: "speculationrules") }
+    }
+
+    static func type(_ type: ScriptType) -> Self {
+        HTMLAttribute(name: "type", value: type.value)
+    }
+
+    // async
+    static var async: Self {
+        HTMLAttribute(name: "async", value: nil)
+    }
+
+    // defer
+    static var `defer`: Self {
+        HTMLAttribute(name: "defer", value: nil)
+    }
+
+    // nomodule
+    static var nomodule: Self {
+        HTMLAttribute(name: "nomodule", value: nil)
     }
 }
