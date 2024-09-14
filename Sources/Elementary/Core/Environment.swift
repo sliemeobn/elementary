@@ -88,7 +88,7 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
         #endif
 
         html.taskLocal.withValue(html.value) {
-            Content._render(html.wrappedContent, into: &renderer, with: consume context)
+            Content._render(html.wrappedContent, into: &renderer, with: context)
         }
     }
 
