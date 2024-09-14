@@ -487,7 +487,7 @@ public extension HTMLAttribute where Tag == HTMLTag.option {
 }
 
 // script tag attributes
-public extension HTMLAttribute where Tag == HTMLTag.button {
+public extension HTMLAttribute where Tag == HTMLTag.script {
     // type
     struct ScriptType: Sendable, ExpressibleByStringLiteral {
         var value: String
