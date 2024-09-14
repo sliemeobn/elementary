@@ -1,3 +1,20 @@
+/// A property wrapper that reads an environment value from a `TaskLocal`.
+///
+/// Use `@Environment` to conveniently read a value provided via ``HTML/environment(_:_:)``.
+/// Elementary uses task-locals as the underlying storage system for environment variables.
+///
+/// ```swift
+/// enum Values {
+///     @TaskLocal static var myNumber = 0
+/// }
+/// struct MyNumber: HTML {
+///     @Environment(Values.$myNumber) var number
+///
+///     var content: some HTML {
+///         p { "\(number)" }
+///     }
+/// }
+/// ```
 @propertyWrapper
 public struct Environment<T: Sendable>: Sendable {
     enum _Storage {
@@ -7,14 +24,22 @@ public struct Environment<T: Sendable>: Sendable {
 
     var storage: _Storage
 
-    public init(requiring taskLocal: TaskLocal<T?>) {
-        storage = .optionalTaskLocal(taskLocal)
-    }
-
+    /// Creates an environment property that reads the value from the given `TaskLocal`.
+    /// - Parameter taskLocal: The `TaskLocal` to read the value from.
     public init(_ taskLocal: TaskLocal<T>) {
         storage = .taskLocal(taskLocal)
     }
 
+    /// Creates an environment property that reads the value from the given `TaskLocal`
+    /// by force-unwrapping an optional.
+    ///
+    /// Note: Is the value is `nil` during rendering, a fatal error will be thrown.
+    /// - Parameter taskLocal: The `TaskLocal` to read the value from.
+    public init(requiring taskLocal: TaskLocal<T?>) {
+        storage = .optionalTaskLocal(taskLocal)
+    }
+
+    /// The value of the environment property.
     public var wrappedValue: T {
         switch storage {
         case let .taskLocal(taskLocal): return taskLocal.wrappedValue
@@ -29,6 +54,20 @@ public struct Environment<T: Sendable>: Sendable {
 }
 
 public extension HTML {
+    /// Sets the value of a `TaskLocal` for the duration of rendering the content.
+    ///
+    /// The value can be accessed using the ``Environment`` property wrapper.
+    /// Elementary uses task-locals as the underlying storage system for environment variables.
+    ///
+    /// ```swift
+    /// enum Values {
+    ///     @TaskLocal static var myNumber = 0
+    /// }
+    /// div {
+    ///     MyNumber()
+    ///         .environment(Values.$myNumber, 15)
+    /// }
+    /// ```
     func environment<T: Sendable>(_ taskLocal: TaskLocal<T>, _ value: T) -> _ModifiedTaskLocal<T, Self> {
         _ModifiedTaskLocal(wrappedContent: self, taskLocal: taskLocal, value: value)
     }
