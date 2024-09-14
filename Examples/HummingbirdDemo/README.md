@@ -1,5 +1,9 @@
 # Elementary ❤️ Hummingbird
 
+> [!NOTE]
+> Please use the [hummingbird-elementary](https://github.com/hummingbird-community/hummingbird-elementary) integration package
+> when using Elementary with Hummingbird.
+
 ## Running the example
 
 Run the app and open http://localhost:8080 in the browser
