@@ -3,16 +3,26 @@ name: CI
 on:
   push:
     branches: [main]
+    paths:
+      - "**.swift"
+      - "**.yml"
   pull_request:
     branches: [main]
   workflow_dispatch:
 
 jobs:
-  ci:
-    name: Build & Test
+  linux:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        image: ["swift:5.10", "swiftlang/swift:nightly-6.0-jammy"]
+
+    container:
+      image: ${{ matrix.image }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Build
         run: swift build --build-tests

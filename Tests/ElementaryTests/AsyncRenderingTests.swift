@@ -87,12 +87,13 @@ private func getValue() async -> String {
     return "late response"
 }
 
-private extension AsyncStream {
+private extension AsyncStream where Element: Sendable {
     init(testData: [Element]) {
-        var iterator = testData.makeIterator()
-        self.init {
-            await Task.yield()
-            return iterator.next()
+        self.init { continuation in
+            for element in testData {
+                continuation.yield(element)
+            }
+            continuation.finish()
         }
     }
 }
