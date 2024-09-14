@@ -29,12 +29,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/cache@v4
-        with:
-          path: .build
-          key: ${{ matrix.image }}-spm-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ matrix.image }}-spm-
-
       - name: Build
         run: swift build
