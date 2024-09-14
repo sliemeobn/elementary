@@ -3,6 +3,9 @@ name: Build Examples
 on:
   push:
     branches: [main]
+    paths:
+      - "**.swift"
+      - "**.yml"
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -12,7 +15,15 @@ defaults:
     working-directory: ./Examples/HummingbirdDemo
 
 jobs:
-  ci:
+  linux-examples:
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        image: ["swift:5.10", "swiftlang/swift:nightly-6.0-jammy"]
+
+    container:
+      image: ${{ matrix.image }}
+
     name: Build Examples
     runs-on: ubuntu-latest
     steps:
@@ -21,9 +32,9 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: .build
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          key: ${{ matrix.image }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-spm-
+            ${{ matrix.image }}-spm-
 
       - name: Build
         run: swift build
