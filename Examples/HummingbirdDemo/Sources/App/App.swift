@@ -16,7 +16,8 @@ struct App {
             let count = request.uri.queryParameters.get("count", as: Int.self) ?? 1
 
             return MainLayout(title: "Greetings") {
-                GreetingPage(name: name.isEmpty ? "kind stranger" : name, greetingCount: count)
+                GreetingPage(greetingCount: count)
+                    .environment(EnvironmentValues.$name, name.isEmpty ? "kind stranger" : name)
             }
         }
 
