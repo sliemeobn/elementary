@@ -82,13 +82,23 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
 
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+        #if compiler(>=6.0)
+        // https://github.com/swiftlang/swift/issues/76474
+        let context = consume context
+        #endif
+
         html.taskLocal.withValue(html.value) {
-            Content._render(html.wrappedContent, into: &renderer, with: context)
+            Content._render(html.wrappedContent, into: &renderer, with: consume context)
         }
     }
 
     @_spi(Rendering)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        #if compiler(>=6.0)
+        // https://github.com/swiftlang/swift/issues/76474
+        let context = consume context
+        #endif
+
         try await html.taskLocal.withValue(html.value) {
             try await Content._render(html.wrappedContent, into: &renderer, with: context)
         }
