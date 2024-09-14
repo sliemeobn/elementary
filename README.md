@@ -177,7 +177,7 @@ div {
 
 As a sensible default, _class_ and _style_ attributes are merged (with a blank space or semicolon respectively). All other attributes are overwritten by default.
 
-## Fist class async support
+## Seamless async support
 
 Elementary supports Swift Concurrency in HTML content. Simply `await` something inside your HTML, while the first bytes are already flying towards the browser.
 
@@ -208,6 +208,32 @@ ul {
         // ...is immediately streamed out as HTML
         li { "\(user.name) \(user.favoriteProgrammingLanguage)" }
     }
+}
+```
+
+## Enviroment values
+
+Elementary utilizes `TaskLocal`s to provide a light-weight environment system.
+
+```swift
+enum MyValues {
+    // task-locals act as keys, ...
+    @TaskLocal static var userName = "Anonymous"
+}
+
+struct MyComponent: HTML {
+    // ... their values can be accessed ...
+    @Environment(MyValues.$userName) var userName
+
+    var content: some HTML {
+        p { "Hello, \(userName)!" }
+    }
+}
+
+div {
+    // ... and provided in a familiar way
+    MyComponent()
+        .environment(Values.$userName, "Drax the Destroyer")
 }
 ```
 

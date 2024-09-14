@@ -48,7 +48,8 @@ struct WelcomePage: HTML {
 }
 
 struct GreetingPage: HTML {
-    var name: String
+    // example of a task-local based environment value
+    @Environment(requiring: EnvironmentValues.$name) var name
     var greetingCount: Int
 
     var content: some HTML {
@@ -82,4 +83,8 @@ extension input {
             .class("hover:bg-orange-600 hover:shadow-xl")
         )
     }
+}
+
+enum EnvironmentValues {
+    @TaskLocal static var name: String?
 }
