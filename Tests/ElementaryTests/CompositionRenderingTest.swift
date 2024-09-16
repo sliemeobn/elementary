@@ -5,7 +5,7 @@ final class CompositionRenderingTests: XCTestCase {
     func testRendersADocument() async throws {
         try await HTMLAssertEqual(
             MyPage(text: "my text"),
-            #"<!DOCTYPE html><html><head><title>Foo</title><meta name="author" content="Me"><meta name="description" content="Test page"></head><body><div><h1>Hello, world!</h1><p>my text</p></div></body></html>"#
+            #"<!DOCTYPE html><html lang="en"><head><title>Foo</title><meta name="author" content="Me"><meta name="description" content="Test page"></head><body><div><h1>Hello, world!</h1><p>my text</p></div></body></html>"#
         )
     }
 
@@ -39,6 +39,7 @@ struct MyPage: HTMLDocument {
     var text: String
 
     var title: String = "Foo"
+    var lang: String = "en"
 
     var head: some HTML {
         meta(.name(.author), .content("Me"))

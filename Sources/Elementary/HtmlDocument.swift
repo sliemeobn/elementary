@@ -1,12 +1,13 @@
 /// A type that represents a full HTML document.
 ///
 /// Provides a simple structure to model top-level HTML types.
-/// A default ``HTML/content`` implementation takes your ``title``, ``head`` and ``body``
-/// properties and renders them into a full HTML document.
+/// A default ``HTML/content`` implementation takes your ``title``, ``head``,  ``body`` and
+///  (optional) ``lang`` properties and renders them into a full HTML document.
 ///
 /// ```swift
 /// struct MyPage: HTMLDocument {
 ///   var title = "Hello, World!"
+///   var lang = "en"
 ///
 ///   var head: some HTML {
 ///     meta(.name(.viewport), .content("width=device-width, initial-scale=1.0"))
@@ -23,6 +24,7 @@ public protocol HTMLDocument: HTML {
     associatedtype HTMLBody: HTML
 
     var title: String { get }
+    var lang: String { get }
     @HTMLBuilder var head: HTMLHead { get }
     @HTMLBuilder var body: HTMLBody { get }
 }
@@ -37,5 +39,10 @@ public extension HTMLDocument {
             }
             Elementary.body { self.body }
         }
+        .attributes(.lang(lang), when: lang != "")
     }
+}
+
+public extension HTMLDocument {
+    var lang: String { "" }
 }
