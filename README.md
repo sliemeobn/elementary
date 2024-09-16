@@ -8,7 +8,8 @@
 
 ```swift
 struct MainPage: HTMLDocument {
-    var title: String = "Elementary"
+    var title = "Elementary"
+    var lang = "en"
 
     var head: some HTML {
         meta(.name(.description), .content("Typesafe HTML in modern Swift"))
