@@ -1,12 +1,17 @@
 struct HTMLTextRenderer: _HTMLRendering {
-    private var result = ""
+    private var result: [UInt8] = []
+
+    init() {
+        // gotta start somewhere
+        result.reserveCapacity(1024)
+    }
 
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
-        result.append(token.renderedValue)
+        result.appendToken(token)
     }
 
     consuming func collect() -> String {
-        result
+        String(decoding: result, as: UTF8.self)
     }
 }
 
@@ -15,7 +20,7 @@ struct HTMLStreamRenderer: _HTMLRendering {
     let writer: (String) -> Void
 
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
-        writer(token.renderedValue)
+        writer(token.renderedValue())
     }
 }
 
@@ -79,7 +84,7 @@ struct PrettyHTMLTextRenderer {
 
 extension PrettyHTMLTextRenderer: _HTMLRendering {
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
-        let renderedToken = token.renderedValue
+        let renderedToken = token.renderedValue()
 
         if token.shouldInline(currentlyInlined: isInLineAfterBlockTagOpen || !currentInlineText.isEmpty) {
             if !isInLineAfterBlockTagOpen {
