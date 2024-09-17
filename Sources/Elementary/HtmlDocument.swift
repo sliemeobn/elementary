@@ -24,7 +24,7 @@ public protocol HTMLDocument: HTML {
     associatedtype HTMLBody: HTML
 
     var title: String { get }
-    var lang: String { get }
+    var lang: String { get } // Note: Not an optional to prevent accidental property overloading with type `String` in implementations
     @HTMLBuilder var head: HTMLHead { get }
     @HTMLBuilder var body: HTMLBody { get }
 }
@@ -39,10 +39,15 @@ public extension HTMLDocument {
             }
             Elementary.body { self.body }
         }
-        .attributes(.lang(lang), when: lang != "")
+        .attributes(.lang(lang), when: lang != .undefined)
     }
 }
 
 public extension HTMLDocument {
-    var lang: String { "" }
+    typealias Language = String
+    var lang: Language { .undefined }
+}
+
+extension HTMLDocument.Language {
+    static let undefined = HTMLDocument.Language()
 }
