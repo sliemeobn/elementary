@@ -1,55 +1,9 @@
 extension _HTMLRenderToken {
-    // NOTE: consuming get causes complier error, but won't make a difference likely
-    var renderedValue: String {
-        switch self {
-        case let .startTagOpen(tagName, _):
-            return "<\(tagName)"
-        case let .attribute(name, value):
-            if let value = value {
-                return " \(name)=\"\(value.htmlEscaped(for: .attribute))\""
-            } else {
-                return " \(name)"
-            }
-        case .startTagClose:
-            return ">"
-        case let .endTag(tagName, _):
-            return "</\(tagName)>"
-        case let .text(text):
-            return text.htmlEscaped(for: .content)
-        case let .raw(raw):
-            return raw
-        case let .comment(comment):
-            return "<!--\(comment.htmlEscaped(for: .content))-->"
-        }
-    }
-}
-
-private extension String {
-    enum HTMLEscapingMode {
-        case attribute
-        case content
-    }
-
-    func htmlEscaped(for mode: HTMLEscapingMode) -> String {
-        var result = [UInt8]()
-        result.reserveCapacity(utf8.count)
-
-        for byte in utf8 {
-            switch (byte, mode) {
-            case (38, _): // &
-                result.append(contentsOf: "&amp;".utf8)
-            case (34, .attribute): // "
-                result.append(contentsOf: "&quot;".utf8)
-            case (60, .content): // <
-                result.append(contentsOf: "&lt;".utf8)
-            case (62, .content): // >
-                result.append(contentsOf: "&gt;".utf8)
-            default:
-                result.append(byte)
-            }
-        }
-
-        return String(decoding: result, as: UTF8.self)
+    // TODO: remove this method
+    func renderedValue() -> String {
+        var buffer: [UInt8] = []
+        buffer.appendToken(self)
+        return String(decoding: buffer, as: UTF8.self)
     }
 }
 
@@ -67,42 +21,63 @@ extension _RenderingContext {
     }
 }
 
-// NOTE: weirdly, using string interpolation tokens is faster than appending to the buffer directly. keeping this here for future experiments
-// extension [UInt8] {
-//     @inline(__always)
-//     mutating func append(_ string: String) {
-//         append(contentsOf: string.utf8)
-//     }
+extension [UInt8] {
+    mutating func writeEscapedAttribute(_ value: consuming String) {
+        for byte in value.utf8 {
+            switch byte {
+            case 38: // &
+                self.append(contentsOf: "&amp;".utf8)
+            case 34: // "
+                append(contentsOf: "&quot;".utf8)
+            default:
+                append(byte)
+            }
+        }
+    }
 
-//     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
-//         // avoid strings and append each component directly
-//         switch token {
-//         case let .startTagOpen(tagName, _):
-//             append("<")
-//             append(tagName)
-//         case let .attribute(name, value):
-//             append(" ")
-//             append(name)
-//             if let value = value {
-//                 append("=")
-//                 append("\"")
-//                 append(value.htmlEscaped(for: .attribute))
-//                 append("\"")
-//             }
-//         case .startTagClose:
-//             append(">")
-//         case let .endTag(tagName, _):
-//             append("</")
-//             append(tagName)
-//             append(">")
-//         case let .text(text):
-//             append(text.htmlEscaped(for: .content))
-//         case let .raw(raw):
-//             append(raw)
-//         case let .comment(comment):
-//             append("<!--")
-//             append(comment.htmlEscaped(for: .content))
-//             append("-->")
-//         }
-//     }
-// }
+    mutating func writeEscapedContent(_ value: consuming String) {
+        for byte in value.utf8 {
+            switch byte {
+            case 38: // &
+                append(contentsOf: "&amp;".utf8)
+            case 60: // <
+                append(contentsOf: "&lt;".utf8)
+            case 62: // >
+                append(contentsOf: "&gt;".utf8)
+            default:
+                append(byte)
+            }
+        }
+    }
+
+    mutating func appendToken(_ token: consuming _HTMLRenderToken) {
+        // avoid strings and append each component directly
+        switch token {
+        case let .startTagOpen(tagName, _):
+            append(60) // <
+            append(contentsOf: tagName.utf8)
+        case let .attribute(name, value):
+            append(32) // space
+            append(contentsOf: name.utf8)
+            if let value = value {
+                append(contentsOf: [61, 34]) // ="
+                writeEscapedAttribute(value)
+                append(34) // "
+            }
+        case .startTagClose:
+            append(62) // >
+        case let .endTag(tagName, _):
+            append(contentsOf: [60, 47]) // </
+            append(contentsOf: tagName.utf8)
+            append(62) // >
+        case let .text(text):
+            writeEscapedContent(text)
+        case let .raw(raw):
+            append(contentsOf: raw.utf8)
+        case let .comment(comment):
+            append(contentsOf: "<!--".utf8)
+            writeEscapedContent(comment)
+            append(contentsOf: "-->".utf8)
+        }
+    }
+}
