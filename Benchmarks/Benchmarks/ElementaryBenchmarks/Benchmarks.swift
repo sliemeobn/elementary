@@ -205,7 +205,15 @@ func makeSingleAttributeElements() -> some HTML {
 }
 
 struct MyCustomElement<H: HTML>: HTML {
-    @HTMLBuilder var content: H
+    var myContent: H
+
+    init(@HTMLBuilder content: () -> H) {
+        myContent = content()
+    }
+
+    var content: some HTML {
+        myContent
+    }
 }
 
 struct MyListItem: HTML {

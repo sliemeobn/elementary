@@ -30,10 +30,7 @@ public protocol HTML<Tag> {
     /// The HTML content of this component.
     @HTMLBuilder var content: Content { get }
 
-    @_spi(Rendering)
     static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext)
-
-    @_spi(Rendering)
     static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws
 }
 
@@ -81,10 +78,12 @@ public protocol _AsyncHTMLRendering {
 }
 
 public extension HTML {
+    @_transparent
     static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         Content._render(html.content, into: &renderer, with: context)
     }
 
+    @_transparent
     static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         try await Content._render(html.content, into: &renderer, with: context)
     }
