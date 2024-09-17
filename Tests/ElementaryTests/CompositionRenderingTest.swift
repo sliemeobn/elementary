@@ -38,8 +38,8 @@ final class CompositionRenderingTests: XCTestCase {
 struct MyPage: HTMLDocument {
     var text: String
 
-    var title: String = "Foo"
-    var lang: String = "en"
+    var title = "Foo"
+    var lang = "en"
 
     var head: some HTML {
         meta(.name(.author), .content("Me"))
