@@ -220,8 +220,14 @@ struct MyListItem: HTML {
     let number: Int
 
     var content: some HTML {
+        let isEven = number.isMultiple(of: 2)
+
         li(.id("\(number)")) {
-            "Item \(number)"
-        }.attributes(.class("item"), when: number.isMultiple(of: 2))
+            if isEven {
+                "Even Item \(number)"
+            } else {
+                "Item \(number)"
+            }
+        }.attributes(.class("even"), when: isEven)
     }
 }
