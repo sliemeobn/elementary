@@ -28,6 +28,7 @@ struct AsyncHTMLRenderer<Writer: HTMLStreamWriter>: _AsyncHTMLRendering {
 
 final class BufferWriter: HTMLStreamWriter {
     var result: [UInt8] = []
+
     func write(_ bytes: ArraySlice<UInt8>) async throws {
         result.append(contentsOf: bytes)
     }

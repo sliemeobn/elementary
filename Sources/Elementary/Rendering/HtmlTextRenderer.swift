@@ -1,6 +1,11 @@
 struct HTMLTextRenderer: _HTMLRendering {
     private var result: [UInt8] = []
 
+    init() {
+        // gotta start somewhere
+        result.reserveCapacity(1024)
+    }
+
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         result.appendToken(token)
     }
