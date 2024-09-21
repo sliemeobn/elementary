@@ -66,5 +66,5 @@ public extension HTMLDocument {
     /// The default value for the `lang` property is an empty string and will not be rendered in the HTML.
     var lang: String { defaultUndefinedLanguage }
     /// The default value for the `dir` property is an empty string and will not be rendered in the HTML.
-    var dir: HTMLAttributeValue.Direction { .init(value: "") }
+    var dir: HTMLAttributeValue.Direction { .init(value: defaultUndefinedDirection) }
 }
