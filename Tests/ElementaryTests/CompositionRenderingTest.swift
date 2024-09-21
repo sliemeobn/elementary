@@ -9,6 +9,13 @@ final class CompositionRenderingTests: XCTestCase {
         )
     }
 
+    func testRendersARTLPage() async throws {
+        try await HTMLAssertEqual(
+            MyRTLPage(),
+            #"<!DOCTYPE html><html lang="he" dir="rtl"><head><title>שלום עולם</title></head><body><h1>מה קורה?</h1></body></html>"#
+        )
+    }
+
     func testRendersAComponent() async throws {
         try await HTMLAssertEqual(
             MyList(items: ["one", "two"], selectedIndex: 1),
@@ -75,5 +82,19 @@ struct MyListItem: HTML {
     var content: some HTML<HTMLTag.li> {
         li { text }
             .attributes(.class("selected"), when: isSelected)
+    }
+}
+
+struct MyRTLPage: HTMLDocument {
+    var title = "שלום עולם"
+    var lang = "he"
+    var dir: HTMLAttributeValue.Direction = .rtl
+
+    var head: some HTML {
+        EmptyHTML()
+    }
+
+    var body: some HTML {
+        h1 { "מה קורה?" }
     }
 }
