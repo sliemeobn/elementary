@@ -40,6 +40,23 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     }
 }
 
+// dir attribute
+public extension HTMLAttributeValue {
+    struct Direction {
+        var value: String
+
+        public static var ltr: Self { .init(value: "ltr") }
+        public static var rtl: Self { .init(value: "rtl") }
+        public static var auto: Self { .init(value: "auto") }
+    }
+}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
+    static func dir(_ value: HTMLAttributeValue.Direction) -> Self {
+        HTMLAttribute(name: "dir", value: value.value)
+    }
+}
+
 // meta tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.meta {
     struct Name: Sendable, ExpressibleByStringLiteral {

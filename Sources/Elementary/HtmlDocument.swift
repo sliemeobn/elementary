@@ -1,8 +1,9 @@
 /// A type that represents a full HTML document.
 ///
 /// Provides a simple structure to model top-level HTML types.
-/// A default ``HTML/content`` implementation takes your ``title``, ``head``, ``body``, and
-///  (optional) ``lang`` properties and renders them into a full HTML document.
+/// A default ``HTML/content`` implementation takes your ``title``, ``head``, ``body``
+/// and renders them into a full HTML document.
+/// Optionally properties for ``lang`` and ``dir`` can be provided.
 ///
 /// ```swift
 /// struct MyPage: HTMLDocument {
@@ -23,8 +24,19 @@ public protocol HTMLDocument: HTML {
     associatedtype HTMLHead: HTML
     associatedtype HTMLBody: HTML
 
+    /// The title of the HTML document.
     var title: String { get }
+
+    /// The language of the HTML document.
+    ///
+    /// By default this attribute is not set.
     var lang: String { get }
+
+    /// The text directionality (`ltr`, `rtl`, `auto`) of the HTML document.
+    ///
+    /// By default this attribute is not set.
+    var dir: HTMLAttributeValue.Direction { get }
+
     @HTMLBuilder var head: HTMLHead { get }
     @HTMLBuilder var body: HTMLBody { get }
 }
@@ -40,15 +52,19 @@ public extension HTMLDocument {
             Elementary.body { self.body }
         }
         .attributes(.lang(lang), when: lang != defaultUndefinedLanguage)
+        .attributes(.dir(dir), when: dir.value != defaultUndefinedDirection)
     }
 }
 
 // NOTE: The default implementation uses an empty string as the "magic value" for undefined.
-// This is to avoid the need for an optional `lang` property on the protocol,
-// which would cause confusing issues when adopters provide a property of type `String`.
+// This is to avoid the need for an optional `lang` or `dir`` property on the protocol,
+// which would cause confusing issues when adopters provide a property of a non-optional type.
 private let defaultUndefinedLanguage = ""
+private let defaultUndefinedDirection = ""
 
 public extension HTMLDocument {
     /// The default value for the `lang` property is an empty string and will not be rendered in the HTML.
     var lang: String { defaultUndefinedLanguage }
+    /// The default value for the `dir` property is an empty string and will not be rendered in the HTML.
+    var dir: HTMLAttributeValue.Direction { .init(value: "") }
 }
