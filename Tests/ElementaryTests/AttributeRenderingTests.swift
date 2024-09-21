@@ -123,4 +123,11 @@ final class AttributeRenderingTests: XCTestCase {
             #"<img id="1" style="2">"#
         )
     }
+
+    func testRendersWidthAndHeightAttributes() async throws {
+        try await HTMLAssertEqual(
+            img(.width(100), .height(200)),
+            #"<img width="100" height="200">"#
+        )
+    }
 }

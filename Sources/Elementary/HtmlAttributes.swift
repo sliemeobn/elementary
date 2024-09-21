@@ -92,7 +92,7 @@ public extension HTMLAttribute where Tag == HTMLTag.meta {
 // link tag attributes
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
 public extension HTMLAttribute where Tag == HTMLTag.link {
-    public struct As: Sendable, ExpressibleByStringLiteral {
+    struct As: Sendable, ExpressibleByStringLiteral {
         var value: String
 
         init(value: String) {
@@ -118,7 +118,7 @@ public extension HTMLAttribute where Tag == HTMLTag.link {
         public static let author = As(value: "author")
     }
 
-    public static func `as`(_ value: As) -> Self {
+    static func `as`(_ value: As) -> Self {
         HTMLAttribute(name: "as", value: value.value)
     }
 }
@@ -458,6 +458,29 @@ public extension HTMLAttributeValue {
 extension HTMLAttribute where Tag: HTMLTrait.Attributes.referrerpolicy {
     static func referrerPolicy(_ type: HTMLAttributeValue.ReferrerPolicy) -> Self {
         HTMLAttribute(name: "referrerpolicy", value: type.value)
+    }
+}
+
+// width and height attributes
+public extension HTMLTrait.Attributes {
+    protocol dimensions {}
+}
+
+extension HTMLTag.canvas: HTMLTrait.Attributes.dimensions {}
+extension HTMLTag.embed: HTMLTrait.Attributes.dimensions {}
+extension HTMLTag.iframe: HTMLTrait.Attributes.dimensions {}
+extension HTMLTag.img: HTMLTrait.Attributes.dimensions {}
+extension HTMLTag.input: HTMLTrait.Attributes.dimensions {}
+extension HTMLTag.object: HTMLTrait.Attributes.dimensions {}
+extension HTMLTag.video: HTMLTrait.Attributes.dimensions {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.dimensions {
+    static func width(_ value: Int) -> Self {
+        HTMLAttribute(name: "width", value: "\(value)")
+    }
+
+    static func height(_ value: Int) -> Self {
+        HTMLAttribute(name: "height", value: "\(value)")
     }
 }
 
