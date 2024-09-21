@@ -214,6 +214,7 @@ public extension HTMLAttributeValue {
 
         public static var icon: Self { "icon" }
         public static var stylesheet: Self { "stylesheet" }
+        public static var preload: Self { "preload" }
     }
 }
 
