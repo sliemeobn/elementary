@@ -72,6 +72,40 @@ public extension HTMLAttribute where Tag == HTMLTag.meta {
     }
 }
 
+// link tag attributes
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
+public extension HTMLAttribute where Tag == HTMLTag.link {
+    public struct As: Sendable, ExpressibleByStringLiteral {
+        var value: String
+
+        init(value: String) {
+            self.value = value
+        }
+
+        public init(stringLiteral value: String) {
+            self.value = value
+        }
+
+        public static let audio = As(value: "audio")
+        public static let document = As(value: "document")
+        public static let embed = As(value: "embed")
+        public static let fetch = As(value: "fetch")
+        public static let font = As(value: "font")
+        public static let image = As(value: "image")
+        public static let object = As(value: "object")
+        public static let script = As(value: "script")
+        public static let style = As(value: "style")
+        public static let track = As(value: "track")
+        public static let video = As(value: "video")
+        public static let worker = As(value: "worker")
+        public static let author = As(value: "author")
+    }
+
+    public static func `as`(_ value: As) -> Self {
+        HTMLAttribute(name: "as", value: value.value)
+    }
+}
+
 // href attribute
 public extension HTMLTrait.Attributes {
     protocol href {}
