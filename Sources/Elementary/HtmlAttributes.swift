@@ -125,7 +125,7 @@ public extension HTMLAttribute where Tag == HTMLTag.link {
 
 // button tag attributes
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button
-public extension HTMLAttribute where Tag == HTMLTag.link {
+public extension HTMLAttribute where Tag == HTMLTag.button {
     struct ButtonType: Sendable, ExpressibleByStringLiteral {
         var value: String
 
