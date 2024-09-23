@@ -126,14 +126,10 @@ public extension HTMLAttribute where Tag == HTMLTag.link {
 // button tag attributes
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button
 public extension HTMLAttribute where Tag == HTMLTag.button {
-    struct ButtonType: Sendable, ExpressibleByStringLiteral {
+    struct ButtonType: Sendable {
         var value: String
 
         init(value: String) {
-            self.value = value
-        }
-
-        public init(stringLiteral value: String) {
             self.value = value
         }
 
