@@ -45,6 +45,26 @@ struct FeatureList: HTML {
 }
 ```
 
+## Use it
+
+Add the dependency to `Package.swift`
+```swift
+.package(url: "https://github.com/sliemeobn/elementary.git", from: "0.3.2")
+.product(name: "Elementary", package: "elementary")
+```
+
+Integration with [Hummingbird](https://github.com/hummingbird-community/hummingbird-elementary)
+```swift
+.package(url: "https://github.com/hummingbird-community/hummingbird-elementary.git", from: "0.3.0")
+.product(name: "HummingbirdElementary", package: "hummingbird-elementary")
+```
+
+Integration with [Vapor](https://github.com/vapor-community/vapor-elementary)
+```swift
+.package(url: "https://github.com/vapor-community/vapor-elementary.git", from: "0.1.0")
+.product(name: "VaporElementary", package: "vapor-elementary")
+```
+
 ## Play with it
 
 Check out the [Hummingbird + Tailwind example app](https://github.com/sliemeobn/elementary/tree/main/Examples/HummingbirdDemo).
