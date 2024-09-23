@@ -620,3 +620,17 @@ public extension HTMLAttribute where Tag == HTMLTag.script {
         HTMLAttribute(name: "nomodule", value: nil)
     }
 }
+
+// placeholder attribute
+public extension HTMLTrait.Attributes {
+    protocol placeholder {}
+}
+
+extension HTMLTag.input: HTMLTrait.Attributes.placeholder {}
+extension HTMLTag.textarea: HTMLTrait.Attributes.placeholder {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.placeholder {
+    static func placeholder(_ value: String) -> Self {
+        HTMLAttribute(name: "placeholder", value: value)
+    }
+}
