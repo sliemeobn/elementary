@@ -123,6 +123,26 @@ public extension HTMLAttribute where Tag == HTMLTag.link {
     }
 }
 
+// button tag attributes
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button
+public extension HTMLAttribute where Tag == HTMLTag.button {
+    struct ButtonType: Sendable {
+        var value: String
+
+        init(value: String) {
+            self.value = value
+        }
+
+        public static let submit = ButtonType(value: "submit")
+        public static let reset = ButtonType(value: "reset")
+        public static let button = ButtonType(value: "button")
+    }
+
+    static func type(_ value: ButtonType) -> Self {
+        HTMLAttribute(name: "type", value: value.value)
+    }
+}
+
 // href attribute
 public extension HTMLTrait.Attributes {
     protocol href {}
