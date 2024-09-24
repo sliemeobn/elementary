@@ -551,6 +551,18 @@ public extension HTMLAttribute where Tag == HTMLTag.input {
         public static var week: Self { .init(value: "week") }
     }
 
+    struct Accept: Sendable, Equatable, ExpressibleByStringLiteral {
+        var value: String
+
+        init(value: String) {
+            self.value = value
+        }
+
+        public init(stringLiteral value: StringLiteralType) {
+            self.value = value
+        }
+    }
+
     static func type(_ type: InputType) -> Self {
         HTMLAttribute(name: "type", value: type.value)
     }
@@ -561,6 +573,10 @@ public extension HTMLAttribute where Tag == HTMLTag.input {
 
     static var checked: Self {
         HTMLAttribute(name: "checked", value: nil)
+    }
+
+    static func accept(_ type: Accept) -> Self {
+        HTMLAttribute(name: "accept", value: type.value)
     }
 }
 
