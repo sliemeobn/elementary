@@ -50,7 +50,7 @@ extension Never: HTMLTagDefinition {
 public struct _RenderingContext {
     var attributes: AttributeStorage
 
-    static var emptyContext: Self { Self(attributes: .none) }
+    public static var emptyContext: Self { Self(attributes: .none) }
 }
 
 // TODO: think about this interface... seems not ideal
