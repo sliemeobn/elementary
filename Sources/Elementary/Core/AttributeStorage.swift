@@ -1,12 +1,12 @@
-struct StoredAttribute: Equatable, Sendable {
+public struct _StoredAttribute: Equatable, Sendable {
     enum MergeMode: Equatable {
         case appendValue(_ separator: String = " ")
         case replaceValue
         case ignoreIfSet
     }
 
-    var name: String
-    var value: String?
+    public var name: String
+    public var value: String?
     var mergeMode: MergeMode = .replaceValue
 
     mutating func appending(value: String?, separatedBy separator: String) {
@@ -18,20 +18,20 @@ struct StoredAttribute: Equatable, Sendable {
     }
 }
 
-enum AttributeStorage: Sendable {
+public enum _AttributeStorage: Sendable, Equatable {
     case none
-    case single(StoredAttribute)
-    case multiple([StoredAttribute])
+    case single(_StoredAttribute)
+    case multiple([_StoredAttribute])
 
-    init() {
+    public init() {
         self = .none
     }
 
-    init(_ attribute: HTMLAttribute<some HTMLTagDefinition>) {
+    public init(_ attribute: HTMLAttribute<some HTMLTagDefinition>) {
         self = .single(attribute.htmlAttribute)
     }
 
-    init(_ attributes: [HTMLAttribute<some HTMLTagDefinition>]) {
+    public init(_ attributes: [HTMLAttribute<some HTMLTagDefinition>]) {
         switch attributes.count {
         case 0: self = .none
         case 1: self = .single(attributes[0].htmlAttribute)
@@ -39,7 +39,7 @@ enum AttributeStorage: Sendable {
         }
     }
 
-    var isEmpty: Bool {
+    public var isEmpty: Bool {
         switch self {
         case .none: return true
         case .single: return false
@@ -47,7 +47,7 @@ enum AttributeStorage: Sendable {
         }
     }
 
-    mutating func append(_ attributes: consuming AttributeStorage) {
+    public mutating func append(_ attributes: consuming _AttributeStorage) {
         // maybe this was a bad idea....
         switch (self, attributes) {
         case (_, .none):
@@ -68,31 +68,31 @@ enum AttributeStorage: Sendable {
         }
     }
 
-    consuming func flattened() -> FlattenedAttributeView {
+    public consuming func flattened() -> FlattenedAttributeView {
         .init(storage: self)
     }
 }
 
-extension AttributeStorage {
+public extension _AttributeStorage {
     struct FlattenedAttributeView: Sequence, Sendable {
-        typealias Element = StoredAttribute
-        var storage: AttributeStorage
+        public typealias Element = _StoredAttribute
+        var storage: _AttributeStorage
 
-        consuming func makeIterator() -> Iterator {
+        public consuming func makeIterator() -> Iterator {
             Iterator(storage)
         }
 
-        struct Iterator: IteratorProtocol {
+        public struct Iterator: IteratorProtocol {
             enum State {
                 case empty
-                case single(StoredAttribute)
-                case flattening([StoredAttribute], Int)
+                case single(_StoredAttribute)
+                case flattening([_StoredAttribute], Int)
                 case _temporaryNothing
             }
 
             var state: State
 
-            init(_ storage: consuming AttributeStorage) {
+            init(_ storage: consuming _AttributeStorage) {
                 switch storage {
                 case .none: state = .empty
                 case let .single(attribute): state = .single(attribute)
@@ -100,7 +100,7 @@ extension AttributeStorage {
                 }
             }
 
-            mutating func next() -> StoredAttribute? {
+            public mutating func next() -> _StoredAttribute? {
                 switch state {
                 case .empty: return nil
                 case let .single(attribute):
@@ -125,8 +125,8 @@ extension AttributeStorage {
     }
 }
 
-private let blankedOut = StoredAttribute(name: "")
-private func nextflattenedAttribute(attributes: inout [StoredAttribute], from index: Int) -> (StoredAttribute, Int?) {
+private let blankedOut = _StoredAttribute(name: "")
+private func nextflattenedAttribute(attributes: inout [_StoredAttribute], from index: Int) -> (_StoredAttribute, Int?) {
     var attribute = attributes[index]
     attributes[index] = blankedOut
 

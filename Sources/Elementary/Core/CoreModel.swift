@@ -48,7 +48,7 @@ extension Never: HTMLTagDefinition {
 }
 
 public struct _RenderingContext {
-    var attributes: AttributeStorage
+    var attributes: _AttributeStorage
 
     static var emptyContext: Self { Self(attributes: .none) }
 }

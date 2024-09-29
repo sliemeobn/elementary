@@ -108,12 +108,12 @@ public struct HTMLText: HTML {
 }
 
 public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
-    enum Value {
+    public enum Value {
         case trueContent(TrueContent)
         case falseContent(FalseContent)
     }
 
-    let value: Value
+    public let value: Value
 
     init(_ value: Value) {
         self.value = value
@@ -141,7 +141,7 @@ public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
 }
 
 public struct _HTMLTuple<each Child: HTML>: HTML {
-    let value: (repeat each Child)
+    public let value: (repeat each Child)
 
     init(_ value: repeat each Child) {
         self.value = (repeat each value)
@@ -171,7 +171,7 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
 }
 
 public struct _HTMLArray<Element: HTML>: HTML {
-    let value: [Element]
+    public let value: [Element]
 
     init(_ value: [Element]) {
         self.value = value
