@@ -34,7 +34,7 @@ public struct _StoredAttribute: Equatable, Sendable {
     }
 }
 
-public enum _AttributeStorage: Sendable {
+public enum _AttributeStorage: Sendable, Equatable {
     case none
     case single(_StoredAttribute)
     case multiple([_StoredAttribute])
