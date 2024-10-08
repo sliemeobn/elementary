@@ -17,10 +17,11 @@
     }
 
     // variadic generics currently not supported in embedded
-    @_unavailableInEmbedded
-    public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
-        _HTMLTuple(repeat each content)
-    }
+    #if !hasFeature(Embedded)
+        public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
+            _HTMLTuple(repeat each content)
+        }
+    #endif
 
     public static func buildIf<Content>(_ content: Content?) -> Content? where Content: HTML {
         content
