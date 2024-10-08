@@ -1,9 +1,20 @@
 // swift-tools-version: 6.0
+import Foundation
 import PackageDescription
 
-let featureFlags: [SwiftSetting] = [
+let shouldBuildForEmbedded = ProcessInfo.processInfo.environment["EXPERIMENTAL_EMBEDDED_WASM"].flatMap(Bool.init) ?? false
+
+var featureFlags: [SwiftSetting] = [
     .enableUpcomingFeature("ExistentialAny"),
 ]
+
+if shouldBuildForEmbedded {
+    featureFlags.append(
+        .unsafeFlags([
+            "-Xfrontend", "-emit-empty-object-file",
+        ])
+    )
+}
 
 let package = Package(
     name: "elementary",

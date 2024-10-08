@@ -1,23 +1,29 @@
-extension _HTMLRenderToken {
-    // TODO: remove this method
-    func renderedValue() -> String {
-        var buffer: [UInt8] = []
-        buffer.appendToken(self)
-        return String(decoding: buffer, as: UTF8.self)
-    }
-}
-
 extension _RenderingContext {
     @inline(__always)
     func assertNoAttributes(_ type: (some HTML).Type) {
-        assert(attributes.isEmpty, "Attributes are not supported on \(type)")
+        #if hasFeature(Embedded)
+            assert(attributes.isEmpty, "Attributes are not supported")
+        #else
+            assert(attributes.isEmpty, "Attributes are not supported on \(type)")
+        #endif
     }
 
     @inline(__always)
     func assertionFailureNoAsyncContext(_ type: (some HTML).Type) {
         let message = "Cannot render \(type) in a synchronous context, please use .render(into:) or .renderAsync() instead."
         print("Elementary rendering error: \(message)")
-        assertionFailure(message)
+        #if !hasFeature(Embedded)
+            assertionFailure(message)
+        #endif
+    }
+}
+
+extension _HTMLRenderToken {
+    // TODO: remove this method
+    func renderedValue() -> String {
+        var buffer: [UInt8] = []
+        buffer.appendToken(self)
+        return String(decoding: buffer, as: UTF8.self)
     }
 }
 
