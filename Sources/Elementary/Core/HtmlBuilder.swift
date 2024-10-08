@@ -16,11 +16,11 @@
         content
     }
 
-    #if !hasFeature(Embedded) // variadic generics currently not supported in embedded
-        public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
-            _HTMLTuple(repeat each content)
-        }
-    #endif
+    // variadic generics currently not supported in embedded
+    @_unavailableInEmbedded
+    public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
+        _HTMLTuple(repeat each content)
+    }
 
     public static func buildIf<Content>(_ content: Content?) -> Content? where Content: HTML {
         content
@@ -149,39 +149,40 @@ public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
     typealias Tag = TrueContent.Tag
 }
 
-#if !hasFeature(Embedded) // variadic generics currently not supported in embedded
-    extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
+// variadic generics currently not supported in embedded
 
-    public struct _HTMLTuple<each Child: HTML>: HTML {
-        public let value: (repeat each Child)
+extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
 
-        init(_ value: repeat each Child) {
-            self.value = (repeat each value)
-        }
+@_unavailableInEmbedded
+public struct _HTMLTuple<each Child: HTML>: HTML {
+    public let value: (repeat each Child)
 
-        @_spi(Rendering)
-        public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
-            context.assertNoAttributes(self)
-
-            // NOTE: use iteration in swift 6
-            func renderElement<Element: HTML>(_ element: Element, _ renderer: inout Renderer) {
-                Element._render(element, into: &renderer, with: copy context)
-            }
-            repeat renderElement(each html.value, &renderer)
-        }
-
-        @_spi(Rendering)
-        public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
-            context.assertNoAttributes(self)
-
-            // NOTE: use iteration in swift 6
-            func renderElement<Element: HTML>(_ element: Element, _ renderer: inout Renderer) async throws {
-                try await Element._render(element, into: &renderer, with: copy context)
-            }
-            repeat try await renderElement(each html.value, &renderer)
-        }
+    init(_ value: repeat each Child) {
+        self.value = (repeat each value)
     }
-#endif
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+        context.assertNoAttributes(self)
+
+        // NOTE: use iteration in swift 6
+        func renderElement<Element: HTML>(_ element: Element, _ renderer: inout Renderer) {
+            Element._render(element, into: &renderer, with: copy context)
+        }
+        repeat renderElement(each html.value, &renderer)
+    }
+
+    @_spi(Rendering)
+    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+        context.assertNoAttributes(self)
+
+        // NOTE: use iteration in swift 6
+        func renderElement<Element: HTML>(_ element: Element, _ renderer: inout Renderer) async throws {
+            try await Element._render(element, into: &renderer, with: copy context)
+        }
+        repeat try await renderElement(each html.value, &renderer)
+    }
+}
 
 extension _HTMLArray: Sendable where Element: Sendable {}
 
