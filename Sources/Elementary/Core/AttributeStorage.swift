@@ -136,7 +136,7 @@ private func nextflattenedAttribute(attributes: inout [_StoredAttribute], from i
         // fast-skip blanked out attributes
         guard !attributes[j].name.isEmpty else { continue }
 
-        guard attributes[j].name == attribute.name else {
+        guard attributes[j].name.utf8Equals(attribute.name) else {
             if nextIndex == nil { nextIndex = j }
             continue
         }
@@ -153,4 +153,8 @@ private func nextflattenedAttribute(attributes: inout [_StoredAttribute], from i
     }
 
     return (attribute, nextIndex)
+}
+
+extension String {
+    func utf8Equals(_ other: String) -> Bool { utf8.elementsEqual(other.utf8) }
 }

@@ -40,7 +40,11 @@
 @_spi(Rendering)
 public extension HTML where Content == Never {
     var content: Never {
-        fatalError("content cannot be called on \(Self.self)")
+        #if hasFeature(Embedded)
+            fatalError("content was called on an unsupported type")
+        #else
+            fatalError("content cannot be called on \(Self.self)")
+        #endif
     }
 }
 

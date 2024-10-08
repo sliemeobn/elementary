@@ -558,7 +558,7 @@ public extension HTMLAttribute where Tag == HTMLTag.input {
             self.value = value
         }
 
-        public init(stringLiteral value: StringLiteralType) {
+        public init(stringLiteral value: String) {
             self.value = value
         }
     }
