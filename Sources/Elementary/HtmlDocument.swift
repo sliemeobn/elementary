@@ -20,6 +20,7 @@
 ///   }
 /// }
 /// ```
+@_unavailableInEmbedded
 public protocol HTMLDocument: HTML {
     associatedtype HTMLHead: HTML
     associatedtype HTMLBody: HTML
@@ -41,6 +42,7 @@ public protocol HTMLDocument: HTML {
     @HTMLBuilder var body: HTMLBody { get }
 }
 
+@_unavailableInEmbedded
 public extension HTMLDocument {
     @HTMLBuilder var content: some HTML {
         HTMLRaw("<!DOCTYPE html>")
@@ -62,6 +64,7 @@ public extension HTMLDocument {
 private let defaultUndefinedLanguage = ""
 private let defaultUndefinedDirection = ""
 
+@_unavailableInEmbedded
 public extension HTMLDocument {
     /// The default value for the `lang` property is an empty string and will not be rendered in the HTML.
     var lang: String { defaultUndefinedLanguage }

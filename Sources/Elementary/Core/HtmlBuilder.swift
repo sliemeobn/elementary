@@ -150,7 +150,7 @@ public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
 }
 
 // variadic generics currently not supported in embedded
-
+@_unavailableInEmbedded
 extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
 
 @_unavailableInEmbedded
