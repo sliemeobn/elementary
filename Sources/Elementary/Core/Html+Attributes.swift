@@ -1,5 +1,6 @@
 /// An HTML attribute that can be applied to an HTML element of the associated tag.
 public struct HTMLAttribute<Tag: HTMLTagDefinition>: Sendable {
+    @usableFromInline
     var htmlAttribute: _StoredAttribute
 
     /// The name of the attribute.
@@ -11,7 +12,12 @@ public struct HTMLAttribute<Tag: HTMLTagDefinition>: Sendable {
 
 /// The action to take when merging an attribute with the same name.
 public struct HTMLAttributeMergeAction: Sendable {
+    @usableFromInline
     var mergeMode: _StoredAttribute.MergeMode
+
+    init(mergeMode: _StoredAttribute.MergeMode) {
+        self.mergeMode = mergeMode
+    }
 
     /// Replaces the value of the existing attribute with the new value.
     public static var replacing: Self { .init(mergeMode: .replaceValue) }
@@ -29,6 +35,7 @@ public extension HTMLAttribute {
     ///   - name: The name of the attribute.
     ///   - value: The value of the attribute.
     ///   - action: The merge action to use with a previously attached attribute with the same name.
+    @inlinable
     init(name: String, value: String?, mergedBy action: HTMLAttributeMergeAction = .replacing) {
         htmlAttribute = .init(name: name, value: value, mergeMode: action.mergeMode)
     }
@@ -36,6 +43,7 @@ public extension HTMLAttribute {
     /// Changes the default merge action of this attribute.
     /// - Parameter action: The new merge action to use.
     /// - Returns: A modified attribute with the specified merge action.
+    @inlinable
     consuming func mergedBy(_ action: HTMLAttributeMergeAction) -> HTMLAttribute {
         .init(name: name, value: value, mergedBy: action)
     }
@@ -44,6 +52,7 @@ public extension HTMLAttribute {
 public struct _AttributedElement<Content: HTML>: HTML {
     public var content: Content
 
+    @usableFromInline
     var attributes: _AttributeStorage
 
     @_spi(Rendering)

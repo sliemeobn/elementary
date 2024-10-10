@@ -1,5 +1,6 @@
 public struct _StoredAttribute: Equatable, Sendable {
-    enum MergeMode: Equatable {
+    @usableFromInline
+    enum MergeMode: Equatable, Sendable {
         case appendValue(_ separator: String = " ")
         case replaceValue
         case ignoreIfSet
@@ -7,7 +8,15 @@ public struct _StoredAttribute: Equatable, Sendable {
 
     public var name: String
     public var value: String?
+    @usableFromInline
     var mergeMode: MergeMode = .replaceValue
+
+    @usableFromInline
+    init(name: String, value: String? = nil, mergeMode: MergeMode = .replaceValue) {
+        self.name = name
+        self.value = value
+        self.mergeMode = mergeMode
+    }
 
     mutating func mergeWith(_ attribute: consuming _StoredAttribute) {
         switch attribute.mergeMode {
@@ -30,14 +39,17 @@ public enum _AttributeStorage: Sendable {
     case single(_StoredAttribute)
     case multiple([_StoredAttribute])
 
+    @inlinable
     init() {
         self = .none
     }
 
+    @inlinable
     init(_ attribute: HTMLAttribute<some HTMLTagDefinition>) {
         self = .single(attribute.htmlAttribute)
     }
 
+    @inlinable
     init(_ attributes: [HTMLAttribute<some HTMLTagDefinition>]) {
         switch attributes.count {
         case 0: self = .none

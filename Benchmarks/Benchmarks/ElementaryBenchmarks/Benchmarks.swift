@@ -159,7 +159,7 @@ let benchmarks = { @Sendable in
 
     Benchmark("render full document (sync)") { benchmark in
         for _ in benchmark.scaledIterations {
-            try blackHole(
+            blackHole(
                 html {
                     head {
                         title { "Hello, World!" }
