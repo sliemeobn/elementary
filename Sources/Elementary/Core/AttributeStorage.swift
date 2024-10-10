@@ -1,27 +1,34 @@
-struct StoredAttribute: Equatable, Sendable {
+public struct _StoredAttribute: Equatable, Sendable {
     enum MergeMode: Equatable {
         case appendValue(_ separator: String = " ")
         case replaceValue
         case ignoreIfSet
     }
 
-    var name: String
-    var value: String?
+    public var name: String
+    public var value: String?
     var mergeMode: MergeMode = .replaceValue
 
-    mutating func appending(value: String?, separatedBy separator: String) {
-        self.value = switch (self.value, value) {
-        case (_, .none): self.value
-        case let (.none, .some(value)): value
-        case let (.some(existingValue), .some(otherValue)): "\(existingValue)\(separator)\(otherValue)"
+    mutating func mergeWith(_ attribute: consuming _StoredAttribute) {
+        switch attribute.mergeMode {
+        case let .appendValue(separator):
+            value = switch (value, attribute.value) {
+            case (_, .none): value
+            case let (.none, .some(value)): value
+            case let (.some(existingValue), .some(otherValue)): "\(existingValue)\(separator)\(otherValue)"
+            }
+        case .replaceValue:
+            value = attribute.value
+        case .ignoreIfSet:
+            break
         }
     }
 }
 
-enum AttributeStorage: Sendable {
+public enum _AttributeStorage: Sendable {
     case none
-    case single(StoredAttribute)
-    case multiple([StoredAttribute])
+    case single(_StoredAttribute)
+    case multiple([_StoredAttribute])
 
     init() {
         self = .none
@@ -39,7 +46,7 @@ enum AttributeStorage: Sendable {
         }
     }
 
-    var isEmpty: Bool {
+    public var isEmpty: Bool {
         switch self {
         case .none: return true
         case .single: return false
@@ -47,7 +54,7 @@ enum AttributeStorage: Sendable {
         }
     }
 
-    mutating func append(_ attributes: consuming AttributeStorage) {
+    public mutating func append(_ attributes: consuming _AttributeStorage) {
         // maybe this was a bad idea....
         switch (self, attributes) {
         case (_, .none):
@@ -68,31 +75,31 @@ enum AttributeStorage: Sendable {
         }
     }
 
-    consuming func flattened() -> FlattenedAttributeView {
+    public consuming func flattened() -> FlattenedAttributeView {
         .init(storage: self)
     }
 }
 
-extension AttributeStorage {
+public extension _AttributeStorage {
     struct FlattenedAttributeView: Sequence, Sendable {
-        typealias Element = StoredAttribute
-        var storage: AttributeStorage
+        public typealias Element = _StoredAttribute
+        var storage: _AttributeStorage
 
-        consuming func makeIterator() -> Iterator {
+        public consuming func makeIterator() -> Iterator {
             Iterator(storage)
         }
 
-        struct Iterator: IteratorProtocol {
+        public struct Iterator: IteratorProtocol {
             enum State {
                 case empty
-                case single(StoredAttribute)
-                case flattening([StoredAttribute], Int)
+                case single(_StoredAttribute)
+                case flattening([_StoredAttribute], Int)
                 case _temporaryNothing
             }
 
             var state: State
 
-            init(_ storage: consuming AttributeStorage) {
+            init(_ storage: consuming _AttributeStorage) {
                 switch storage {
                 case .none: state = .empty
                 case let .single(attribute): state = .single(attribute)
@@ -100,7 +107,7 @@ extension AttributeStorage {
                 }
             }
 
-            mutating func next() -> StoredAttribute? {
+            public mutating func next() -> _StoredAttribute? {
                 switch state {
                 case .empty: return nil
                 case let .single(attribute):
@@ -125,10 +132,9 @@ extension AttributeStorage {
     }
 }
 
-private let blankedOut = StoredAttribute(name: "")
-private func nextflattenedAttribute(attributes: inout [StoredAttribute], from index: Int) -> (StoredAttribute, Int?) {
-    var attribute = attributes[index]
-    attributes[index] = blankedOut
+private func nextflattenedAttribute(attributes: inout [_StoredAttribute], from index: Int) -> (_StoredAttribute, Int?) {
+    var attribute: _StoredAttribute = .blankedOut
+    swap(&attribute, &attributes[index])
 
     var nextIndex: Int?
 
@@ -136,21 +142,28 @@ private func nextflattenedAttribute(attributes: inout [StoredAttribute], from in
         // fast-skip blanked out attributes
         guard !attributes[j].name.isEmpty else { continue }
 
-        guard attributes[j].name == attribute.name else {
+        guard attributes[j].name.utf8Equals(attribute.name) else {
             if nextIndex == nil { nextIndex = j }
             continue
         }
 
-        switch attributes[j].mergeMode {
-        case let .appendValue(separator):
-            attribute.appending(value: attributes[j].value, separatedBy: separator)
-        case .replaceValue:
-            attribute.value = attributes[j].value
-        case .ignoreIfSet:
-            break
-        }
-        attributes[j] = blankedOut
+        var mergedAttribute: _StoredAttribute = .blankedOut
+        swap(&mergedAttribute, &attributes[j])
+
+        attribute.mergeWith(mergedAttribute)
     }
 
     return (attribute, nextIndex)
+}
+
+private extension _StoredAttribute {
+    static let blankedOut = _StoredAttribute(name: "")
+}
+
+private extension String {
+    @inline(__always)
+    func utf8Equals(_ other: borrowing String) -> Bool {
+        // for embedded support
+        utf8.elementsEqual(other.utf8)
+    }
 }

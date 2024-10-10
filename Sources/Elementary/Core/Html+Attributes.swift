@@ -1,6 +1,6 @@
 /// An HTML attribute that can be applied to an HTML element of the associated tag.
 public struct HTMLAttribute<Tag: HTMLTagDefinition>: Sendable {
-    var htmlAttribute: StoredAttribute
+    var htmlAttribute: _StoredAttribute
 
     /// The name of the attribute.
     public var name: String { htmlAttribute.name }
@@ -11,7 +11,7 @@ public struct HTMLAttribute<Tag: HTMLTagDefinition>: Sendable {
 
 /// The action to take when merging an attribute with the same name.
 public struct HTMLAttributeMergeAction: Sendable {
-    var mergeMode: StoredAttribute.MergeMode
+    var mergeMode: _StoredAttribute.MergeMode
 
     /// Replaces the value of the existing attribute with the new value.
     public static var replacing: Self { .init(mergeMode: .replaceValue) }
@@ -44,7 +44,7 @@ public extension HTMLAttribute {
 public struct _AttributedElement<Content: HTML>: HTML {
     public var content: Content
 
-    var attributes: AttributeStorage
+    var attributes: _AttributeStorage
 
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
@@ -95,7 +95,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
 }
 
 private extension _RenderingContext {
-    mutating func prependAttributes(_ attributes: consuming AttributeStorage) {
+    mutating func prependAttributes(_ attributes: consuming _AttributeStorage) {
         attributes.append(self.attributes)
         self.attributes = attributes
     }

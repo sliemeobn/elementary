@@ -50,25 +50,31 @@ extension [UInt8] {
         }
     }
 
+    mutating func append(tag: StaticString) {
+        tag.withUTF8Buffer { buffer in
+            append(contentsOf: buffer)
+        }
+    }
+
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         // avoid strings and append each component directly
         switch token {
-        case let .startTagOpen(tagName, _):
+        case let .startTag(tagName, attributes: attributes, isUnpaired: _, type: _):
             append(60) // <
-            append(contentsOf: tagName.utf8)
-        case let .attribute(name, value):
-            append(32) // space
-            append(contentsOf: name.utf8)
-            if let value = value {
-                append(contentsOf: [61, 34]) // ="
-                writeEscapedAttribute(value)
-                append(34) // "
+            append(tag: tagName)
+            for attribute in attributes.flattened() {
+                append(32) // space
+                append(contentsOf: attribute.name.utf8)
+                if let value = attribute.value {
+                    append(contentsOf: [61, 34]) // ="
+                    writeEscapedAttribute(value)
+                    append(34) // "
+                }
             }
-        case .startTagClose:
             append(62) // >
         case let .endTag(tagName, _):
             append(contentsOf: [60, 47]) // </
-            append(contentsOf: tagName.utf8)
+            append(tag: tagName)
             append(62) // >
         case let .text(text):
             writeEscapedContent(text)

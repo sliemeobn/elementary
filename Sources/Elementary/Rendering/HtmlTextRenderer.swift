@@ -83,72 +83,59 @@ struct PrettyHTMLTextRenderer {
 }
 
 extension PrettyHTMLTextRenderer: _HTMLRendering {
-    mutating func appendToken(_ token: consuming _HTMLRenderToken) {
-        let renderedToken = token.renderedValue()
+    mutating func appendToken(_: consuming _HTMLRenderToken) {
+        // let renderedToken = token.renderedValue()
 
-        if token.shouldInline(currentlyInlined: isInLineAfterBlockTagOpen || !currentInlineText.isEmpty) {
-            if !isInLineAfterBlockTagOpen {
-                addLineBreak()
-            }
+        // if token.shouldInline(currentlyInlined: isInLineAfterBlockTagOpen || !currentInlineText.isEmpty) {
+        //     if !isInLineAfterBlockTagOpen {
+        //         addLineBreak()
+        //     }
 
-            currentInlineText += renderedToken
-        } else {
-            switch token {
-            case .startTagOpen:
-                flushInlineText(forceLineBreak: isInLineAfterBlockTagOpen)
-                addLineBreak()
-                result += renderedToken
-                increaseIndentation()
-            case let .startTagClose(isUnpaired):
-                assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
+        //     currentInlineText += renderedToken
+        // } else {
+        //     switch token {
+        //     case .startTag(tagName, attributes: attributes, isUnpaired: isUnpaired, type: _HTMLRenderToken.RenderingType):
+        //         flushInlineText(forceLineBreak: isInLineAfterBlockTagOpen)
+        //         addLineBreak()
+        //         result += renderedToken
+        //         increaseIndentation()
+        //     case let .startTagClose(isUnpaired):
+        //         assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
 
-                result += renderedToken
+        //         result += renderedToken
 
-                if isUnpaired {
-                    decreaseIndentation()
-                    isInLineAfterBlockTagOpen = false
-                } else {
-                    isInLineAfterBlockTagOpen = true
-                }
-            case .endTag:
-                var shouldLineBreak = false
+        //         if isUnpaired {
+        //             decreaseIndentation()
+        //             isInLineAfterBlockTagOpen = false
+        //         } else {
+        //             isInLineAfterBlockTagOpen = true
+        //         }
+        //     case .endTag:
+        //         var shouldLineBreak = false
 
-                if isInLineAfterBlockTagOpen {
-                    let hasBroken = flushInlineText()
-                    shouldLineBreak = hasBroken
-                } else {
-                    flushInlineText()
-                    shouldLineBreak = true
-                }
+        //         if isInLineAfterBlockTagOpen {
+        //             let hasBroken = flushInlineText()
+        //             shouldLineBreak = hasBroken
+        //         } else {
+        //             flushInlineText()
+        //             shouldLineBreak = true
+        //         }
 
-                decreaseIndentation()
+        //         decreaseIndentation()
 
-                if shouldLineBreak {
-                    addLineBreak()
-                }
+        //         if shouldLineBreak {
+        //             addLineBreak()
+        //         }
 
-                result += renderedToken
-            case .attribute:
-                assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
-                result += renderedToken
-            default:
-                assertionFailure("unexpected rendering case for \(renderedToken)")
-                flushInlineText()
-                result += renderedToken
-            }
-        }
-    }
-}
-
-extension _HTMLRenderToken {
-    func shouldInline(currentlyInlined: Bool) -> Bool {
-        switch self {
-        case .startTagOpen(_, .inline), .endTag(_, .inline), .text, .raw, .comment:
-            return true
-        case .attribute, .startTagClose:
-            return currentlyInlined
-        default:
-            return false
-        }
+        //         result += renderedToken
+        //     case .attribute:
+        //         assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
+        //         result += renderedToken
+        //     default:
+        //         assertionFailure("unexpected rendering case for \(renderedToken)")
+        //         flushInlineText()
+        //         result += renderedToken
+        //     }
+        // }
     }
 }
