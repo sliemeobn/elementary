@@ -6,6 +6,7 @@ public extension HTMLElement {
     /// - Parameters:
     ///   - attributes: The attributes to apply to the element.
     ///   - content: The future content of the element.
+    @inlinable
     init<AwaitedContent: HTML>(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent)
         where Self.Content == AsyncContent<AwaitedContent>
     {
@@ -20,6 +21,7 @@ public extension HTMLElement {
     /// - Parameters:
     ///   - attributes: The attributes to apply to the element.
     ///   - content: The future content of the element.
+    @inlinable
     init<AwaitedContent: HTML>(attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent)
         where Self.Content == AsyncContent<AwaitedContent>
     {

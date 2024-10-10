@@ -55,6 +55,12 @@ public struct _AttributedElement<Content: HTML>: HTML {
     @usableFromInline
     var attributes: _AttributeStorage
 
+    @usableFromInline
+    init(content: Content, attributes: _AttributeStorage) {
+        self.content = content
+        self.attributes = attributes
+    }
+
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.prependAttributes(html.attributes)
@@ -76,6 +82,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attribute: The attribute to add to the element.
     ///   - condition: If set to false, the attribute will not be added.
     /// - Returns: A new element with the specified attribute added.
+    @inlinable
     func attributes(_ attribute: HTMLAttribute<Tag>, when condition: Bool = true) -> _AttributedElement<Self> {
         if condition {
             return _AttributedElement(content: self, attributes: .init(attribute))
@@ -89,6 +96,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attributes: The attributes to add to the element.
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
+    @inlinable
     func attributes(_ attributes: HTMLAttribute<Tag>..., when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))
     }
@@ -98,6 +106,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attributes: The attributes to add to the element as an array.
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
+    @inlinable
     func attributes(contentsOf attributes: [HTMLAttribute<Tag>], when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))
     }
