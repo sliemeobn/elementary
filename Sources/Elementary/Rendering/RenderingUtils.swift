@@ -22,34 +22,6 @@ extension _RenderingContext {
 }
 
 extension [UInt8] {
-    mutating func writeEscapedAttribute(_ value: consuming String) {
-        for byte in value.utf8 {
-            switch byte {
-            case 38: // &
-                self.append(contentsOf: "&amp;".utf8)
-            case 34: // "
-                append(contentsOf: "&quot;".utf8)
-            default:
-                append(byte)
-            }
-        }
-    }
-
-    mutating func writeEscapedContent(_ value: consuming String) {
-        for byte in value.utf8 {
-            switch byte {
-            case 38: // &
-                append(contentsOf: "&amp;".utf8)
-            case 60: // <
-                append(contentsOf: "&lt;".utf8)
-            case 62: // >
-                append(contentsOf: "&gt;".utf8)
-            default:
-                append(byte)
-            }
-        }
-    }
-
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         // avoid strings and append each component directly
         switch token {
@@ -61,7 +33,7 @@ extension [UInt8] {
                 append(contentsOf: attribute.name.utf8)
                 if let value = attribute.value {
                     append(contentsOf: [61, 34]) // ="
-                    writeEscapedAttribute(value)
+                    appendEscapedAttributeValue(value)
                     append(34) // "
                 }
             }
@@ -71,13 +43,41 @@ extension [UInt8] {
             append(contentsOf: tagName.utf8)
             append(62) // >
         case let .text(text):
-            writeEscapedContent(text)
+            appendEscapedText(text)
         case let .raw(raw):
             append(contentsOf: raw.utf8)
         case let .comment(comment):
             append(contentsOf: "<!--".utf8)
-            writeEscapedContent(comment)
+            appendEscapedText(comment)
             append(contentsOf: "-->".utf8)
+        }
+    }
+
+    mutating func appendEscapedAttributeValue(_ value: consuming String) {
+        for byte in value.utf8 {
+            switch byte {
+            case 38: // &
+                append(contentsOf: "&amp;".utf8)
+            case 34: // "
+                append(contentsOf: "&quot;".utf8)
+            default:
+                append(byte)
+            }
+        }
+    }
+
+    mutating func appendEscapedText(_ value: consuming String) {
+        for byte in value.utf8 {
+            switch byte {
+            case 38: // &
+                append(contentsOf: "&amp;".utf8)
+            case 60: // <
+                append(contentsOf: "&lt;".utf8)
+            case 62: // >
+                append(contentsOf: "&gt;".utf8)
+            default:
+                append(byte)
+            }
         }
     }
 }
