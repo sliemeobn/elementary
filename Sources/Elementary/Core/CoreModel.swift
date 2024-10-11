@@ -37,14 +37,14 @@ public protocol HTML<Tag> {
 /// A type that represents an HTML tag.
 public protocol HTMLTagDefinition: Sendable {
     /// The name of the HTML tag as it is rendered in an HTML document.
-    static var name: StaticString { get }
+    static var name: String { get }
 
     @_spi(Rendering)
     static var _rendersInline: Bool { get }
 }
 
 extension Never: HTMLTagDefinition {
-    public static var name: StaticString { fatalError("HTMLTag.name was called on Never") }
+    public static var name: String { fatalError("HTMLTag.name was called on Never") }
 }
 
 public struct _RenderingContext {
@@ -60,8 +60,8 @@ public enum _HTMLRenderToken {
         case inline
     }
 
-    case startTag(StaticString, attributes: _AttributeStorage, isUnpaired: Bool, type: RenderingType)
-    case endTag(StaticString, type: RenderingType)
+    case startTag(String, attributes: _AttributeStorage, isUnpaired: Bool, type: RenderingType)
+    case endTag(String, type: RenderingType)
     case text(String)
     case raw(String)
     case comment(String)
