@@ -4,7 +4,8 @@ import Elementary
 let benchmarks = { @Sendable in
     Benchmark.defaultConfiguration = .init(
         metrics: [.wallClock, .mallocCountTotal, .instructions, .throughput],
-        scalingFactor: .kilo
+        scalingFactor: .kilo,
+        maxDuration: .seconds(5)
     )
 
     Benchmark("initialize nested html tags") { benchmark in
