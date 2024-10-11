@@ -28,7 +28,7 @@ extension [UInt8] {
         case let .startTag(tagName, attributes: attributes, isUnpaired: _, type: _):
             append(60) // <
             append(contentsOf: tagName.utf8)
-            for attribute in attributes.flattened() {
+            for attribute in attributes {
                 append(32) // space
                 append(contentsOf: attribute.name.utf8)
                 if let value = attribute.value {

@@ -49,7 +49,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         html.attributes.append(context.attributes)
 
-        renderer.appendToken(.startTag(Tag.name, attributes: html.attributes, isUnpaired: false, type: Tag.renderingType))
+        renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
         Content._render(html.content, into: &renderer, with: .emptyContext)
         renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
@@ -58,7 +58,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         html.attributes.append(context.attributes)
 
-        try await renderer.appendToken(.startTag(Tag.name, attributes: html.attributes, isUnpaired: false, type: Tag.renderingType))
+        try await renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
         try await Content._render(html.content, into: &renderer, with: .emptyContext)
         try await renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
@@ -101,13 +101,13 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         html.attributes.append(context.attributes)
-        renderer.appendToken(.startTag(Tag.name, attributes: html.attributes, isUnpaired: true, type: Tag.renderingType))
+        renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
     }
 
     @_spi(Rendering)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         html.attributes.append(context.attributes)
-        try await renderer.appendToken(.startTag(Tag.name, attributes: html.attributes, isUnpaired: true, type: Tag.renderingType))
+        try await renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
     }
 }
 

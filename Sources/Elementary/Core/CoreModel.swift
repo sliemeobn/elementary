@@ -60,7 +60,7 @@ public enum _HTMLRenderToken {
         case inline
     }
 
-    case startTag(String, attributes: _AttributeStorage, isUnpaired: Bool, type: RenderingType)
+    case startTag(String, attributes: _MergedAttributes, isUnpaired: Bool, type: RenderingType)
     case endTag(String, type: RenderingType)
     case text(String)
     case raw(String)

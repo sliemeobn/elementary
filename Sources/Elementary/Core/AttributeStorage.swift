@@ -87,58 +87,56 @@ public enum _AttributeStorage: Sendable {
         }
     }
 
-    public consuming func flattened() -> FlattenedAttributeView {
+    public consuming func flattened() -> _MergedAttributes {
         .init(storage: self)
     }
 }
 
-public extension _AttributeStorage {
-    struct FlattenedAttributeView: Sequence, Sendable {
-        public typealias Element = _StoredAttribute
-        var storage: _AttributeStorage
+public struct _MergedAttributes: Sequence, Sendable {
+    public typealias Element = _StoredAttribute
+    var storage: _AttributeStorage
 
-        public consuming func makeIterator() -> Iterator {
-            Iterator(storage)
+    public consuming func makeIterator() -> Iterator {
+        Iterator(storage)
+    }
+
+    public struct Iterator: IteratorProtocol {
+        enum State {
+            case empty
+            case single(_StoredAttribute)
+            case flattening([_StoredAttribute], Int)
+            case _temporaryNothing
         }
 
-        public struct Iterator: IteratorProtocol {
-            enum State {
-                case empty
-                case single(_StoredAttribute)
-                case flattening([_StoredAttribute], Int)
-                case _temporaryNothing
+        var state: State
+
+        init(_ storage: consuming _AttributeStorage) {
+            switch storage {
+            case .none: state = .empty
+            case let .single(attribute): state = .single(attribute)
+            case let .multiple(attributes): state = .flattening(attributes, 0)
             }
+        }
 
-            var state: State
+        public mutating func next() -> _StoredAttribute? {
+            switch state {
+            case .empty: return nil
+            case let .single(attribute):
+                state = .empty
+                return attribute
+            case .flattening(var list, let index):
+                state = ._temporaryNothing
+                let (attribute, newIndex) = nextflattenedAttribute(attributes: &list, from: index)
 
-            init(_ storage: consuming _AttributeStorage) {
-                switch storage {
-                case .none: state = .empty
-                case let .single(attribute): state = .single(attribute)
-                case let .multiple(attributes): state = .flattening(attributes, 0)
-                }
-            }
-
-            public mutating func next() -> _StoredAttribute? {
-                switch state {
-                case .empty: return nil
-                case let .single(attribute):
+                if let newIndex {
+                    state = .flattening(list, newIndex)
+                } else {
                     state = .empty
-                    return attribute
-                case .flattening(var list, let index):
-                    state = ._temporaryNothing
-                    let (attribute, newIndex) = nextflattenedAttribute(attributes: &list, from: index)
-
-                    if let newIndex {
-                        state = .flattening(list, newIndex)
-                    } else {
-                        state = .empty
-                    }
-
-                    return attribute
-                case ._temporaryNothing:
-                    fatalError("unexpected _temporaryNothing state")
                 }
+
+                return attribute
+            case ._temporaryNothing:
+                fatalError("unexpected _temporaryNothing state")
             }
         }
     }

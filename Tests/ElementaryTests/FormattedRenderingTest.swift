@@ -103,6 +103,31 @@ final class FormatedRenderingTests: XCTestCase {
         )
     }
 
+    func testManyUnpairedTags() {
+        HTMLFormattedAssertEqual(
+            div {
+                br()
+                img()
+                img()
+                p {
+                    svg {}
+                    img()
+                }
+            },
+            """
+            <div>
+              <br>
+              <img>
+              <img>
+              <p>
+                <svg></svg>
+                <img>
+              </p>
+            </div>
+            """
+        )
+    }
+
     func testFormatsMixed() {
         HTMLFormattedAssertEqual(
             div {

@@ -31,10 +31,10 @@ struct PrettyHTMLTextRenderer {
         indentation = String(repeating: " ", count: spaces)
     }
 
-    private var result: String = ""
-    private var currentIndentation: String = ""
-    private var currentTokenContext = _HTMLRenderToken.RenderingType.block
+    private var result = ""
+    private var currentIndentation = ""
     private var currentInlineText = ""
+    private var currentTokenContext = _HTMLRenderToken.RenderingType.block
     private var isInLineAfterBlockTagOpen = false
 
     consuming func collect() -> String {
@@ -83,59 +83,56 @@ struct PrettyHTMLTextRenderer {
 }
 
 extension PrettyHTMLTextRenderer: _HTMLRendering {
-    mutating func appendToken(_: consuming _HTMLRenderToken) {
-        // let renderedToken = token.renderedValue()
+    mutating func appendToken(_ token: consuming _HTMLRenderToken) {
+        let renderedToken = token.renderedValue()
 
-        // if token.shouldInline(currentlyInlined: isInLineAfterBlockTagOpen || !currentInlineText.isEmpty) {
-        //     if !isInLineAfterBlockTagOpen {
-        //         addLineBreak()
-        //     }
+        switch token {
+        case let .startTag(_, attributes: _, isUnpaired: isUnpaired, type: type):
+            switch type {
+            case .inline:
+                currentInlineText += renderedToken
+            case .block:
+                flushInlineText(forceLineBreak: isInLineAfterBlockTagOpen)
+                addLineBreak()
+                result += renderedToken
 
-        //     currentInlineText += renderedToken
-        // } else {
-        //     switch token {
-        //     case .startTag(tagName, attributes: attributes, isUnpaired: isUnpaired, type: _HTMLRenderToken.RenderingType):
-        //         flushInlineText(forceLineBreak: isInLineAfterBlockTagOpen)
-        //         addLineBreak()
-        //         result += renderedToken
-        //         increaseIndentation()
-        //     case let .startTagClose(isUnpaired):
-        //         assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
+                if isUnpaired {
+                    isInLineAfterBlockTagOpen = false
+                } else {
+                    increaseIndentation()
+                    isInLineAfterBlockTagOpen = true
+                }
+            }
+        case let .endTag(_, type):
+            switch type {
+            case .inline:
+                currentInlineText += renderedToken
+            case .block:
+                var shouldLineBreak = false
 
-        //         result += renderedToken
+                if isInLineAfterBlockTagOpen {
+                    let hasBroken = flushInlineText()
+                    shouldLineBreak = hasBroken
+                } else {
+                    flushInlineText()
+                    shouldLineBreak = true
+                }
 
-        //         if isUnpaired {
-        //             decreaseIndentation()
-        //             isInLineAfterBlockTagOpen = false
-        //         } else {
-        //             isInLineAfterBlockTagOpen = true
-        //         }
-        //     case .endTag:
-        //         var shouldLineBreak = false
+                decreaseIndentation()
 
-        //         if isInLineAfterBlockTagOpen {
-        //             let hasBroken = flushInlineText()
-        //             shouldLineBreak = hasBroken
-        //         } else {
-        //             flushInlineText()
-        //             shouldLineBreak = true
-        //         }
+                if shouldLineBreak {
+                    addLineBreak()
+                }
 
-        //         decreaseIndentation()
-
-        //         if shouldLineBreak {
-        //             addLineBreak()
-        //         }
-
-        //         result += renderedToken
-        //     case .attribute:
-        //         assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
-        //         result += renderedToken
-        //     default:
-        //         assertionFailure("unexpected rendering case for \(renderedToken)")
-        //         flushInlineText()
-        //         result += renderedToken
-        //     }
-        // }
+                result += renderedToken
+            }
+        case .text, .raw, .comment:
+            if isInLineAfterBlockTagOpen {
+                currentInlineText += renderedToken
+            } else {
+                addLineBreak()
+                result += renderedToken
+            }
+        }
     }
 }
