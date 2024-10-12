@@ -1,6 +1,7 @@
 /// An HTML attribute that can be applied to an HTML element of the associated tag.
 public struct HTMLAttribute<Tag: HTMLTagDefinition>: Sendable {
-    var htmlAttribute: StoredAttribute
+    @usableFromInline
+    var htmlAttribute: _StoredAttribute
 
     /// The name of the attribute.
     public var name: String { htmlAttribute.name }
@@ -11,7 +12,12 @@ public struct HTMLAttribute<Tag: HTMLTagDefinition>: Sendable {
 
 /// The action to take when merging an attribute with the same name.
 public struct HTMLAttributeMergeAction: Sendable {
-    var mergeMode: StoredAttribute.MergeMode
+    @usableFromInline
+    var mergeMode: _StoredAttribute.MergeMode
+
+    init(mergeMode: _StoredAttribute.MergeMode) {
+        self.mergeMode = mergeMode
+    }
 
     /// Replaces the value of the existing attribute with the new value.
     public static var replacing: Self { .init(mergeMode: .replaceValue) }
@@ -29,6 +35,7 @@ public extension HTMLAttribute {
     ///   - name: The name of the attribute.
     ///   - value: The value of the attribute.
     ///   - action: The merge action to use with a previously attached attribute with the same name.
+    @inlinable
     init(name: String, value: String?, mergedBy action: HTMLAttributeMergeAction = .replacing) {
         htmlAttribute = .init(name: name, value: value, mergeMode: action.mergeMode)
     }
@@ -36,6 +43,7 @@ public extension HTMLAttribute {
     /// Changes the default merge action of this attribute.
     /// - Parameter action: The new merge action to use.
     /// - Returns: A modified attribute with the specified merge action.
+    @inlinable
     consuming func mergedBy(_ action: HTMLAttributeMergeAction) -> HTMLAttribute {
         .init(name: name, value: value, mergedBy: action)
     }
@@ -44,7 +52,14 @@ public extension HTMLAttribute {
 public struct _AttributedElement<Content: HTML>: HTML {
     public var content: Content
 
-    var attributes: AttributeStorage
+    @usableFromInline
+    var attributes: _AttributeStorage
+
+    @usableFromInline
+    init(content: Content, attributes: _AttributeStorage) {
+        self.content = content
+        self.attributes = attributes
+    }
 
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
@@ -67,6 +82,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attribute: The attribute to add to the element.
     ///   - condition: If set to false, the attribute will not be added.
     /// - Returns: A new element with the specified attribute added.
+    @inlinable
     func attributes(_ attribute: HTMLAttribute<Tag>, when condition: Bool = true) -> _AttributedElement<Self> {
         if condition {
             return _AttributedElement(content: self, attributes: .init(attribute))
@@ -80,6 +96,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attributes: The attributes to add to the element.
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
+    @inlinable
     func attributes(_ attributes: HTMLAttribute<Tag>..., when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))
     }
@@ -89,13 +106,14 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attributes: The attributes to add to the element as an array.
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
+    @inlinable
     func attributes(contentsOf attributes: [HTMLAttribute<Tag>], when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))
     }
 }
 
 private extension _RenderingContext {
-    mutating func prependAttributes(_ attributes: consuming AttributeStorage) {
+    mutating func prependAttributes(_ attributes: consuming _AttributeStorage) {
         attributes.append(self.attributes)
         self.attributes = attributes
     }

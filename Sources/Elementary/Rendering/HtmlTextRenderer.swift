@@ -31,10 +31,10 @@ struct PrettyHTMLTextRenderer {
         indentation = String(repeating: " ", count: spaces)
     }
 
-    private var result: String = ""
-    private var currentIndentation: String = ""
-    private var currentTokenContext = _HTMLRenderToken.RenderingType.block
+    private var result = ""
+    private var currentIndentation = ""
     private var currentInlineText = ""
+    private var currentTokenContext = _HTMLRenderToken.RenderingType.block
     private var isInLineAfterBlockTagOpen = false
 
     consuming func collect() -> String {
@@ -86,31 +86,28 @@ extension PrettyHTMLTextRenderer: _HTMLRendering {
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         let renderedToken = token.renderedValue()
 
-        if token.shouldInline(currentlyInlined: isInLineAfterBlockTagOpen || !currentInlineText.isEmpty) {
-            if !isInLineAfterBlockTagOpen {
-                addLineBreak()
-            }
-
-            currentInlineText += renderedToken
-        } else {
-            switch token {
-            case .startTagOpen:
+        switch token {
+        case let .startTag(_, attributes: _, isUnpaired: isUnpaired, type: type):
+            switch type {
+            case .inline:
+                currentInlineText += renderedToken
+            case .block:
                 flushInlineText(forceLineBreak: isInLineAfterBlockTagOpen)
                 addLineBreak()
                 result += renderedToken
-                increaseIndentation()
-            case let .startTagClose(isUnpaired):
-                assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
-
-                result += renderedToken
 
                 if isUnpaired {
-                    decreaseIndentation()
                     isInLineAfterBlockTagOpen = false
                 } else {
+                    increaseIndentation()
                     isInLineAfterBlockTagOpen = true
                 }
-            case .endTag:
+            }
+        case let .endTag(_, type):
+            switch type {
+            case .inline:
+                currentInlineText += renderedToken
+            case .block:
                 var shouldLineBreak = false
 
                 if isInLineAfterBlockTagOpen {
@@ -128,27 +125,14 @@ extension PrettyHTMLTextRenderer: _HTMLRendering {
                 }
 
                 result += renderedToken
-            case .attribute:
-                assert(currentInlineText.isEmpty, "unexpected inline text \(currentInlineText)")
-                result += renderedToken
-            default:
-                assertionFailure("unexpected rendering case for \(renderedToken)")
-                flushInlineText()
+            }
+        case .text, .raw, .comment:
+            if isInLineAfterBlockTagOpen {
+                currentInlineText += renderedToken
+            } else {
+                addLineBreak()
                 result += renderedToken
             }
-        }
-    }
-}
-
-extension _HTMLRenderToken {
-    func shouldInline(currentlyInlined: Bool) -> Bool {
-        switch self {
-        case .startTagOpen(_, .inline), .endTag(_, .inline), .text, .raw, .comment:
-            return true
-        case .attribute, .startTagClose:
-            return currentlyInlined
-        default:
-            return false
         }
     }
 }

@@ -4,7 +4,8 @@ import Elementary
 let benchmarks = { @Sendable in
     Benchmark.defaultConfiguration = .init(
         metrics: [.wallClock, .mallocCountTotal, .instructions, .throughput],
-        scalingFactor: .kilo
+        scalingFactor: .kilo,
+        maxDuration: .seconds(5)
     )
 
     Benchmark("initialize nested html tags") { benchmark in
@@ -154,6 +155,34 @@ let benchmarks = { @Sendable in
                         }
                     }
                 }.renderAsync())
+        }
+    }
+
+    Benchmark("render full document (sync)") { benchmark in
+        for _ in benchmark.scaledIterations {
+            blackHole(
+                html {
+                    head {
+                        title { "Hello, World!" }
+                        meta(.name("viewport"), .content("width=device-width, initial-scale=1"))
+                        link(.rel("stylesheet"), .href("styles.css"))
+                    }
+                    body {
+                        h1(.class("hello")) { "Hello, World!" }
+                        p { "This is a paragraph." }
+                        a(.href("https://swift.org")) {
+                            "Swift"
+                        }
+                        ul(.class("fancy-list")) {
+                            ForEach(0 ..< 1000) { i in
+                                MyCustomElement {
+                                    MyListItem(number: i)
+                                }
+                                HTMLComment("This is a comment")
+                            }
+                        }
+                    }
+                }.render())
         }
     }
 }

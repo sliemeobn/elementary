@@ -48,7 +48,7 @@ extension Never: HTMLTagDefinition {
 }
 
 public struct _RenderingContext {
-    var attributes: AttributeStorage
+    var attributes: _AttributeStorage
 
     public static var emptyContext: Self { Self(attributes: .none) }
 }
@@ -60,9 +60,7 @@ public enum _HTMLRenderToken {
         case inline
     }
 
-    case startTagOpen(String, type: RenderingType)
-    case attribute(name: String, value: String?)
-    case startTagClose(isUnpaired: Bool = false)
+    case startTag(String, attributes: _MergedAttributes, isUnpaired: Bool, type: RenderingType)
     case endTag(String, type: RenderingType)
     case text(String)
     case raw(String)
