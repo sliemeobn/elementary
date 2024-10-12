@@ -17,11 +17,10 @@
     }
 
     // variadic generics currently not supported in embedded
-    #if !hasFeature(Embedded)
-        public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
-            _HTMLTuple(repeat each content)
-        }
-    #endif
+    @_unavailableInEmbedded
+    public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
+        _HTMLTuple(repeat each content)
+    }
 
     public static func buildIf<Content>(_ content: Content?) -> Content? where Content: HTML {
         content
@@ -44,9 +43,9 @@
 public extension HTML where Content == Never {
     var content: Never {
         #if hasFeature(Embedded)
-            fatalError("content was called on an unsupported type")
+        fatalError("content was called on an unsupported type")
         #else
-            fatalError("content cannot be called on \(Self.self)")
+        fatalError("content cannot be called on \(Self.self)")
         #endif
     }
 }

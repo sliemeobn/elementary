@@ -1,3 +1,4 @@
+@_unavailableInEmbedded
 struct HTMLTextRenderer: _HTMLRendering {
     private var result: [UInt8] = []
 
@@ -15,6 +16,7 @@ struct HTMLTextRenderer: _HTMLRendering {
     }
 }
 
+#if !hasFeature(Embedded)
 @available(*, deprecated, message: "will be removed")
 struct HTMLStreamRenderer: _HTMLRendering {
     let writer: (String) -> Void
@@ -136,3 +138,14 @@ extension PrettyHTMLTextRenderer: _HTMLRendering {
         }
     }
 }
+
+private extension _HTMLRenderToken {
+    // TODO: remove this method
+    func renderedValue() -> String {
+        var buffer: [UInt8] = []
+        buffer.appendToken(self)
+        return String(decoding: buffer, as: UTF8.self)
+    }
+}
+
+#endif
