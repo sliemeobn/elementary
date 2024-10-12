@@ -4,8 +4,13 @@
         content
     }
 
-    public static func buildExpression<Content>(_ content: Content) -> HTMLText where Content: StringProtocol {
+    public static func buildExpression(_ content: String) -> HTMLText {
         HTMLText(content)
+    }
+
+    @available(*, deprecated, message: "use buildExpression(_: String) instead")
+    public static func buildExpression<Content>(_ content: Content) -> HTMLText where Content: StringProtocol {
+        HTMLText(String(content))
     }
 
     public static func buildBlock() -> EmptyHTML {
@@ -96,8 +101,14 @@ public struct HTMLText: HTML, Sendable {
     public var text: String
 
     /// Creates a new text content with the specified text.
+    @available(*, deprecated, message: "use init(_: String) instead")
     public init(_ text: some StringProtocol) {
         self.text = String(text)
+    }
+
+    /// Creates a new text content with the specified text.
+    public init(_ text: String) {
+        self.text = text
     }
 
     @_spi(Rendering)
