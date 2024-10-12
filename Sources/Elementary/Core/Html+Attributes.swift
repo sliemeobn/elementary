@@ -51,9 +51,7 @@ public extension HTMLAttribute {
 
 public struct _AttributedElement<Content: HTML>: HTML {
     public var content: Content
-
-    @usableFromInline
-    var attributes: _AttributeStorage
+    public var attributes: _AttributeStorage
 
     @usableFromInline
     init(content: Content, attributes: _AttributeStorage) {

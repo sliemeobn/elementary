@@ -1,3 +1,4 @@
+#if !hasFeature(Embedded)
 /// An element that lazily renders HTML for each element of an `AsyncSequence`.
 ///
 /// The this element can only be rendered in an async context (ie: by calling ``HTML/render(into:chunkSize:)`` or ``HTML/renderAsync()``).
@@ -38,3 +39,4 @@ public struct AsyncForEach<Source: AsyncSequence, Content: HTML>: HTML {
         }
     }
 }
+#endif

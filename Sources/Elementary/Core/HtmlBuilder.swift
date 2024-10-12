@@ -4,8 +4,13 @@
         content
     }
 
-    public static func buildExpression<Content>(_ content: Content) -> HTMLText where Content: StringProtocol {
+    public static func buildExpression(_ content: String) -> HTMLText {
         HTMLText(content)
+    }
+
+    @available(*, deprecated, message: "use buildExpression(_: String) instead")
+    public static func buildExpression<Content>(_ content: Content) -> HTMLText where Content: StringProtocol {
+        HTMLText(String(content))
     }
 
     public static func buildBlock() -> EmptyHTML {
@@ -16,9 +21,12 @@
         content
     }
 
+    // variadic generics currently not supported in embedded
+    #if !hasFeature(Embedded)
     public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
         _HTMLTuple(repeat each content)
     }
+    #endif
 
     public static func buildIf<Content>(_ content: Content?) -> Content? where Content: HTML {
         content
@@ -40,7 +48,11 @@
 @_spi(Rendering)
 public extension HTML where Content == Never {
     var content: Never {
+        #if hasFeature(Embedded)
+        fatalError("content was called on an unsupported type")
+        #else
         fatalError("content cannot be called on \(Self.self)")
+        #endif
     }
 }
 
@@ -68,7 +80,7 @@ extension Optional: HTML where Wrapped: HTML {
 }
 
 /// A type that represents empty HTML.
-public struct EmptyHTML: HTML {
+public struct EmptyHTML: HTML, Sendable {
     public init() {}
 
     @_spi(Rendering)
@@ -85,13 +97,19 @@ public struct EmptyHTML: HTML {
 /// A type that represents text content in an HTML document.
 ///
 /// The text will be escaped when rendered.
-public struct HTMLText: HTML {
+public struct HTMLText: HTML, Sendable {
     /// The text content.
     public var text: String
 
     /// Creates a new text content with the specified text.
+    @available(*, deprecated, message: "use init(_: String) instead")
     public init(_ text: some StringProtocol) {
         self.text = String(text)
+    }
+
+    /// Creates a new text content with the specified text.
+    public init(_ text: String) {
+        self.text = text
     }
 
     @_spi(Rendering)
@@ -107,13 +125,16 @@ public struct HTMLText: HTML {
     }
 }
 
+extension _HTMLConditional.Value: Sendable where TrueContent: Sendable, FalseContent: Sendable {}
+extension _HTMLConditional: Sendable where _HTMLConditional.Value: Sendable {}
+
 public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
-    enum Value {
+    public enum Value {
         case trueContent(TrueContent)
         case falseContent(FalseContent)
     }
 
-    let value: Value
+    public let value: Value
 
     init(_ value: Value) {
         self.value = value
@@ -140,8 +161,12 @@ public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
     typealias Tag = TrueContent.Tag
 }
 
+// variadic generics currently not supported in embedded
+#if !hasFeature(Embedded)
+extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
+
 public struct _HTMLTuple<each Child: HTML>: HTML {
-    let value: (repeat each Child)
+    public let value: (repeat each Child)
 
     init(_ value: repeat each Child) {
         self.value = (repeat each value)
@@ -169,9 +194,12 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
         repeat try await renderElement(each html.value, &renderer)
     }
 }
+#endif
+
+extension _HTMLArray: Sendable where Element: Sendable {}
 
 public struct _HTMLArray<Element: HTML>: HTML {
-    let value: [Element]
+    public let value: [Element]
 
     init(_ value: [Element]) {
         self.value = value
@@ -195,10 +223,3 @@ public struct _HTMLArray<Element: HTML>: HTML {
         }
     }
 }
-
-extension HTMLText: Sendable {}
-extension EmptyHTML: Sendable {}
-extension _HTMLConditional.Value: Sendable where TrueContent: Sendable, FalseContent: Sendable {}
-extension _HTMLConditional: Sendable where _HTMLConditional.Value: Sendable {}
-extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
-extension _HTMLArray: Sendable where Element: Sendable {}

@@ -1,3 +1,4 @@
+#if !hasFeature(Embedded)
 struct AsyncHTMLRenderer<Writer: HTMLStreamWriter>: _AsyncHTMLRendering {
     var writer: Writer
     let chunkSize: Int
@@ -33,3 +34,4 @@ final class BufferWriter: HTMLStreamWriter {
         result.append(contentsOf: bytes)
     }
 }
+#endif

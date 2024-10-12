@@ -1,3 +1,4 @@
+#if !hasFeature(Embedded)
 struct HTMLTextRenderer: _HTMLRendering {
     private var result: [UInt8] = []
 
@@ -136,3 +137,14 @@ extension PrettyHTMLTextRenderer: _HTMLRendering {
         }
     }
 }
+
+private extension _HTMLRenderToken {
+    // TODO: remove this method
+    func renderedValue() -> String {
+        var buffer: [UInt8] = []
+        buffer.appendToken(self)
+        return String(decoding: buffer, as: UTF8.self)
+    }
+}
+
+#endif

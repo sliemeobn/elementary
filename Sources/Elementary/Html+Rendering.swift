@@ -1,3 +1,4 @@
+#if !hasFeature(Embedded)
 public extension HTML {
     /// Renders the HTML content into a single string.
     /// - Returns: The rendered HTML content.
@@ -52,7 +53,9 @@ public extension HTML {
 /// A type that write chunks of HTML content to a stream.
 ///
 /// Conform to this protocol to stream HTML responses efficiently.
+
 public protocol HTMLStreamWriter {
     /// Writes a chunk of rendered HTML.
     mutating func write(_ bytes: ArraySlice<UInt8>) async throws
 }
+#endif

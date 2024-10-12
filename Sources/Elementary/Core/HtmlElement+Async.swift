@@ -10,7 +10,7 @@ public extension HTMLElement {
     init<AwaitedContent: HTML>(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent)
         where Self.Content == AsyncContent<AwaitedContent>
     {
-        self.attributes = .init(attributes)
+        _attributes = .init(attributes)
         self.content = AsyncContent(content: content)
     }
 
@@ -25,7 +25,7 @@ public extension HTMLElement {
     init<AwaitedContent: HTML>(attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent)
         where Self.Content == AsyncContent<AwaitedContent>
     {
-        self.attributes = .init(attributes)
+        _attributes = .init(attributes)
         self.content = AsyncContent(content: content)
     }
 }

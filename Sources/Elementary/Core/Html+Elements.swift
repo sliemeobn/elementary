@@ -2,8 +2,7 @@
 public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag: HTMLTrait.Paired {
     /// The type of the HTML tag this element represents.
     public typealias Tag = Tag
-    @usableFromInline
-    var attributes: _AttributeStorage
+    public var _attributes: _AttributeStorage
 
     // The content of the element.
     public var content: Content
@@ -11,7 +10,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     /// Creates a new HTML element with the specified content.
     /// - Parameter content: The content of the element.
     public init(@HTMLBuilder content: () -> Content) {
-        attributes = .init()
+        _attributes = .init()
         self.content = content()
     }
 
@@ -21,7 +20,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     ///   - content: The content of the element.
     @inlinable
     public init(_ attribute: HTMLAttribute<Tag>, @HTMLBuilder content: () -> Content) {
-        attributes = .init(attribute)
+        _attributes = .init(attribute)
         self.content = content()
     }
 
@@ -31,7 +30,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     ///  - content: The content of the element.
     @inlinable
     public init(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: () -> Content) {
-        self.attributes = .init(attributes)
+        _attributes = .init(attributes)
         self.content = content()
     }
 
@@ -41,24 +40,24 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     ///  - content: The content of the element.
     @inlinable
     public init(attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: () -> Content) {
-        self.attributes = .init(attributes)
+        _attributes = .init(attributes)
         self.content = content()
     }
 
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
-        html.attributes.append(context.attributes)
+        html._attributes.append(context.attributes)
 
-        renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
+        renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
         Content._render(html.content, into: &renderer, with: .emptyContext)
         renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
 
     @_spi(Rendering)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
-        html.attributes.append(context.attributes)
+        html._attributes.append(context.attributes)
 
-        try await renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
+        try await renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
         try await Content._render(html.content, into: &renderer, with: .emptyContext)
         try await renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
@@ -68,46 +67,45 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
 public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait.Unpaired {
     /// The type of the HTML tag this element represents.
     public typealias Tag = Tag
-    @usableFromInline
-    var attributes: _AttributeStorage
+    public var _attributes: _AttributeStorage
 
     /// Creates a new HTML void element.
     @inlinable
     public init() {
-        attributes = .init()
+        _attributes = .init()
     }
 
     /// Creates a new HTML void element with the specified attribute.
     /// - Parameter attribute: The attribute to apply to the element.
     @inlinable
     public init(_ attribute: HTMLAttribute<Tag>) {
-        attributes = .init(attribute)
+        _attributes = .init(attribute)
     }
 
     /// Creates a new HTML void element with the specified attributes.
     /// - Parameter attributes: The attributes to apply to the element.
     @inlinable
     public init(_ attributes: HTMLAttribute<Tag>...) {
-        self.attributes = .init(attributes)
+        _attributes = .init(attributes)
     }
 
     /// Creates a new HTML void element with the specified attributes.
     /// - Parameter attributes: The attributes to apply to the element as an array.
     @inlinable
     public init(attributes: [HTMLAttribute<Tag>]) {
-        self.attributes = .init(attributes)
+        _attributes = .init(attributes)
     }
 
     @_spi(Rendering)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
-        html.attributes.append(context.attributes)
-        renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
+        html._attributes.append(context.attributes)
+        renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
     }
 
     @_spi(Rendering)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
-        html.attributes.append(context.attributes)
-        try await renderer.appendToken(.startTag(Tag.name, attributes: html.attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
+        html._attributes.append(context.attributes)
+        try await renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
     }
 }
 

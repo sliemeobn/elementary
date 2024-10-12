@@ -1,3 +1,4 @@
+#if !hasFeature(Embedded)
 /// A property wrapper that reads an environment value from a `TaskLocal`.
 ///
 /// Use `@Environment` to conveniently read a value provided via ``HTML/environment(_:_:)``.
@@ -106,3 +107,4 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
 }
 
 extension _ModifiedTaskLocal: Sendable where Content: Sendable {}
+#endif
