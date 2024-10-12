@@ -1,4 +1,4 @@
-@_unavailableInEmbedded
+#if !hasFeature(Embedded)
 struct HTMLTextRenderer: _HTMLRendering {
     private var result: [UInt8] = []
 
@@ -16,7 +16,6 @@ struct HTMLTextRenderer: _HTMLRendering {
     }
 }
 
-#if !hasFeature(Embedded)
 @available(*, deprecated, message: "will be removed")
 struct HTMLStreamRenderer: _HTMLRendering {
     let writer: (String) -> Void

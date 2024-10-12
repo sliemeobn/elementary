@@ -22,10 +22,11 @@
     }
 
     // variadic generics currently not supported in embedded
-    @_unavailableInEmbedded
+    #if !hasFeature(Embedded)
     public static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
         _HTMLTuple(repeat each content)
     }
+    #endif
 
     public static func buildIf<Content>(_ content: Content?) -> Content? where Content: HTML {
         content
@@ -161,10 +162,9 @@ public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
 }
 
 // variadic generics currently not supported in embedded
-@_unavailableInEmbedded
+#if !hasFeature(Embedded)
 extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
 
-@_unavailableInEmbedded
 public struct _HTMLTuple<each Child: HTML>: HTML {
     public let value: (repeat each Child)
 
@@ -194,6 +194,7 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
         repeat try await renderElement(each html.value, &renderer)
     }
 }
+#endif
 
 extension _HTMLArray: Sendable where Element: Sendable {}
 

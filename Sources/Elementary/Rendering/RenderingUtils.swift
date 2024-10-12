@@ -18,9 +18,9 @@ extension _RenderingContext {
     }
 }
 
+// I do not know why this function does not work in embedded, but currently it crashes the compiler
+#if !hasFeature(Embedded)
 extension [UInt8] {
-    // I do not know why this function does not work in embedded, but currently it crashes the compiler
-    @_unavailableInEmbedded
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         // avoid strings and append each component directly
         switch token {
@@ -80,3 +80,4 @@ extension [UInt8] {
         }
     }
 }
+#endif
