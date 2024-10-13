@@ -9,6 +9,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
 
     /// Creates a new HTML element with the specified content.
     /// - Parameter content: The content of the element.
+    @inlinable
     public init(@HTMLBuilder content: () -> Content) {
         _attributes = .init()
         self.content = content()
