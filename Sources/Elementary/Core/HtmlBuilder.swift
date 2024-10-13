@@ -38,7 +38,6 @@
     }
 }
 
-@_spi(Rendering)
 public extension HTML where Content == Never {
     var content: Never {
         #if hasFeature(Embedded)
@@ -55,7 +54,7 @@ extension Never: HTML {
 }
 
 extension Optional: HTML where Wrapped: HTML {
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         switch html {
         case .none: return
@@ -63,7 +62,7 @@ extension Optional: HTML where Wrapped: HTML {
         }
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         switch html {
         case .none: break
@@ -76,12 +75,12 @@ extension Optional: HTML where Wrapped: HTML {
 public struct EmptyHTML: HTML, Sendable {
     public init() {}
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
     }
@@ -105,13 +104,13 @@ public struct HTMLText: HTML, Sendable {
         self.text = text
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
         renderer.appendToken(.text(html.text))
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
         try await renderer.appendToken(.text(html.text))
@@ -133,7 +132,7 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
         self.value = value
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         switch html.value {
         case let .trueContent(content): return TrueContent._render(content, into: &renderer, with: context)
@@ -141,7 +140,7 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
         }
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         switch html.value {
         case let .trueContent(content): try await TrueContent._render(content, into: &renderer, with: context)
@@ -163,7 +162,7 @@ public struct _HTMLArray<Element: HTML>: HTML {
         self.value = value
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -172,7 +171,7 @@ public struct _HTMLArray<Element: HTML>: HTML {
         }
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 

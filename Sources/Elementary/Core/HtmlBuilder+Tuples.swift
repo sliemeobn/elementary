@@ -1,5 +1,6 @@
 // hand-rolled tuples types for embedded support (variadic generics are not supported in Embedded ATM)
-// unfortunately variadic generics perform significantly worse than the hand-rolled tuples, so we use them when we can
+// unfortunately variadic generics perform significantly worse than the hand-rolled tuples,
+// so we can just use them for normal HTML rendering as well
 
 public extension HTMLBuilder {
     static func buildBlock<V0: HTML, V1: HTML>(_ v0: V0, _ v1: V1) -> _HTMLTuple2<V0, V1> {
@@ -35,7 +36,7 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
     public let v0: V0
     public let v1: V1
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -43,7 +44,7 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
         V1._render(html.v1, into: &renderer, with: copy context)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 
@@ -58,7 +59,7 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
     public let v1: V1
     public let v2: V2
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -67,7 +68,7 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
         V2._render(html.v2, into: &renderer, with: copy context)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 
@@ -84,7 +85,7 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
     public let v2: V2
     public let v3: V3
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -94,7 +95,7 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
         V3._render(html.v3, into: &renderer, with: copy context)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 
@@ -113,7 +114,7 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
     public let v3: V3
     public let v4: V4
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -124,7 +125,7 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
         V4._render(html.v4, into: &renderer, with: copy context)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 
@@ -145,7 +146,7 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
     public let v4: V4
     public let v5: V5
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -157,7 +158,7 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
         V5._render(html.v5, into: &renderer, with: copy context)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 
@@ -181,7 +182,7 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
         self.value = (repeat each value)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -192,7 +193,7 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
         repeat renderElement(each html.value, &renderer)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 

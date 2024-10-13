@@ -81,7 +81,7 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
     var taskLocal: TaskLocal<T>
     var value: T
 
-    @_spi(Rendering)
+    @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         #if compiler(>=6.0)
         // https://github.com/swiftlang/swift/issues/76474
@@ -93,7 +93,7 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
         }
     }
 
-    @_spi(Rendering)
+    @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         #if compiler(>=6.0)
         // https://github.com/swiftlang/swift/issues/76474

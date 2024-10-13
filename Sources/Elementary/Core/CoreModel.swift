@@ -39,7 +39,9 @@ public protocol HTMLTagDefinition: Sendable {
     /// The name of the HTML tag as it is rendered in an HTML document.
     static var name: String { get }
 
-    @_spi(Rendering)
+    /// Internal property that controls formatted rendering of the element (inline or block).
+    ///
+    /// A default implementation is provided that returns `false`.
     static var _rendersInline: Bool { get }
 }
 
@@ -48,6 +50,7 @@ extension Never: HTMLTagDefinition {
 }
 
 public struct _RenderingContext {
+    @usableFromInline
     var attributes: _AttributeStorage
 
     public static var emptyContext: Self { Self(attributes: .none) }
@@ -76,18 +79,17 @@ public protocol _AsyncHTMLRendering {
 }
 
 public extension HTML {
-    @_transparent
+    @inlinable @inline(__always)
     static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         Content._render(html.content, into: &renderer, with: context)
     }
 
-    @_transparent
+    @inlinable @inline(__always)
     static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         try await Content._render(html.content, into: &renderer, with: context)
     }
 }
 
 public extension HTMLTagDefinition {
-    @_spi(Rendering)
     static var _rendersInline: Bool { false }
 }

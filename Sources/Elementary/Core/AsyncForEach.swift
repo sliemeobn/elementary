@@ -12,7 +12,9 @@
 /// }
 /// ```
 public struct AsyncForEach<Source: AsyncSequence, Content: HTML>: HTML {
+    @usableFromInline
     var sequence: Source
+    @usableFromInline
     var contentBuilder: (Source.Element) -> Content
 
     /// Creates a new async HTML element that renders the specified content for each element of the sequence.
@@ -25,12 +27,12 @@ public struct AsyncForEach<Source: AsyncSequence, Content: HTML>: HTML {
         self.contentBuilder = contentBuilder
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertionFailureNoAsyncContext(self)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 
