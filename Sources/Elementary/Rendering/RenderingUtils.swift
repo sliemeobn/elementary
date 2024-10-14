@@ -1,5 +1,6 @@
 extension _RenderingContext {
     @inline(__always)
+    @usableFromInline
     func assertNoAttributes(_ type: (some HTML).Type) {
         #if hasFeature(Embedded)
         assert(attributes.isEmpty, "Attributes are not supported")
@@ -9,6 +10,7 @@ extension _RenderingContext {
     }
 
     @inline(__always)
+    @usableFromInline
     func assertionFailureNoAsyncContext(_ type: (some HTML).Type) {
         let message = "Cannot render \(type) in a synchronous context, please use .render(into:) or .renderAsync() instead."
         print("Elementary rendering error: \(message)")

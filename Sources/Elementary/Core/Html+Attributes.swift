@@ -59,13 +59,13 @@ public struct _AttributedElement<Content: HTML>: HTML {
         self.attributes = attributes
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.prependAttributes(html.attributes)
         Content._render(html.content, into: &renderer, with: context)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.prependAttributes(html.attributes)
         try await Content._render(html.content, into: &renderer, with: context)
@@ -110,7 +110,8 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     }
 }
 
-private extension _RenderingContext {
+extension _RenderingContext {
+    @usableFromInline
     mutating func prependAttributes(_ attributes: consuming _AttributeStorage) {
         attributes.append(self.attributes)
         self.attributes = attributes

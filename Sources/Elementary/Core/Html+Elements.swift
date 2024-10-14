@@ -9,6 +9,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
 
     /// Creates a new HTML element with the specified content.
     /// - Parameter content: The content of the element.
+    @inlinable
     public init(@HTMLBuilder content: () -> Content) {
         _attributes = .init()
         self.content = content()
@@ -44,7 +45,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
         self.content = content()
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         html._attributes.append(context.attributes)
 
@@ -53,7 +54,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
         renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         html._attributes.append(context.attributes)
 
@@ -96,13 +97,13 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
         _attributes = .init(attributes)
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         html._attributes.append(context.attributes)
         renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         html._attributes.append(context.attributes)
         try await renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
@@ -121,13 +122,13 @@ public struct HTMLComment: HTML {
         self.text = text
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
         renderer.appendToken(.comment(html.text))
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
         try await renderer.appendToken(.comment(html.text))
@@ -146,13 +147,13 @@ public struct HTMLRaw: HTML {
         self.text = text
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
         renderer.appendToken(.raw(html.text))
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
         try await renderer.appendToken(.raw(html.text))
@@ -164,7 +165,8 @@ extension HTMLVoidElement: Sendable {}
 extension HTMLComment: Sendable {}
 extension HTMLRaw: Sendable {}
 
-private extension HTMLTagDefinition {
+extension HTMLTagDefinition {
+    @usableFromInline
     static var renderingType: _HTMLRenderToken.RenderingType {
         _rendersInline ? .inline : .block
     }

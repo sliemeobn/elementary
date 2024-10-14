@@ -11,9 +11,11 @@
 public struct ForEach<Data, Content>: HTML
     where Data: Sequence, Content: HTML
 {
+    @usableFromInline
     var sequence: Data
     // TODO: Swift 6 - @Sendable is not ideal here, but currently the response generators for hummingbird/vapor require sendable HTML types
     // also, currently there is no good way to conditionally apply Sendable conformance based on closure type
+    @usableFromInline
     var contentBuilder: @Sendable (Data.Element) -> Content
 
     /// Creates a new `ForEach` element with the given sequence and content builder closure.
@@ -26,7 +28,7 @@ public struct ForEach<Data, Content>: HTML
         self.contentBuilder = contentBuilder
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
         context.assertNoAttributes(self)
 
@@ -35,7 +37,7 @@ public struct ForEach<Data, Content>: HTML
         }
     }
 
-    @_spi(Rendering)
+    @inlinable @inline(__always)
     public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
         context.assertNoAttributes(self)
 
