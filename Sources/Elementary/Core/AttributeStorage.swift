@@ -100,6 +100,10 @@ public struct _MergedAttributes: Sequence, Sendable {
         Iterator(storage)
     }
 
+    public var isEmpty: Bool {
+        storage.isEmpty
+    }
+
     public struct Iterator: IteratorProtocol {
         enum State {
             case empty
