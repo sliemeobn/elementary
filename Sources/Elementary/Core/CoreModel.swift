@@ -91,5 +91,6 @@ public extension HTML {
 }
 
 public extension HTMLTagDefinition {
+    @inlinable @inline(__always)
     static var _rendersInline: Bool { false }
 }

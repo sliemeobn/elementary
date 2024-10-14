@@ -1,9 +1,11 @@
 /// A result builder for building HTML components.
 @resultBuilder public struct HTMLBuilder {
+    @inlinable
     public static func buildExpression<Content>(_ content: Content) -> Content where Content: HTML {
         content
     }
 
+    @inlinable
     public static func buildExpression(_ content: String) -> HTMLText {
         HTMLText(content)
     }
@@ -13,26 +15,32 @@
         HTMLText(String(content))
     }
 
+    @inlinable
     public static func buildBlock() -> EmptyHTML {
         EmptyHTML()
     }
 
+    @inlinable
     public static func buildBlock<Content>(_ content: Content) -> Content where Content: HTML {
         content
     }
 
+    @inlinable
     public static func buildIf<Content>(_ content: Content?) -> Content? where Content: HTML {
         content
     }
 
+    @inlinable
     public static func buildEither<TrueContent: HTML, FalseContent: HTML>(first: TrueContent) -> _HTMLConditional<TrueContent, FalseContent> {
         _HTMLConditional(.trueContent(first))
     }
 
+    @inlinable
     public static func buildEither<TrueContent: HTML, FalseContent: HTML>(second: FalseContent) -> _HTMLConditional<TrueContent, FalseContent> {
         _HTMLConditional(.falseContent(second))
     }
 
+    @inlinable
     public static func buildArray<Element: HTML>(_ components: [Element]) -> _HTMLArray<Element> {
         return _HTMLArray(components)
     }
@@ -100,6 +108,7 @@ public struct HTMLText: HTML, Sendable {
     }
 
     /// Creates a new text content with the specified text.
+    @inlinable
     public init(_ text: String) {
         self.text = text
     }
@@ -128,7 +137,8 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
 
     public let value: Value
 
-    init(_ value: Value) {
+    @inlinable
+    public init(_ value: Value) {
         self.value = value
     }
 
@@ -158,7 +168,8 @@ extension _HTMLArray: Sendable where Element: Sendable {}
 public struct _HTMLArray<Element: HTML>: HTML {
     public let value: [Element]
 
-    init(_ value: [Element]) {
+    @inlinable
+    public init(_ value: [Element]) {
         self.value = value
     }
 
