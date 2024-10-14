@@ -166,7 +166,7 @@ extension HTMLComment: Sendable {}
 extension HTMLRaw: Sendable {}
 
 extension HTMLTagDefinition {
-    @usableFromInline
+    @usableFromInline @inline(__always)
     static var renderingType: _HTMLRenderToken.RenderingType {
         _rendersInline ? .inline : .block
     }
