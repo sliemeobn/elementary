@@ -25,7 +25,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build
-        run: swift build -c release \
+        run: |
+          swift build -c release \
           --triple wasm32-unknown-none-wasm  \
           -Xswiftc -enable-experimental-feature -Xswiftc Embedded \
           -Xswiftc -enable-experimental-feature -Xswiftc Extern \
