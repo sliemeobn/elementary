@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        image: [swiftlang/swift:nightly-main]
+        image: ["swiftlang/swift:nightly-main"]
 
     container:
       image: ${{ matrix.image }}
