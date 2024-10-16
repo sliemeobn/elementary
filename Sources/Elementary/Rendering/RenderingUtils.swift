@@ -9,15 +9,16 @@ extension _RenderingContext {
         #endif
     }
 
+    #if !hasFeature(Embedded)
     @inline(__always)
     @usableFromInline
     func assertionFailureNoAsyncContext(_ type: (some HTML).Type) {
         let message = "Cannot render \(type) in a synchronous context, please use .render(into:) or .renderAsync() instead."
         print("Elementary rendering error: \(message)")
-        #if !hasFeature(Embedded)
+
         assertionFailure(message)
-        #endif
     }
+    #endif
 }
 
 // I do not know why this function does not work in embedded, but currently it crashes the compiler
