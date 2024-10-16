@@ -2,13 +2,15 @@
 import Foundation
 import PackageDescription
 
-let shouldBuildForEmbedded = ProcessInfo.processInfo.environment["EXPERIMENTAL_EMBEDDED_WASM"].flatMap(Bool.init) ?? false
+let shouldBuildForEmbedded = ProcessInfo.processInfo.environment["JAVASCRIPTKIT_EXPERIMENTAL_EMBEDDED_WASM"].flatMap(Bool.init) ?? false
 
 var featureFlags: [SwiftSetting] = [
     .enableUpcomingFeature("ExistentialAny"),
 ]
 
 if shouldBuildForEmbedded {
+    // currently this work-around only works for SwiftPM package dependencies on branches, not version tags
+    // see https://github.com/swiftlang/swift-package-manager/issues/7612
     featureFlags.append(
         .unsafeFlags([
             "-Xfrontend", "-emit-empty-object-file",

@@ -12,9 +12,12 @@ extension _RenderingContext {
     @inline(__always)
     @usableFromInline
     func assertionFailureNoAsyncContext(_ type: (some HTML).Type) {
+        #if hasFeature(Embedded)
+        assertionFailure("Cannot render async content in a synchronous context, please use .render(into:) or .renderAsync() instead.")
+        #else
         let message = "Cannot render \(type) in a synchronous context, please use .render(into:) or .renderAsync() instead."
         print("Elementary rendering error: \(message)")
-        #if !hasFeature(Embedded)
+
         assertionFailure(message)
         #endif
     }
