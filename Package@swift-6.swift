@@ -1,8 +1,7 @@
 // swift-tools-version: 6.0
-import Foundation
 import PackageDescription
 
-let shouldBuildForEmbedded = ProcessInfo.processInfo.environment["JAVASCRIPTKIT_EXPERIMENTAL_EMBEDDED_WASM"].flatMap(Bool.init) ?? false
+let shouldBuildForEmbedded = Context.environment["JAVASCRIPTKIT_EXPERIMENTAL_EMBEDDED_WASM"].flatMap(Bool.init) ?? false
 
 var featureFlags: [SwiftSetting] = [
     .enableUpcomingFeature("ExistentialAny"),
@@ -11,11 +10,13 @@ var featureFlags: [SwiftSetting] = [
 if shouldBuildForEmbedded {
     // currently this work-around only works for SwiftPM package dependencies on branches, not version tags
     // see https://github.com/swiftlang/swift-package-manager/issues/7612
-    featureFlags.append(
+    featureFlags.append(contentsOf: [
+        .enableExperimentalFeature("Embedded"),
+        .enableExperimentalFeature("Extern"),
         .unsafeFlags([
             "-Xfrontend", "-emit-empty-object-file",
-        ])
-    )
+        ]),
+    ])
 }
 
 let package = Package(
@@ -35,6 +36,7 @@ let package = Package(
     targets: [
         .target(
             name: "Elementary",
+            cSettings: shouldBuildForEmbedded ? [.unsafeFlags(["-fdeclspec"])] : nil,
             swiftSettings: featureFlags
         ),
         .testTarget(

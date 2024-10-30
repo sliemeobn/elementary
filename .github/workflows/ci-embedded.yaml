@@ -26,10 +26,5 @@ jobs:
 
       - name: Build
         run: |
-          swift build -c release \
-          --triple wasm32-unknown-none-wasm  \
-          -Xswiftc -enable-experimental-feature -Xswiftc Embedded \
-          -Xswiftc -enable-experimental-feature -Xswiftc Extern \
-          -Xswiftc -wmo -Xswiftc -disable-cmo \
-          -Xswiftc -cxx-interoperability-mode=default \
-          -Xcc -fdeclspec
+          JAVASCRIPTKIT_EXPERIMENTAL_EMBEDDED_WASM=true \
+            swift build --triple wasm32-unknown-none-wasm
