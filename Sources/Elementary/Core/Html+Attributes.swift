@@ -26,7 +26,11 @@ public struct HTMLAttributeMergeAction: Sendable {
     public static var ignoring: Self { .init(mergeMode: .ignoreIfSet) }
 
     /// Appends the new value to the existing value, separated by the specified string.
+    @available(*, deprecated, renamed: "appending(separatedBy:)")
     public static func appending(seperatedBy: String) -> Self { .init(mergeMode: .appendValue(seperatedBy)) }
+
+    /// Appends the new value to the existing value, separated by the specified string.
+    public static func appending(separatedBy: String) -> Self { .init(mergeMode: .appendValue(separatedBy)) }
 }
 
 public extension HTMLAttribute {
