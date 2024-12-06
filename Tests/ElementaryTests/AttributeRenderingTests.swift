@@ -61,9 +61,9 @@ final class AttributeRenderingTests: XCTestCase {
     func testRespectsCustomMergeMode() async throws {
         try await HTMLAssertEqual(
             br(.id("1"), .data("bar", value: "baz"))
-                .attributes(.id("2").mergedBy(.appending(seperatedBy: "-")))
+                .attributes(.id("2").mergedBy(.appending(separatedBy: "-")))
                 .attributes(.id("3").mergedBy(.ignoring))
-                .attributes(.data("bar", value: "baq").mergedBy(.appending(seperatedBy: ""))),
+                .attributes(.data("bar", value: "baq").mergedBy(.appending(separatedBy: ""))),
             #"<br id="1-2" data-bar="bazbaq">"#
         )
     }
