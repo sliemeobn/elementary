@@ -1,3 +1,4 @@
+#if !hasFeature(Embedded)
 /// A wrapper around an `any HTML` value that can be safely sent once.
 ///
 /// Note: For non-sendable values, this will only allow the value to be taken only once.
@@ -42,3 +43,4 @@ public struct _SendableAnyHTMLBox: Sendable {
     }
     #endif
 }
+#endif

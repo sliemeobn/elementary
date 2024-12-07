@@ -10,12 +10,14 @@ final class SendOnceHTMLValueTests: XCTestCase {
         XCTAssertNotNil(box.tryTake())
     }
 
+    #if swift(>=6.0)
     func testHoldsNonSendable() {
         let html = MyComponent()
         let box = _SendableAnyHTMLBox(html)
         XCTAssertNotNil(box.tryTake())
         XCTAssertNil(box.tryTake())
     }
+    #endif
 }
 
 class NonSendable {
