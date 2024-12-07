@@ -6,6 +6,7 @@ final class SendOnceBox: Sendable, SendOnceBoxing {
     // final class SendOnceBox<Value>: Sendable, SendOnceBoxing {
     typealias Value = any HTML
     // NOTE: generics+Synchronization crashes the compiler ATM
+    // https://github.com/swiftlang/swift/issues/78048
 
     let mutex: Mutex<Value?>
 
