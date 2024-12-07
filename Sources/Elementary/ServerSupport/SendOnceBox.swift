@@ -2,15 +2,19 @@
 import Synchronization
 
 @available(macOS 15.0, *)
-final class SendOnceBox<V>: Sendable, SendOnceBoxing {
-    let value: Mutex<V?>
+final class SendOnceBox: Sendable, SendOnceBoxing {
+    // final class SendOnceBox<Value>: Sendable, SendOnceBoxing {
+    typealias Value = any HTML
+    // NOTE: generics+Synchronization crashes the compiler ATM
 
-    init(_ value: sending V) {
-        self.value = Mutex(value)
+    let mutex: Mutex<Value?>
+
+    init(_ value: sending Value) {
+        mutex = Mutex(value)
     }
 
-    func tryTake() -> sending V? {
-        value.withLock { value -> sending V? in
+    func tryTake() -> sending Value? {
+        mutex.withLock { value -> sending Value? in
             let result = value
             value = nil
             return result
