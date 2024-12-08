@@ -8,7 +8,7 @@ public struct _SendableAnyHTMLBox: Sendable {
 
     enum Storage {
         case sendable(any HTML & Sendable)
-        #if swift(>=6.0)
+        #if compiler(>=6.0)
         // NOTE: protocol can be removed when macOS 15 is the minimum
         case sendOnceBox(any SendOnceBoxing<any HTML>)
         #endif
@@ -18,14 +18,14 @@ public struct _SendableAnyHTMLBox: Sendable {
         storage = .sendable(html)
     }
 
-    #if swift(>=6.0)
+    #if compiler(>=6.0)
     @available(macOS 15, *)
     public init(_ html: sending any HTML) {
         storage = .sendOnceBox(SendOnceBox(html))
     }
     #endif
 
-    #if swift(>=6.0)
+    #if compiler(>=6.0)
     public consuming func tryTake() -> sending (any HTML)? {
         switch storage {
         case let .sendable(html):
