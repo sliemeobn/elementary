@@ -1,7 +1,6 @@
 import Elementary
 import XCTest
 
-@available(macOS 15.0, *)
 final class SendOnceHTMLValueTests: XCTestCase {
     func testHoldsSendableValue() {
         let html = div { "Hello, World!" }
@@ -10,8 +9,12 @@ final class SendOnceHTMLValueTests: XCTestCase {
         XCTAssertNotNil(box.tryTake())
     }
 
-    #if swift(>=6.0)
-    func testHoldsNonSendable() {
+    #if compiler(>=6.0)
+    func testHoldsNonSendable() throws {
+        guard #available(macOS 15.0, *) else {
+            throw XCTSkip("Requires macOS 15.0")
+        }
+
         let html = MyComponent()
         let box = _SendableAnyHTMLBox(html)
         XCTAssertNotNil(box.tryTake())
