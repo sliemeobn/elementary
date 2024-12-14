@@ -357,6 +357,12 @@ public extension HTMLAttributeValue {
     }
 }
 
+public extension HTMLAttribute where Tag == HTMLTag.img {
+    static func alt(_ value: String) -> Self {
+        HTMLAttribute(name: "alt", value: value)
+    }
+}
+
 public extension HTMLAttribute where Tag: HTMLTrait.Attributes.autocomplete {
     static func autocomplete(_ value: HTMLAttributeValue.AutoComplete) -> Self {
         HTMLAttribute(name: "autocomplete", value: value.rawValue)
