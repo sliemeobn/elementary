@@ -130,4 +130,11 @@ final class AttributeRenderingTests: XCTestCase {
             #"<img width="100" height="200">"#
         )
     }
+
+    func testRendersAltForImg() async throws {
+        try await HTMLAssertEqual(
+            img(.src("/path/to/dog.jpeg"), .alt("A happy dog"), .width(200), .height(200)),
+            #"<img src="/path/to/dog.jpeg" alt="A happy dog" width="200" height="200">"#
+        )
+    }
 }
