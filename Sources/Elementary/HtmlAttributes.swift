@@ -650,3 +650,25 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.placeholder {
         HTMLAttribute(name: "placeholder", value: value)
     }
 }
+
+// scope attribute
+public extension HTMLTrait.Attributes {
+  protocol scope {}
+}
+
+extension HTMLTag.th: HTMLTrait.Attributes.scope {}
+
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.scope {
+  public struct Scope: Sendable, Equatable {
+    var value: String
+
+    public static var col: Self { .init(value: "col") }
+    public static var row: Self { .init(value: "row") }
+    public static var colgroup: Self { .init(value: "colgroup") }
+    public static var rowgroup: Self { .init(value: "rowgroup") }
+  }
+
+  public static func scope(_ scope: Scope) -> Self {
+    HTMLAttribute(name: "scope", value: scope.value)
+  }
+}
