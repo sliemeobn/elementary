@@ -481,7 +481,7 @@ public extension HTMLAttributeValue {
     }
 }
 
-extension HTMLAttribute where Tag: HTMLTrait.Attributes.referrerpolicy {
+public extension HTMLAttribute where Tag: HTMLTrait.Attributes.referrerpolicy {
     static func referrerPolicy(_ type: HTMLAttributeValue.ReferrerPolicy) -> Self {
         HTMLAttribute(name: "referrerpolicy", value: type.value)
     }
