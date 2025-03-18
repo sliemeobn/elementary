@@ -59,10 +59,6 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
         HTMLAttribute(name: "draggable", value: value.value)
     }
 
-    static func anchor(_ value: String) -> Self {
-        HTMLAttribute(name: "anchor", value: value)
-    }
-
     static func `is`(_ value: String) -> Self {
         HTMLAttribute(name: "is", value: value)
     }
