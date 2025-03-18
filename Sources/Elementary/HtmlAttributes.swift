@@ -38,6 +38,43 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     static func tabindex(_ index: Int) -> Self {
         HTMLAttribute(name: "tabindex", value: "\(index)")
     }
+
+    static func role(_ role: String) -> Self {
+        HTMLAttribute(name: "role", value: role)
+    }
+
+    static func popover(_ popover: String) -> Self {
+        HTMLAttribute(name: "popover", value: popover)
+    }
+
+    static var inert: Self {
+        HTMLAttribute(name: "inert", value: nil)
+    }
+
+    static func contenteditable(_ value: HTMLAttributeValue.ContentEditable) -> Self {
+        HTMLAttribute(name: "contenteditable", value: value.value)
+    }
+
+    static func draggable(_ value: HTMLAttributeValue.Draggable) -> Self {
+        HTMLAttribute(name: "draggable", value: value.value)
+    }
+
+    static func anchor(_ value: String) -> Self {
+        HTMLAttribute(name: "anchor", value: value)
+    }
+
+    static func `is`(_ value: String) -> Self {
+        HTMLAttribute(name: "is", value: value)
+    }
+
+    static func slot(_ value: String) -> Self {
+        HTMLAttribute(name: "slot", value: value)
+    }
+
+    static var autofocus: Self {
+        HTMLAttribute(name: "autofocus", value: nil)
+    }
+
 }
 
 // dir attribute
@@ -48,6 +85,27 @@ public extension HTMLAttributeValue {
         public static var ltr: Self { .init(value: "ltr") }
         public static var rtl: Self { .init(value: "rtl") }
         public static var auto: Self { .init(value: "auto") }
+    }
+}
+
+public extension HTMLAttributeValue {
+    struct ContentEditable {
+        var value: String
+
+        public static var `true`: Self { .init(value: "true") }
+        public static var `false`: Self { .init(value: "false") }
+        public static var plaintextOnly: Self { .init(value: "plaintext-only") }
+    }
+}
+
+public extension HTMLAttributeValue {
+    // MDN docs describe draggable as having an enumerated value, but currently
+    // the only valid values are "true" and "false"
+    struct Draggable {
+        var value: String
+
+        public static var true_: Self { .init(value: "true") }
+        public static var false_: Self { .init(value: "false") }
     }
 }
 
