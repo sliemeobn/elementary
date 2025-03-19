@@ -39,12 +39,16 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
         HTMLAttribute(name: "tabindex", value: "\(index)")
     }
 
-    static func role(_ role: String) -> Self {
-        HTMLAttribute(name: "role", value: role)
+    static func role(_ role: HTMLAttributeValue.Role) -> Self {
+        HTMLAttribute(name: "role", value: role.rawValue)
     }
 
-    static func popover(_ popover: String) -> Self {
-        HTMLAttribute(name: "popover", value: popover)
+    static var popover: Self {
+        HTMLAttribute(name: "popover", value: "auto")
+    }
+
+    static func popover(_ popover: HTMLAttributeValue.Popover) -> Self {
+        HTMLAttribute(name: "popover", value: popover.value)
     }
 
     static var inert: Self {
@@ -95,19 +99,64 @@ public extension HTMLAttributeValue {
 }
 
 public extension HTMLAttributeValue {
+    struct Popover {
+        var value: String
+
+        public static var auto: Self { .init(value: "auto") }
+        public static var hint: Self { .init(value: "hint") }
+        public static var manual: Self { .init(value: "manual") }
+    }
+}
+
+public extension HTMLAttributeValue {
     // MDN docs describe draggable as having an enumerated value, but currently
     // the only valid values are "true" and "false"
     struct Draggable {
         var value: String
 
-        public static var true_: Self { .init(value: "true") }
-        public static var false_: Self { .init(value: "false") }
+        public static var `true`: Self { .init(value: "true") }
+        public static var `false`: Self { .init(value: "false") }
     }
 }
 
 public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     static func dir(_ value: HTMLAttributeValue.Direction) -> Self {
         HTMLAttribute(name: "dir", value: value.value)
+    }
+}
+
+public extension HTMLAttributeValue {
+    struct Role: ExpressibleByStringLiteral, RawRepresentable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
+        public init(stringLiteral value: String) {
+            rawValue = value
+        }
+
+        public static var banner: Self { "banner" }
+        public static var main: Self { "banner" }
+        public static var navigation: Self { "banner" }
+        public static var contentinfo: Self { "banner" }
+        public static var complementary: Self { "banner" }
+        public static var form: Self { "banner" }
+        public static var search: Self { "banner" }
+
+        public static var button: Self { "banner" }
+        public static var checkbox: Self { "banner" }
+        public static var link: Self { "banner" }
+        public static var menuitem: Self { "banner" }
+        public static var option: Self { "banner" }
+
+        public static var article: Self { "banner" }
+        public static var table: Self { "banner" }
+        public static var heading: Self { "banner" }
+        public static var list: Self { "banner" }
+        public static var listitem: Self { "banner" }
+        public static var figure: Self { "banner" }
     }
 }
 
@@ -266,22 +315,6 @@ public extension HTMLAttributeValue {
 public extension HTMLAttribute where Tag: HTMLTrait.Attributes.target {
     static func target(_ target: HTMLAttributeValue.Target) -> Self {
         HTMLAttribute(name: "target", value: target.rawValue)
-    }
-}
-
-// autofocus attribute
-public extension HTMLTrait.Attributes {
-    protocol autofocus {}
-}
-
-extension HTMLTag.button: HTMLTrait.Attributes.autofocus {}
-extension HTMLTag.input: HTMLTrait.Attributes.autofocus {}
-extension HTMLTag.select: HTMLTrait.Attributes.autofocus {}
-extension HTMLTag.textarea: HTMLTrait.Attributes.autofocus {}
-
-public extension HTMLAttribute where Tag: HTMLTrait.Attributes.autofocus {
-    static var autofocus: Self {
-        HTMLAttribute(name: "autofocus", value: nil)
     }
 }
 
