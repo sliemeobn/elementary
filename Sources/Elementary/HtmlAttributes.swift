@@ -138,25 +138,25 @@ public extension HTMLAttributeValue {
         }
 
         public static var banner: Self { "banner" }
-        public static var main: Self { "banner" }
-        public static var navigation: Self { "banner" }
-        public static var contentinfo: Self { "banner" }
-        public static var complementary: Self { "banner" }
-        public static var form: Self { "banner" }
-        public static var search: Self { "banner" }
+        public static var main: Self { "main" }
+        public static var navigation: Self { "navigation" }
+        public static var contentinfo: Self { "contentinfo" }
+        public static var complementary: Self { "complementary" }
+        public static var form: Self { "form" }
+        public static var search: Self { "search" }
 
-        public static var button: Self { "banner" }
-        public static var checkbox: Self { "banner" }
-        public static var link: Self { "banner" }
-        public static var menuitem: Self { "banner" }
-        public static var option: Self { "banner" }
+        public static var button: Self { "button" }
+        public static var checkbox: Self { "checkbox" }
+        public static var link: Self { "link" }
+        public static var menuitem: Self { "menuitem" }
+        public static var option: Self { "option" }
 
-        public static var article: Self { "banner" }
-        public static var table: Self { "banner" }
-        public static var heading: Self { "banner" }
-        public static var list: Self { "banner" }
-        public static var listitem: Self { "banner" }
-        public static var figure: Self { "banner" }
+        public static var article: Self { "article" }
+        public static var table: Self { "table" }
+        public static var heading: Self { "heading" }
+        public static var list: Self { "list" }
+        public static var listitem: Self { "listitem" }
+        public static var figure: Self { "figure" }
     }
 }
 
