@@ -44,7 +44,7 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     }
 
     static var popover: Self {
-        HTMLAttribute(name: "popover", value: "auto")
+        HTMLAttribute(name: "popover", value: nil)
     }
 
     static func popover(_ popover: HTMLAttributeValue.Popover) -> Self {
