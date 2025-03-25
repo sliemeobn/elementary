@@ -38,6 +38,43 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     static func tabindex(_ index: Int) -> Self {
         HTMLAttribute(name: "tabindex", value: "\(index)")
     }
+
+    static func role(_ role: HTMLAttributeValue.Role) -> Self {
+        HTMLAttribute(name: "role", value: role.rawValue)
+    }
+
+    static var popover: Self {
+        HTMLAttribute(name: "popover", value: nil)
+    }
+
+    static func popover(_ popover: HTMLAttributeValue.Popover) -> Self {
+        HTMLAttribute(name: "popover", value: popover.value)
+    }
+
+    static var inert: Self {
+        HTMLAttribute(name: "inert", value: nil)
+    }
+
+    static func contenteditable(_ value: HTMLAttributeValue.ContentEditable) -> Self {
+        HTMLAttribute(name: "contenteditable", value: value.value)
+    }
+
+    static func draggable(_ value: HTMLAttributeValue.Draggable) -> Self {
+        HTMLAttribute(name: "draggable", value: value.value)
+    }
+
+    static func `is`(_ value: String) -> Self {
+        HTMLAttribute(name: "is", value: value)
+    }
+
+    static func slot(_ value: String) -> Self {
+        HTMLAttribute(name: "slot", value: value)
+    }
+
+    static var autofocus: Self {
+        HTMLAttribute(name: "autofocus", value: nil)
+    }
+
 }
 
 // dir attribute
@@ -51,9 +88,55 @@ public extension HTMLAttributeValue {
     }
 }
 
+public extension HTMLAttributeValue {
+    struct ContentEditable {
+        var value: String
+
+        public static var `true`: Self { .init(value: "true") }
+        public static var `false`: Self { .init(value: "false") }
+        public static var plaintextOnly: Self { .init(value: "plaintext-only") }
+    }
+}
+
+public extension HTMLAttributeValue {
+    struct Popover {
+        var value: String
+
+        public static var auto: Self { .init(value: "auto") }
+        public static var hint: Self { .init(value: "hint") }
+        public static var manual: Self { .init(value: "manual") }
+    }
+}
+
+public extension HTMLAttributeValue {
+    // MDN docs describe draggable as having an enumerated value, but currently
+    // the only valid values are "true" and "false"
+    struct Draggable {
+        var value: String
+
+        public static var `true`: Self { .init(value: "true") }
+        public static var `false`: Self { .init(value: "false") }
+    }
+}
+
 public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     static func dir(_ value: HTMLAttributeValue.Direction) -> Self {
         HTMLAttribute(name: "dir", value: value.value)
+    }
+}
+
+// role attribute
+public extension HTMLAttributeValue {
+    struct Role: ExpressibleByStringLiteral, RawRepresentable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
+        public init(stringLiteral value: String) {
+            rawValue = value
+        }
     }
 }
 
@@ -212,22 +295,6 @@ public extension HTMLAttributeValue {
 public extension HTMLAttribute where Tag: HTMLTrait.Attributes.target {
     static func target(_ target: HTMLAttributeValue.Target) -> Self {
         HTMLAttribute(name: "target", value: target.rawValue)
-    }
-}
-
-// autofocus attribute
-public extension HTMLTrait.Attributes {
-    protocol autofocus {}
-}
-
-extension HTMLTag.button: HTMLTrait.Attributes.autofocus {}
-extension HTMLTag.input: HTMLTrait.Attributes.autofocus {}
-extension HTMLTag.select: HTMLTrait.Attributes.autofocus {}
-extension HTMLTag.textarea: HTMLTrait.Attributes.autofocus {}
-
-public extension HTMLAttribute where Tag: HTMLTrait.Attributes.autofocus {
-    static var autofocus: Self {
-        HTMLAttribute(name: "autofocus", value: nil)
     }
 }
 
