@@ -79,8 +79,8 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
 
 // dir attribute
 public extension HTMLAttributeValue {
-    struct Direction {
-        var value: String
+    struct Direction: Sendable {
+        let value: String
 
         public static var ltr: Self { .init(value: "ltr") }
         public static var rtl: Self { .init(value: "rtl") }
@@ -89,8 +89,8 @@ public extension HTMLAttributeValue {
 }
 
 public extension HTMLAttributeValue {
-    struct ContentEditable {
-        var value: String
+    struct ContentEditable: Sendable {
+        let value: String
 
         public static var `true`: Self { .init(value: "true") }
         public static var `false`: Self { .init(value: "false") }
@@ -99,8 +99,8 @@ public extension HTMLAttributeValue {
 }
 
 public extension HTMLAttributeValue {
-    struct Popover {
-        var value: String
+    struct Popover: Sendable {
+        let value: String
 
         public static var auto: Self { .init(value: "auto") }
         public static var hint: Self { .init(value: "hint") }
@@ -111,8 +111,8 @@ public extension HTMLAttributeValue {
 public extension HTMLAttributeValue {
     // MDN docs describe draggable as having an enumerated value, but currently
     // the only valid values are "true" and "false"
-    struct Draggable {
-        var value: String
+    struct Draggable: Sendable {
+        let value: String
 
         public static var `true`: Self { .init(value: "true") }
         public static var `false`: Self { .init(value: "false") }
@@ -127,8 +127,8 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
 
 // role attribute
 public extension HTMLAttributeValue {
-    struct Role: ExpressibleByStringLiteral, RawRepresentable {
-        public var rawValue: String
+    struct Role: ExpressibleByStringLiteral, RawRepresentable, Sendable {
+        public let rawValue: String
 
         public init(rawValue: String) {
             self.rawValue = rawValue
@@ -262,7 +262,7 @@ extension HTMLTag.base: HTMLTrait.Attributes.target {}
 extension HTMLTag.form: HTMLTrait.Attributes.target {}
 
 public extension HTMLAttributeValue {
-    struct Target: ExpressibleByStringLiteral, RawRepresentable {
+    struct Target: ExpressibleByStringLiteral, RawRepresentable, Sendable {
         public let rawValue: String
 
         public init(rawValue: String) {
