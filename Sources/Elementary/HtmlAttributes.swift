@@ -145,6 +145,10 @@ public extension HTMLAttribute where Tag == HTMLTag.meta {
     struct Name: Sendable, ExpressibleByStringLiteral {
         let value: String
 
+        init(value: String) {
+            self.value = value
+        }
+
         public init(stringLiteral value: String) {
             self.value = value
         }
@@ -173,6 +177,10 @@ public extension HTMLAttribute where Tag == HTMLTag.meta {
 public extension HTMLAttribute where Tag == HTMLTag.link {
     struct As: Sendable, ExpressibleByStringLiteral {
         let value: String
+
+        init(value: String) {
+            self.value = value
+        }
 
         public init(stringLiteral value: String) {
             self.value = value
@@ -660,6 +668,10 @@ public extension HTMLAttribute where Tag == HTMLTag.script {
     // type
     struct ScriptType: Sendable, ExpressibleByStringLiteral {
         let value: String
+
+        init(value: String) {
+            self.value = value
+        }
 
         public init(stringLiteral value: String) {
             self.value = value
