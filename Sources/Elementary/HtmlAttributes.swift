@@ -143,11 +143,7 @@ public extension HTMLAttributeValue {
 // meta tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.meta {
     struct Name: Sendable, ExpressibleByStringLiteral {
-        var value: String
-
-        init(value: String) {
-            self.value = value
-        }
+        let value: String
 
         public init(stringLiteral value: String) {
             self.value = value
@@ -176,11 +172,7 @@ public extension HTMLAttribute where Tag == HTMLTag.meta {
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
 public extension HTMLAttribute where Tag == HTMLTag.link {
     struct As: Sendable, ExpressibleByStringLiteral {
-        var value: String
-
-        init(value: String) {
-            self.value = value
-        }
+        let value: String
 
         public init(stringLiteral value: String) {
             self.value = value
@@ -210,11 +202,7 @@ public extension HTMLAttribute where Tag == HTMLTag.link {
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button
 public extension HTMLAttribute where Tag == HTMLTag.button {
     struct ButtonType: Sendable {
-        var value: String
-
-        init(value: String) {
-            self.value = value
-        }
+        let value: String
 
         public static let submit = ButtonType(value: "submit")
         public static let reset = ButtonType(value: "reset")
@@ -275,7 +263,7 @@ extension HTMLTag.form: HTMLTrait.Attributes.target {}
 
 public extension HTMLAttributeValue {
     struct Target: ExpressibleByStringLiteral, RawRepresentable {
-        public var rawValue: String
+        public let rawValue: String
 
         public init(rawValue: String) {
             self.rawValue = rawValue
@@ -308,7 +296,7 @@ extension HTMLTag.script: HTMLTrait.Attributes.charset {}
 
 public extension HTMLAttributeValue {
     struct CharacterSet: ExpressibleByStringLiteral, RawRepresentable, Sendable, Equatable {
-        public var rawValue: String
+        public let rawValue: String
 
         public init(rawValue: String) {
             self.rawValue = rawValue
@@ -340,7 +328,7 @@ extension HTMLTag.form: HTMLTrait.Attributes.rel {}
 
 public extension HTMLAttributeValue {
     struct Relationship: ExpressibleByStringLiteral, RawRepresentable, Sendable, Equatable {
-        public var rawValue: String
+        public let rawValue: String
 
         public init(rawValue: String) {
             self.rawValue = rawValue
@@ -409,7 +397,7 @@ extension HTMLTag.textarea: HTMLTrait.Attributes.autocomplete {}
 
 public extension HTMLAttributeValue {
     struct AutoComplete: ExpressibleByStringLiteral, RawRepresentable, Sendable, Equatable {
-        public var rawValue: String
+        public let rawValue: String
 
         public init(rawValue: String) {
             self.rawValue = rawValue
@@ -498,7 +486,7 @@ extension HTMLTag.link: HTMLTrait.Attributes.crossorigin {}
 
 public extension HTMLAttributeValue {
     struct CrossOrigin: Sendable, Equatable {
-        var value: String
+        let value: String
 
         public static var anonymous: Self { .init(value: "anonymous") }
         public static var useCredentials: Self { .init(value: "use-credentials") }
@@ -535,7 +523,7 @@ extension HTMLTag.link: HTMLTrait.Attributes.referrerpolicy {}
 
 public extension HTMLAttributeValue {
     struct ReferrerPolicy: Sendable, Equatable {
-        var value: String
+        let value: String
 
         public static var noReferrer: Self { .init(value: "no-referrer") }
         public static var noReferrerWhenDowngrade: Self { .init(value: "no-referrer-when-downgrade") }
@@ -580,7 +568,7 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.dimensions {
 // form tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.form {
     struct Method: Sendable, Equatable {
-        var value: String
+        let value: String
 
         public static var get: Self { .init(value: "get") }
         public static var post: Self { .init(value: "post") }
@@ -598,7 +586,7 @@ public extension HTMLAttribute where Tag == HTMLTag.form {
 // input tag attributes
 public extension HTMLAttribute where Tag == HTMLTag.input {
     struct InputType: Sendable, Equatable {
-        var value: String
+        let value: String
 
         public static var button: Self { .init(value: "button") }
         public static var checkbox: Self { .init(value: "checkbox") }
@@ -625,11 +613,7 @@ public extension HTMLAttribute where Tag == HTMLTag.input {
     }
 
     struct Accept: Sendable, Equatable, ExpressibleByStringLiteral {
-        var value: String
-
-        init(value: String) {
-            self.value = value
-        }
+        let value: String
 
         public init(stringLiteral value: String) {
             self.value = value
@@ -675,11 +659,7 @@ public extension HTMLAttribute where Tag == HTMLTag.option {
 public extension HTMLAttribute where Tag == HTMLTag.script {
     // type
     struct ScriptType: Sendable, ExpressibleByStringLiteral {
-        var value: String
-
-        init(value: String) {
-            self.value = value
-        }
+        let value: String
 
         public init(stringLiteral value: String) {
             self.value = value
@@ -727,7 +707,7 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.placeholder {
 // scope attribute
 public extension HTMLAttribute where Tag == HTMLTag.th {
   struct Scope: Sendable, Equatable {
-    var value: String
+    let value: String
 
     public static var col: Self { .init(value: "col") }
     public static var row: Self { .init(value: "row") }
