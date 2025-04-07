@@ -21,11 +21,13 @@ public struct _StoredAttribute: Equatable, Sendable {
     mutating func mergeWith(_ attribute: consuming _StoredAttribute) {
         switch attribute.mergeMode {
         case let .appendValue(separator):
-            value = switch (value, attribute.value) {
-            case (_, .none): value
-            case let (.none, .some(value)): value
-            case let (.some(existingValue), .some(otherValue)): "\(existingValue)\(separator)\(otherValue)"
-            }
+            value =
+                switch (value, attribute.value) {
+                case (_, .none): value
+                case let (.none, .some(value)): value
+                case let (.some(existingValue), .some(otherValue)):
+                    "\(existingValue)\(separator)\(otherValue)"
+                }
         case .replaceValue:
             value = attribute.value
         case .ignoreIfSet:
@@ -40,17 +42,17 @@ public enum _AttributeStorage: Sendable, Equatable {
     case multiple([_StoredAttribute])
 
     @inlinable
-    init() {
+    public init() {
         self = .none
     }
 
     @inlinable
-    init(_ attribute: HTMLAttribute<some HTMLTagDefinition>) {
+    public init(_ attribute: HTMLAttribute<some HTMLTagDefinition>) {
         self = .single(attribute.htmlAttribute)
     }
 
     @inlinable
-    init(_ attributes: [HTMLAttribute<some HTMLTagDefinition>]) {
+    public init(_ attributes: [HTMLAttribute<some HTMLTagDefinition>]) {
         switch attributes.count {
         case 0: self = .none
         case 1: self = .single(attributes[0].htmlAttribute)
