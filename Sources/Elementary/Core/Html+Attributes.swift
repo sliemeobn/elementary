@@ -59,7 +59,7 @@ extension HTMLAttribute {
     }
 }
 
-public protocol _AttributeStorageModifier: Sendable {
+public protocol _AttributeStorageModifier {
     func modify(_ attributes: inout _AttributeStorage)
 }
 
@@ -96,7 +96,7 @@ public struct _ModifiedAttributes<Wrapped: HTML, Modifier: _AttributeStorageModi
     }
 }
 
-public struct _PrependedAttributes: _AttributeStorageModifier {
+public struct _PrependedAttributes: _AttributeStorageModifier, Sendable {
     public var attributes: _AttributeStorage
 
     @usableFromInline
