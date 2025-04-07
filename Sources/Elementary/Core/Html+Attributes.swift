@@ -27,10 +27,14 @@ public struct HTMLAttributeMergeAction: Sendable {
 
     /// Appends the new value to the existing value, separated by the specified string.
     @available(*, deprecated, renamed: "appending(separatedBy:)")
-    public static func appending(seperatedBy: String) -> Self { .init(mergeMode: .appendValue(seperatedBy)) }
+    public static func appending(seperatedBy: String) -> Self {
+        .init(mergeMode: .appendValue(seperatedBy))
+    }
 
     /// Appends the new value to the existing value, separated by the specified string.
-    public static func appending(separatedBy: String) -> Self { .init(mergeMode: .appendValue(separatedBy)) }
+    public static func appending(separatedBy: String) -> Self {
+        .init(mergeMode: .appendValue(separatedBy))
+    }
 }
 
 public extension HTMLAttribute {
@@ -40,7 +44,9 @@ public extension HTMLAttribute {
     ///   - value: The value of the attribute.
     ///   - action: The merge action to use with a previously attached attribute with the same name.
     @inlinable
-    init(name: String, value: String?, mergedBy action: HTMLAttributeMergeAction = .replacing) {
+    init(
+        name: String, value: String?, mergedBy action: HTMLAttributeMergeAction = .replacing
+    ) {
         htmlAttribute = .init(name: name, value: value, mergeMode: action.mergeMode)
     }
 
@@ -53,30 +59,64 @@ public extension HTMLAttribute {
     }
 }
 
-public struct _AttributedElement<Content: HTML>: HTML {
-    public var content: Content
-    public var attributes: _AttributeStorage
+public protocol _AttributeStorageModifier: Sendable {
+    func modify(_ attributes: inout _AttributeStorage)
+}
+
+extension _ModifiedAttributes: Sendable where Wrapped: Sendable, Modifier: Sendable {}
+
+public struct _ModifiedAttributes<Wrapped: HTML, Modifier: _AttributeStorageModifier>: HTML {
+    public typealias Tag = Wrapped.Tag
+
+    public var content: Wrapped
+    public var modifier: Modifier
 
     @usableFromInline
-    init(content: Content, attributes: _AttributeStorage) {
+    init(content: Wrapped, modifier: Modifier) {
         self.content = content
-        self.attributes = attributes
+        self.modifier = modifier
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
-        context.prependAttributes(html.attributes)
-        Content._render(html.content, into: &renderer, with: context)
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self, into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
+        html.modifier.modify(&context.attributes)
+        Wrapped._render(html.content, into: &renderer, with: context)
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
-        context.prependAttributes(html.attributes)
-        try await Content._render(html.content, into: &renderer, with: context)
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self, into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
+        html.modifier.modify(&context.attributes)
+        try await Wrapped._render(html.content, into: &renderer, with: context)
     }
 }
 
-extension _AttributedElement: Sendable where Content: Sendable {}
+public struct _AttributePrepender: _AttributeStorageModifier {
+    public var attributes: _AttributeStorage
+
+    @usableFromInline
+    init(_ attributes: _AttributeStorage) {
+        self.attributes = attributes
+    }
+
+    @inlinable
+    public consuming func modify(_ attributes: inout _AttributeStorage) {
+        attributes.prependAttributes(self.attributes)
+    }
+}
+
+extension _ModifiedAttributes where Modifier == _AttributePrepender {
+    @usableFromInline
+    init(content: Wrapped, prepending attributes: _AttributeStorage) {
+        self.content = content
+        modifier = .init(attributes)
+    }
+}
 
 public extension HTML where Tag: HTMLTrait.Attributes.Global {
     /// Adds the specified attribute to the element.
@@ -85,11 +125,13 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - condition: If set to false, the attribute will not be added.
     /// - Returns: A new element with the specified attribute added.
     @inlinable
-    func attributes(_ attribute: HTMLAttribute<Tag>, when condition: Bool = true) -> _AttributedElement<Self> {
+    func attributes(_ attribute: HTMLAttribute<Tag>, when condition: Bool = true)
+        -> _ModifiedAttributes<Self, _AttributePrepender>
+    {
         if condition {
-            return _AttributedElement(content: self, attributes: .init(attribute))
+            return _ModifiedAttributes(content: self, prepending: .init(attribute))
         } else {
-            return _AttributedElement(content: self, attributes: .init())
+            return _ModifiedAttributes(content: self, prepending: .init())
         }
     }
 
@@ -99,8 +141,10 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
     @inlinable
-    func attributes(_ attributes: HTMLAttribute<Tag>..., when condition: Bool = true) -> _AttributedElement<Self> {
-        _AttributedElement(content: self, attributes: .init(condition ? attributes : []))
+    func attributes(_ attributes: HTMLAttribute<Tag>..., when condition: Bool = true)
+        -> _ModifiedAttributes<Self, _AttributePrepender>
+    {
+        _ModifiedAttributes(content: self, prepending: .init(condition ? attributes : []))
     }
 
     /// Adds the specified attributes to the element.
@@ -109,15 +153,17 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
     @inlinable
-    func attributes(contentsOf attributes: [HTMLAttribute<Tag>], when condition: Bool = true) -> _AttributedElement<Self> {
-        _AttributedElement(content: self, attributes: .init(condition ? attributes : []))
+    func attributes(contentsOf attributes: [HTMLAttribute<Tag>], when condition: Bool = true)
+        -> _ModifiedAttributes<Self, _AttributePrepender>
+    {
+        _ModifiedAttributes(content: self, prepending: .init(condition ? attributes : []))
     }
 }
 
-extension _RenderingContext {
+extension _AttributeStorage {
     @usableFromInline
     mutating func prependAttributes(_ attributes: consuming _AttributeStorage) {
-        attributes.append(self.attributes)
-        self.attributes = attributes
+        attributes.append(self)
+        self = attributes
     }
 }
