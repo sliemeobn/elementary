@@ -71,8 +71,8 @@ public struct _ModifiedAttributes<Wrapped: HTML, Modifier: _AttributeStorageModi
     public var content: Wrapped
     public var modifier: Modifier
 
-    @usableFromInline
-    init(content: Wrapped, modifier: Modifier) {
+    @inlinable
+    public init(content: Wrapped, modifier: Modifier) {
         self.content = content
         self.modifier = modifier
     }
