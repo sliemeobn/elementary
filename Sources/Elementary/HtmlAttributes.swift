@@ -11,12 +11,12 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
         HTMLAttribute(name: "id", value: value)
     }
 
-    static func `class`(_ value: String) -> Self {
-        HTMLAttribute(name: "class", value: value, mergedBy: .appending(separatedBy: " "))
-    }
-
     static func data(_ key: String, value: String) -> Self {
         HTMLAttribute(name: "data-\(key)", value: value)
+    }
+
+    static func `class`(_ value: String) -> Self {
+        HTMLAttribute(name: "class", value: value, mergedBy: .appending(separatedBy: " "))
     }
 
     static func style(_ value: String) -> Self {

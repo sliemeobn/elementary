@@ -1,40 +1,9 @@
-public struct _StoredAttribute: Equatable, Sendable {
-    @usableFromInline
-    enum MergeMode: Equatable, Sendable {
-        case appendValue(_ separator: String = " ")
-        case replaceValue
-        case ignoreIfSet
-    }
-
-    public var name: String
-    public var value: String?
-    @usableFromInline
-    var mergeMode: MergeMode = .replaceValue
-
-    @usableFromInline
-    init(name: String, value: String? = nil, mergeMode: MergeMode = .replaceValue) {
-        self.name = name
-        self.value = value
-        self.mergeMode = mergeMode
-    }
-
-    mutating func mergeWith(_ attribute: consuming _StoredAttribute) {
-        switch attribute.mergeMode {
-        case let .appendValue(separator):
-            value =
-                switch (value, attribute.value) {
-                case (_, .none): value
-                case let (.none, .some(value)): value
-                case let (.some(existingValue), .some(otherValue)): "\(existingValue)\(separator)\(otherValue)"
-                }
-        case .replaceValue:
-            value = attribute.value
-        case .ignoreIfSet:
-            break
-        }
-    }
-}
-
+/// An internal type that stores HTML attributes for elements.
+///
+/// It is optimized to avoid allocations for single attribute elements, and implements a lazy "flattening" iterator for rendering.
+///
+/// The storage automatically optimizes for the number of attributes being stored,
+/// using the most efficient representation in each case.
 public enum _AttributeStorage: Sendable, Equatable {
     case none
     case single(_StoredAttribute)
@@ -147,7 +116,12 @@ public struct _MergedAttributes: Sequence, Sendable {
     }
 }
 
-private func nextflattenedAttribute(attributes: inout [_StoredAttribute], from index: Int) -> (_StoredAttribute, Int?) {
+private func nextflattenedAttribute(
+    attributes: inout [_StoredAttribute],
+    from index: Int
+) -> (
+    _StoredAttribute, Int?
+) {
     var attribute: _StoredAttribute = .blankedOut
     swap(&attribute, &attributes[index])
 
@@ -171,13 +145,13 @@ private func nextflattenedAttribute(attributes: inout [_StoredAttribute], from i
     return (attribute, nextIndex)
 }
 
-private extension _StoredAttribute {
-    static let blankedOut = _StoredAttribute(name: "")
+extension _StoredAttribute {
+    fileprivate static let blankedOut = _StoredAttribute(name: "")
 }
 
-private extension String {
+extension String {
     @inline(__always)
-    func utf8Equals(_ other: borrowing String) -> Bool {
+    fileprivate func utf8Equals(_ other: borrowing String) -> Bool {
         // for embedded support
         utf8.elementsEqual(other.utf8)
     }
