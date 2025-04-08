@@ -35,7 +35,11 @@ public struct _StoredAttribute: Equatable, Sendable {
             case let .classes(classes): return classes.flatten()
             }
         }
+        set {
+            _value = newValue.map { .plain($0) } ?? .empty
+        }
     }
+
     @usableFromInline
     var mergeMode: MergeMode = .replaceValue
 
