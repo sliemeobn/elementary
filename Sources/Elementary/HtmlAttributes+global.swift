@@ -90,6 +90,7 @@ public extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
     }
 
     @inlinable
+    @_disfavoredOverload
     static func style(_ values: some Sequence<(key: String, value: String)>) -> Self {
         HTMLAttribute(styles: .init(values))
     }
