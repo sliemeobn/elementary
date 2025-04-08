@@ -106,6 +106,7 @@ public extension HTMLTag {
     enum video: HTMLTrait.Paired { public static let name = "video" }
 
     // Links
+    // swift-format-ignore: DontRepeatTypeInStaticProperties
     enum a: HTMLTrait.Paired, HTMLTrait.RenderedInline { public static let name = "a" }
     enum link: HTMLTrait.Unpaired { public static let name = "link" }
     enum nav: HTMLTrait.Paired { public static let name = "nav" }

@@ -7,9 +7,11 @@ public extension HTMLElement {
     ///   - attributes: The attributes to apply to the element.
     ///   - content: The future content of the element.
     @inlinable
-    init<AwaitedContent: HTML>(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent)
-        where Self.Content == AsyncContent<AwaitedContent>
-    {
+    init<AwaitedContent: HTML>(
+        _ attributes: HTMLAttribute<Tag>...,
+        @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent
+    )
+    where Self.Content == AsyncContent<AwaitedContent> {
         _attributes = .init(attributes)
         self.content = AsyncContent(content: content)
     }
@@ -22,9 +24,11 @@ public extension HTMLElement {
     ///   - attributes: The attributes to apply to the element.
     ///   - content: The future content of the element.
     @inlinable
-    init<AwaitedContent: HTML>(attributes: [HTMLAttribute<Tag>], @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent)
-        where Self.Content == AsyncContent<AwaitedContent>
-    {
+    init<AwaitedContent: HTML>(
+        attributes: [HTMLAttribute<Tag>],
+        @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent
+    )
+    where Self.Content == AsyncContent<AwaitedContent> {
         _attributes = .init(attributes)
         self.content = AsyncContent(content: content)
     }

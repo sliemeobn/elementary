@@ -21,7 +21,7 @@ let package = Package(
         .library(
             name: "Elementary",
             targets: ["Elementary"]
-        ),
+        )
     ],
     targets: [
         .target(

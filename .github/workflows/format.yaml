@@ -1,0 +1,27 @@
+name: Swift Format Lint
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.swift"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        image: ["swift:6.1"]
+
+    container:
+      image: ${{ matrix.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check Format
+        run: swift format lint -prs .

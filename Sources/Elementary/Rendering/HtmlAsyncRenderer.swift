@@ -17,7 +17,7 @@ struct AsyncHTMLRenderer<Writer: HTMLStreamWriter>: _AsyncHTMLRendering {
         buffer.appendToken(token)
         if buffer.count >= buffer.capacity {
             try await flush()
-            buffer.replaceSubrange(0 ... buffer.count - 1, with: [])
+            buffer.replaceSubrange(0...buffer.count - 1, with: [])
         }
     }
 

@@ -83,7 +83,7 @@ private struct AwaitedP: HTML {
 }
 
 private func getValue() async -> String {
-    await Task.yield() // just for fun
+    await Task.yield()  // just for fun
     return "late response"
 }
 

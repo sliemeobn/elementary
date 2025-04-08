@@ -21,11 +21,12 @@ public struct _StoredAttribute: Equatable, Sendable {
     mutating func mergeWith(_ attribute: consuming _StoredAttribute) {
         switch attribute.mergeMode {
         case let .appendValue(separator):
-            value = switch (value, attribute.value) {
-            case (_, .none): value
-            case let (.none, .some(value)): value
-            case let (.some(existingValue), .some(otherValue)): "\(existingValue)\(separator)\(otherValue)"
-            }
+            value =
+                switch (value, attribute.value) {
+                case (_, .none): value
+                case let (.none, .some(value)): value
+                case let (.some(existingValue), .some(otherValue)): "\(existingValue)\(separator)\(otherValue)"
+                }
         case .replaceValue:
             value = attribute.value
         case .ignoreIfSet:
@@ -62,7 +63,7 @@ public enum _AttributeStorage: Sendable, Equatable {
         switch self {
         case .none: return true
         case .single: return false
-        case let .multiple(attributes): return attributes.isEmpty // just to be sure...
+        case let .multiple(attributes): return attributes.isEmpty  // just to be sure...
         }
     }
 

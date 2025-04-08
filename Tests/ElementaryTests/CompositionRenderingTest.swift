@@ -25,7 +25,7 @@ final class CompositionRenderingTests: XCTestCase {
 
     func testRendersForEachWithRange() async throws {
         try await HTMLAssertEqual(
-            ForEach(1 ... 3) { index in
+            ForEach(1...3) { index in
                 li { "Item \(index)" }
             },
             #"<li>Item 1</li><li>Item 2</li><li>Item 3</li>"#

@@ -28,7 +28,8 @@ final class TagRenderingTests: XCTestCase {
             div {
                 h1 {}
                 p {}
-            }, "<div><h1></h1><p></p></div>"
+            },
+            "<div><h1></h1><p></p></div>"
         )
     }
 
@@ -38,7 +39,8 @@ final class TagRenderingTests: XCTestCase {
                 if true {
                     p {}
                 }
-            }, "<div><p></p></div>"
+            },
+            "<div><p></p></div>"
         )
 
         try await HTMLAssertEqual(
@@ -46,7 +48,8 @@ final class TagRenderingTests: XCTestCase {
                 if false {
                     p {}
                 }
-            }, "<div></div>"
+            },
+            "<div></div>"
         )
     }
 
@@ -58,7 +61,8 @@ final class TagRenderingTests: XCTestCase {
                 } else {
                     span {}
                 }
-            }, "<div><p></p></div>"
+            },
+            "<div><p></p></div>"
         )
 
         try await HTMLAssertEqual(
@@ -68,17 +72,19 @@ final class TagRenderingTests: XCTestCase {
                 } else {
                     span {}
                 }
-            }, "<div><span></span></div>"
+            },
+            "<div><span></span></div>"
         )
     }
 
     func testRendersLists() async throws {
         try await HTMLAssertEqual(
             div {
-                for _ in 0 ..< 3 {
+                for _ in 0..<3 {
                     p {}
                 }
-            }, "<div><p></p><p></p><p></p></div>"
+            },
+            "<div><p></p><p></p><p></p></div>"
         )
     }
 }
