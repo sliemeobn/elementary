@@ -28,12 +28,20 @@ public struct AsyncForEach<Source: AsyncSequence, Content: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertionFailureNoAsyncContext(self)
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         for try await element in html.sequence {

@@ -18,8 +18,8 @@ let package = Package(
             ],
             path: "Benchmarks/ElementaryBenchmarks",
             plugins: [
-                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
             ]
-        ),
+        )
     ]
 )

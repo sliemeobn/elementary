@@ -4,7 +4,7 @@ import PackageDescription
 let shouldBuildForEmbedded = Context.environment["JAVASCRIPTKIT_EXPERIMENTAL_EMBEDDED_WASM"].flatMap(Bool.init) ?? false
 
 var featureFlags: [SwiftSetting] = [
-    .enableUpcomingFeature("ExistentialAny"),
+    .enableUpcomingFeature("ExistentialAny")
 ]
 
 if shouldBuildForEmbedded {
@@ -31,7 +31,7 @@ let package = Package(
         .library(
             name: "Elementary",
             targets: ["Elementary"]
-        ),
+        )
     ],
     targets: [
         .target(

@@ -9,8 +9,7 @@
 /// }
 /// ```
 public struct ForEach<Data, Content>: HTML
-    where Data: Sequence, Content: HTML
-{
+where Data: Sequence, Content: HTML {
     public var _data: Data
     // TODO: Swift 6 - @Sendable is not ideal here, but currently the response generators for hummingbird/vapor require sendable HTML types
     // also, currently there is no good way to conditionally apply Sendable conformance based on closure type
@@ -28,7 +27,11 @@ public struct ForEach<Data, Content>: HTML
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         for element in html._data {
@@ -37,7 +40,11 @@ public struct ForEach<Data, Content>: HTML
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         for element in html._data {

@@ -31,24 +31,24 @@ extension [UInt8] {
         // avoid strings and append each component directly
         switch token {
         case let .startTag(tagName, attributes: attributes, isUnpaired: _, type: _):
-            append(60) // <
+            append(60)  // <
             appendString(tagName)
             if !attributes.isEmpty {
                 for attribute in attributes {
-                    append(32) // space
+                    append(32)  // space
                     appendString(attribute.name)
                     if let value = attribute.value {
-                        append(contentsOf: [61, 34]) // ="
+                        append(contentsOf: [61, 34])  // ="
                         appendEscapedAttributeValue(value)
-                        append(34) // "
+                        append(34)  // "
                     }
                 }
             }
-            append(62) // >
+            append(62)  // >
         case let .endTag(tagName, _):
-            append(contentsOf: [60, 47]) // </
+            append(contentsOf: [60, 47])  // </
             appendString(tagName)
-            append(62) // >
+            append(62)  // >
         case let .text(text):
             appendEscapedText(text)
         case let .raw(raw):
@@ -74,12 +74,12 @@ extension [UInt8] {
 
             for current in utf8.indices {
                 switch utf8[current] {
-                case 38: // &
-                    append(contentsOf: utf8[start ..< current])
+                case 38:  // &
+                    append(contentsOf: utf8[start..<current])
                     appendString("&amp;")
                     start = utf8.index(after: current)
-                case 34: // "
-                    append(contentsOf: utf8[start ..< current])
+                case 34:  // "
+                    append(contentsOf: utf8[start..<current])
                     appendString("&quot;")
                     start = utf8.index(after: current)
                 default:
@@ -88,7 +88,7 @@ extension [UInt8] {
             }
 
             if start < utf8.endIndex {
-                append(contentsOf: utf8[start ..< utf8.endIndex])
+                append(contentsOf: utf8[start..<utf8.endIndex])
             }
         }
     }
@@ -100,16 +100,16 @@ extension [UInt8] {
 
             for current in utf8.indices {
                 switch utf8[current] {
-                case 38: // &
-                    append(contentsOf: utf8[start ..< current])
+                case 38:  // &
+                    append(contentsOf: utf8[start..<current])
                     appendString("&amp;")
                     start = utf8.index(after: current)
-                case 60: // <
-                    append(contentsOf: utf8[start ..< current])
+                case 60:  // <
+                    append(contentsOf: utf8[start..<current])
                     appendString("&lt;")
                     start = utf8.index(after: current)
-                case 62: // >
-                    append(contentsOf: utf8[start ..< current])
+                case 62:  // >
+                    append(contentsOf: utf8[start..<current])
                     appendString("&gt;")
                     start = utf8.index(after: current)
                 default:
@@ -118,7 +118,7 @@ extension [UInt8] {
             }
 
             if start < utf8.endIndex {
-                append(contentsOf: utf8[start ..< utf8.endIndex])
+                append(contentsOf: utf8[start..<utf8.endIndex])
             }
         }
     }

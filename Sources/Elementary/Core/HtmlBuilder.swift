@@ -31,18 +31,21 @@
     }
 
     @inlinable
-    public static func buildEither<TrueContent: HTML, FalseContent: HTML>(first: TrueContent) -> _HTMLConditional<TrueContent, FalseContent> {
+    public static func buildEither<TrueContent: HTML, FalseContent: HTML>(first: TrueContent) -> _HTMLConditional<TrueContent, FalseContent>
+    {
         _HTMLConditional(.trueContent(first))
     }
 
     @inlinable
-    public static func buildEither<TrueContent: HTML, FalseContent: HTML>(second: FalseContent) -> _HTMLConditional<TrueContent, FalseContent> {
+    public static func buildEither<TrueContent: HTML, FalseContent: HTML>(
+        second: FalseContent
+    ) -> _HTMLConditional<TrueContent, FalseContent> {
         _HTMLConditional(.falseContent(second))
     }
 
     @inlinable
     public static func buildArray<Element: HTML>(_ components: [Element]) -> _HTMLArray<Element> {
-        return _HTMLArray(components)
+        _HTMLArray(components)
     }
 }
 
@@ -63,7 +66,11 @@ extension Never: HTML {
 
 extension Optional: HTML where Wrapped: HTML {
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         switch html {
         case .none: return
         case let .some(value): Wrapped._render(value, into: &renderer, with: context)
@@ -71,7 +78,11 @@ extension Optional: HTML where Wrapped: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         switch html {
         case .none: break
         case let .some(value): try await Wrapped._render(value, into: &renderer, with: context)
@@ -84,12 +95,20 @@ public struct EmptyHTML: HTML, Sendable {
     public init() {}
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
     }
 }
@@ -114,13 +133,21 @@ public struct HTMLText: HTML, Sendable {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
         renderer.appendToken(.text(html.text))
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
         try await renderer.appendToken(.text(html.text))
     }
@@ -143,7 +170,11 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         switch html.value {
         case let .trueContent(content): return TrueContent._render(content, into: &renderer, with: context)
         case let .falseContent(content): return FalseContent._render(content, into: &renderer, with: context)
@@ -151,7 +182,11 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         switch html.value {
         case let .trueContent(content): try await TrueContent._render(content, into: &renderer, with: context)
         case let .falseContent(content): try await FalseContent._render(content, into: &renderer, with: context)
@@ -174,7 +209,11 @@ public struct _HTMLArray<Element: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         for element in html.value {
@@ -183,7 +222,11 @@ public struct _HTMLArray<Element: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         for element in html.value {

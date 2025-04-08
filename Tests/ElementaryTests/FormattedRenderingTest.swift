@@ -4,7 +4,11 @@ import XCTest
 final class FormatedRenderingTests: XCTestCase {
     func testFormatsBlocks() {
         HTMLFormattedAssertEqual(
-            div { div { p {}; p {} } },
+            div {
+                div {
+                    p {}; p {}
+                }
+            },
             """
             <div>
               <div>
@@ -18,7 +22,11 @@ final class FormatedRenderingTests: XCTestCase {
 
     func testFormatsInlineTextAndRaw() {
         HTMLFormattedAssertEqual(
-            div { div { p { "Hello&" }; p { HTMLRaw("World&") } } },
+            div {
+                div {
+                    p { "Hello&" }; p { HTMLRaw("World&") }
+                }
+            },
             """
             <div>
               <div>

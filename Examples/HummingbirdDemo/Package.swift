@@ -4,10 +4,10 @@ import PackageDescription
 let package = Package(
     name: "HummingbirdDemo",
     platforms: [
-        .macOS(.v14),
+        .macOS(.v14)
     ],
     products: [
-        .executable(name: "App", targets: ["App"]),
+        .executable(name: "App", targets: ["App"])
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
@@ -21,6 +21,6 @@ let package = Package(
                 .product(name: "Elementary", package: "elementary"),
             ],
             swiftSettings: [.enableExperimentalFeature("StrictConcurrency=complete")]
-        ),
+        )
     ]
 )

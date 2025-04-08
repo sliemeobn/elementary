@@ -69,22 +69,20 @@ let benchmarks = { @Sendable in
     Benchmark("render merged attributes") { benchmark in
         benchmark.startMeasurement()
         for _ in benchmark.scaledIterations {
-            try blackHole(await p {
-                img(.class("1"), .style("1"), .id("old"))
-                    .attributes(.class("2"), .style("2"))
-                    .attributes(.id("new"))
-            }.renderAsync())
+            try blackHole(
+                await p {
+                    img(.class("1"), .style("1"), .id("old"))
+                        .attributes(.class("2"), .style("2"))
+                        .attributes(.id("new"))
+                }.renderAsync()
+            )
         }
     }
 
     Benchmark("render tuples") { benchmark in
         for _ in benchmark.scaledIterations {
-            try blackHole(await div {
-                img()
-                img()
-                img()
-                img()
-                div {
+            try blackHole(
+                await div {
                     img()
                     img()
                     img()
@@ -92,41 +90,53 @@ let benchmarks = { @Sendable in
                     div {
                         img()
                         img()
+                        img()
+                        img()
+                        div {
+                            img()
+                            img()
+                        }
                     }
-                }
-            }.renderAsync())
+                }.renderAsync()
+            )
         }
     }
 
     Benchmark("render array") { benchmark in
         for _ in benchmark.scaledIterations {
-            try blackHole(await div {
-                for i in 0 ..< 1000 {
-                    img(.id("\(i)"))
-                }
-            }.renderAsync())
+            try blackHole(
+                await div {
+                    for i in 0..<1000 {
+                        img(.id("\(i)"))
+                    }
+                }.renderAsync()
+            )
         }
     }
 
     Benchmark("render sequence") { benchmark in
         for _ in benchmark.scaledIterations {
-            try blackHole(await div {
-                ForEach(0 ..< 1000) { i in
-                    img(.id("\(i)"))
-                }
-            }.renderAsync())
+            try blackHole(
+                await div {
+                    ForEach(0..<1000) { i in
+                        img(.id("\(i)"))
+                    }
+                }.renderAsync()
+            )
         }
     }
 
     Benchmark("render text") { benchmark in
         for _ in benchmark.scaledIterations {
-            try blackHole(await div {
-                "Hello, World!"
-                "This is a paragraph."
-                "Some interpolation \("maybe")"
-                i { "Italic" }
-                b { "Bold" }
-            }.renderAsync())
+            try blackHole(
+                await div {
+                    "Hello, World!"
+                    "This is a paragraph."
+                    "Some interpolation \("maybe")"
+                    i { "Italic" }
+                    b { "Bold" }
+                }.renderAsync()
+            )
         }
     }
 
@@ -146,7 +156,7 @@ let benchmarks = { @Sendable in
                             "Swift"
                         }
                         ul(.class("fancy-list")) {
-                            ForEach(0 ..< 1000) { i in
+                            ForEach(0..<1000) { i in
                                 MyCustomElement {
                                     MyListItem(number: i)
                                 }
@@ -154,7 +164,8 @@ let benchmarks = { @Sendable in
                             }
                         }
                     }
-                }.renderAsync())
+                }.renderAsync()
+            )
         }
     }
 
@@ -174,7 +185,7 @@ let benchmarks = { @Sendable in
                             "Swift"
                         }
                         ul(.class("fancy-list")) {
-                            ForEach(0 ..< 1000) { i in
+                            ForEach(0..<1000) { i in
                                 MyCustomElement {
                                     MyListItem(number: i)
                                 }
@@ -182,7 +193,8 @@ let benchmarks = { @Sendable in
                             }
                         }
                     }
-                }.render())
+                }.render()
+            )
         }
     }
 }

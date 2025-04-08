@@ -5,33 +5,47 @@
 public extension HTMLBuilder {
     @inlinable
     static func buildBlock<V0: HTML, V1: HTML>(_ v0: V0, _ v1: V1) -> _HTMLTuple2<V0, V1> {
-        return _HTMLTuple2(v0: v0, v1: v1)
+        _HTMLTuple2(v0: v0, v1: v1)
     }
 
     @inlinable
     static func buildBlock<V0: HTML, V1: HTML, V2: HTML>(_ v0: V0, _ v1: V1, _ v2: V2) -> _HTMLTuple3<V0, V1, V2> {
-        return _HTMLTuple3(v0: v0, v1: v1, v2: v2)
+        _HTMLTuple3(v0: v0, v1: v1, v2: v2)
     }
 
     @inlinable
     static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML>(_ v0: V0, _ v1: V1, _ v2: V2, _ v3: V3) -> _HTMLTuple4<V0, V1, V2, V3> {
-        return _HTMLTuple4(v0: v0, v1: v1, v2: v2, v3: v3)
+        _HTMLTuple4(v0: v0, v1: v1, v2: v2, v3: v3)
     }
 
     @inlinable
-    static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>(_ v0: V0, _ v1: V1, _ v2: V2, _ v3: V3, _ v4: V4) -> _HTMLTuple5<V0, V1, V2, V3, V4> {
-        return _HTMLTuple5(v0: v0, v1: v1, v2: v2, v3: v3, v4: v4)
+    static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>(
+        _ v0: V0,
+        _ v1: V1,
+        _ v2: V2,
+        _ v3: V3,
+        _ v4: V4
+    ) -> _HTMLTuple5<V0, V1, V2, V3, V4> {
+        _HTMLTuple5(v0: v0, v1: v1, v2: v2, v3: v3, v4: v4)
     }
 
     @inlinable
-    static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: HTML>(_ v0: V0, _ v1: V1, _ v2: V2, _ v3: V3, _ v4: V4, _ v5: V5) -> _HTMLTuple6<V0, V1, V2, V3, V4, V5> {
-        return _HTMLTuple6(v0: v0, v1: v1, v2: v2, v3: v3, v4: v4, v5: v5)
+    static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: HTML>(
+        _ v0: V0,
+        _ v1: V1,
+        _ v2: V2,
+        _ v3: V3,
+        _ v4: V4,
+        _ v5: V5
+    ) -> _HTMLTuple6<V0, V1, V2, V3, V4, V5> {
+        _HTMLTuple6(v0: v0, v1: v1, v2: v2, v3: v3, v4: v4, v5: v5)
     }
 
     // variadic generics currently not supported in embedded
     #if !hasFeature(Embedded)
     @inlinable
-    static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple < repeat each Content> where repeat each Content: HTML {
+    static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple<repeat each Content>
+    where repeat each Content: HTML {
         _HTMLTuple(repeat each content)
     }
     #endif
@@ -49,7 +63,11 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         V0._render(html.v0, into: &renderer, with: copy context)
@@ -57,7 +75,11 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         try await V0._render(html.v0, into: &renderer, with: copy context)
@@ -79,7 +101,11 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         V0._render(html.v0, into: &renderer, with: copy context)
@@ -88,7 +114,11 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         try await V0._render(html.v0, into: &renderer, with: copy context)
@@ -113,7 +143,11 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         V0._render(html.v0, into: &renderer, with: copy context)
@@ -123,7 +157,11 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         try await V0._render(html.v0, into: &renderer, with: copy context)
@@ -151,7 +189,11 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         V0._render(html.v0, into: &renderer, with: copy context)
@@ -162,7 +204,11 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         try await V0._render(html.v0, into: &renderer, with: copy context)
@@ -193,7 +239,11 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         V0._render(html.v0, into: &renderer, with: copy context)
@@ -205,7 +255,11 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         try await V0._render(html.v0, into: &renderer, with: copy context)
@@ -230,7 +284,11 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.assertNoAttributes(self)
 
         // NOTE: use iteration in swift 6
@@ -241,7 +299,11 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.assertNoAttributes(self)
 
         // NOTE: use iteration in swift 6

@@ -30,8 +30,16 @@ public protocol HTML<Tag> {
     /// The HTML content of this component.
     @HTMLBuilder var content: Content { get }
 
-    static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext)
-    static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws
+    static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    )
+    static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws
 }
 
 /// A type that represents an HTML tag.
@@ -80,12 +88,20 @@ public protocol _AsyncHTMLRendering {
 
 public extension HTML {
     @inlinable @inline(__always)
-    static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         Content._render(html.content, into: &renderer, with: context)
     }
 
     @inlinable @inline(__always)
-    static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         try await Content._render(html.content, into: &renderer, with: context)
     }
 }

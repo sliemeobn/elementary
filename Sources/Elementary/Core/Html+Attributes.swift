@@ -64,13 +64,21 @@ public struct _AttributedElement<Content: HTML>: HTML {
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _HTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
         context.prependAttributes(html.attributes)
         Content._render(html.content, into: &renderer, with: context)
     }
 
     @inlinable @inline(__always)
-    public static func _render<Renderer: _AsyncHTMLRendering>(_ html: consuming Self, into renderer: inout Renderer, with context: consuming _RenderingContext) async throws {
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
         context.prependAttributes(html.attributes)
         try await Content._render(html.content, into: &renderer, with: context)
     }
