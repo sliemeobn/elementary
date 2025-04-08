@@ -30,6 +30,16 @@ final class ClassAndStyleRenderingTests: XCTestCase {
         )
     }
 
+    func testRendersStylesFromDictionary() async throws {
+        let styles = [
+            "display": "flex"
+        ]
+        try await HTMLAssertEqual(
+            p(.style(styles)) {},
+            #"<p style="display:flex"></p>"#
+        )
+    }
+
     func testMergesStylesKeepingSequence() async throws {
         try await HTMLAssertEqual(
             p(.style(["color": "red", "font-size": "16px"])) {}
