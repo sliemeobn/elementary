@@ -18,8 +18,8 @@ public struct _StoredAttribute: Equatable, Sendable {
     enum Value: Equatable {
         case empty
         case plain(String)
-        case styles(StyleList)
-        case classes(ClassList)
+        case styles(Styles)
+        case classes(Classes)
     }
 
     public var name: String
@@ -47,13 +47,17 @@ public struct _StoredAttribute: Equatable, Sendable {
     }
 
     @usableFromInline
-    static func styles(_ styles: StyleList) -> Self {
-        .init(name: "style", value: nil, mergeMode: .appendValue(";"))
+    init(_ styles: Styles) {
+        self.name = "style"
+        self._value = .styles(styles)
+        self.mergeMode = .appendValue(";")
     }
 
     @usableFromInline
-    static func classes(_ classes: ClassList) -> Self {
-        .init(name: "class", value: nil, mergeMode: .appendValue(" "))
+    init(_ classes: Classes) {
+        self.name = "class"
+        self._value = .classes(classes)
+        self.mergeMode = .appendValue(" ")
     }
 
     mutating func mergeWith(_ attribute: consuming _StoredAttribute) {
@@ -70,21 +74,21 @@ public struct _StoredAttribute: Equatable, Sendable {
                 existing.append(contentsOf: other)
                 _value = .styles(existing)
             case (.classes(var existing), .classes(let other)):
-                existing.append(other.classes)
+                existing.append(contentsOf: other)
                 _value = .classes(existing)
             case (.plain(let existing), .styles(let styles)):
-                var newStyles = StyleList(plainValue: existing)
+                var newStyles = Styles(plainValue: existing)
                 newStyles.append(contentsOf: styles)
                 _value = .styles(newStyles)
             case (.styles(var styles), .plain(let other)):
                 styles.append(plainValue: other)
                 _value = .styles(styles)
             case (.plain(let existing), .classes(let classes)):
-                var newClasses = ClassList(arrayLiteral: existing)
-                newClasses.append(classes.classes)
+                var newClasses = Classes([existing])
+                newClasses.append(contentsOf: classes)
                 _value = .classes(newClasses)
             case (.classes(var classes), .plain(let other)):
-                classes.append([other])
+                classes.append(plainValue: other)
                 _value = .classes(classes)
             case (.styles, .classes), (.classes, .styles):
                 assertionFailure("Cannot merge styles and classes")
@@ -101,16 +105,24 @@ public struct _StoredAttribute: Equatable, Sendable {
 
 extension _StoredAttribute {
     @usableFromInline
-    struct StyleList: Equatable, Sendable, ExpressibleByDictionaryLiteral {
-        struct Entry: Equatable {
+    struct Styles: Equatable, Sendable {
+        @usableFromInline
+        struct Entry: Equatable, Sendable {
             let key: String
             let value: String
+
+            @usableFromInline
+            init(key: String, value: String) {
+                self.key = key
+                self.value = value
+            }
         }
 
-        private var styles: [Entry]
-
         @usableFromInline
-        init(dictionaryLiteral elements: (String, String)...) {
+        var styles: [Entry]
+
+        @inlinable
+        init(_ elements: some Sequence<(key: String, value: String)>) {
             self.styles = elements.map { Entry(key: $0.0, value: $0.1) }
         }
 
@@ -123,38 +135,70 @@ extension _StoredAttribute {
             styles.append(Entry(key: "", value: plainValue))
         }
 
-        mutating func append(contentsOf other: StyleList) {
-            styles.append(contentsOf: other.styles)
+        mutating func append(contentsOf other: consuming Styles) {
+            for entry in other.styles {
+                if entry.key.isEmpty {
+                    styles.append(entry)
+                } else {
+                    styles.removeAll { $0.key.utf8Equals(entry.key) }
+                    styles.append(entry)
+                }
+            }
         }
 
         consuming func flatten() -> String {
-            // TODO: make this more efficient
-            var seen = Set<String>()
-            return styles.filter { entry in
-                if entry.key.isEmpty {
-                    return true
+            var result = ""
+            for (index, entry) in styles.enumerated() {
+                if index > 0 {
+                    result += ";"
                 }
-                return seen.insert(entry.key).inserted
-            }.map { "\($0.key):\($0.value)" }.joined(separator: ";")
+                if entry.key.isEmpty {
+                    result += entry.value
+                } else {
+                    result += "\(entry.key):\(entry.value)"
+                }
+            }
+            return result
         }
     }
 
     @usableFromInline
-    struct ClassList: Equatable, Sendable, ExpressibleByArrayLiteral {
+    struct Classes: Equatable, Sendable {
+        @usableFromInline
         var classes: [String]
 
-        @usableFromInline
-        init(arrayLiteral elements: String...) {
+        @inlinable
+        init(_ elements: [String]) {
             self.classes = elements
         }
 
-        mutating func append(_ newClasses: [String]) {
-            classes.append(contentsOf: newClasses)
+        @inlinable
+        init(_ elements: some Sequence<String>) {
+            self.classes = Array(elements)
+        }
+
+        mutating func append(plainValue newClass: String) {
+            classes.append(newClass)
+        }
+
+        mutating func append(contentsOf other: consuming Classes) {
+            for newClass in other.classes {
+                if !classes.contains(where: { $0.utf8Equals(newClass) }) {
+                    classes.append(newClass)
+                }
+            }
         }
 
         consuming func flatten() -> String {
-            var seen = Set<String>()
-            return classes.filter { seen.insert($0).inserted }.joined(separator: " ")
+            classes.joined(separator: " ")
         }
+    }
+}
+
+extension String {
+    @inline(__always)
+    fileprivate func utf8Equals(_ other: borrowing String) -> Bool {
+        // for embedded support
+        utf8.elementsEqual(other.utf8)
     }
 }
