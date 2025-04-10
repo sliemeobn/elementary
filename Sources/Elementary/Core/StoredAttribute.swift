@@ -140,11 +140,17 @@ extension _StoredAttribute {
         }
 
         mutating func append(contentsOf other: consuming Styles) {
+            let originalCount = styles.count
             for entry in other.styles {
                 if entry.key.isEmpty {
                     styles.append(entry)
                 } else {
-                    styles.removeAll { $0.key.utf8Equals(entry.key) }
+                    for i in 0..<originalCount {
+                        if styles[i].key.utf8Equals(entry.key) {
+                            styles.remove(at: i)
+                            break
+                        }
+                    }
                     styles.append(entry)
                 }
             }
@@ -186,8 +192,9 @@ extension _StoredAttribute {
         }
 
         mutating func append(contentsOf other: consuming Classes) {
+            let originalCount = classes.count
             for newClass in other.classes {
-                if !classes.contains(where: { $0.utf8Equals(newClass) }) {
+                if !classes.prefix(originalCount).contains(where: { $0.utf8Equals(newClass) }) {
                     classes.append(newClass)
                 }
             }
