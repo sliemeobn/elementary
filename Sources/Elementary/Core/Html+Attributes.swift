@@ -33,14 +33,14 @@ public struct HTMLAttributeMergeAction: Sendable {
     public static func appending(separatedBy: String) -> Self { .init(mergeMode: .appendValue(separatedBy)) }
 }
 
-public extension HTMLAttribute {
+extension HTMLAttribute {
     /// Creates a new HTML attribute with the specified name and value.
     /// - Parameters:
     ///   - name: The name of the attribute.
     ///   - value: The value of the attribute.
     ///   - action: The merge action to use with a previously attached attribute with the same name.
     @inlinable
-    init(name: String, value: String?, mergedBy action: HTMLAttributeMergeAction = .replacing) {
+    public init(name: String, value: String?, mergedBy action: HTMLAttributeMergeAction = .replacing) {
         htmlAttribute = .init(name: name, value: value, mergeMode: action.mergeMode)
     }
 
@@ -48,8 +48,18 @@ public extension HTMLAttribute {
     /// - Parameter action: The new merge action to use.
     /// - Returns: A modified attribute with the specified merge action.
     @inlinable
-    consuming func mergedBy(_ action: HTMLAttributeMergeAction) -> HTMLAttribute {
+    public consuming func mergedBy(_ action: HTMLAttributeMergeAction) -> HTMLAttribute {
         .init(name: name, value: value, mergedBy: action)
+    }
+
+    @inlinable
+    init(classes: _StoredAttribute.Classes) {
+        htmlAttribute = .init(classes)
+    }
+
+    @inlinable
+    init(styles: _StoredAttribute.Styles) {
+        htmlAttribute = .init(styles)
     }
 }
 
