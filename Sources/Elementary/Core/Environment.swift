@@ -81,7 +81,6 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
     var taskLocal: TaskLocal<T>
     var value: T
 
-   
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -97,7 +96,6 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
         }
     }
 
-   
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
