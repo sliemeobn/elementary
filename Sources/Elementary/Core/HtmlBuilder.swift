@@ -65,7 +65,7 @@ extension Never: HTML {
 }
 
 extension Optional: HTML where Wrapped: HTML {
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -77,7 +77,7 @@ extension Optional: HTML where Wrapped: HTML {
         }
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -94,7 +94,7 @@ extension Optional: HTML where Wrapped: HTML {
 public struct EmptyHTML: HTML, Sendable {
     public init() {}
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -103,7 +103,7 @@ public struct EmptyHTML: HTML, Sendable {
         context.assertNoAttributes(self)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -132,7 +132,7 @@ public struct HTMLText: HTML, Sendable {
         self.text = text
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -142,7 +142,7 @@ public struct HTMLText: HTML, Sendable {
         renderer.appendToken(.text(html.text))
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -169,7 +169,7 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
         self.value = value
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -181,7 +181,7 @@ public struct _HTMLConditional<TrueContent: HTML, FalseContent: HTML>: HTML {
         }
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -208,7 +208,7 @@ public struct _HTMLArray<Element: HTML>: HTML {
         self.value = value
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -221,7 +221,7 @@ public struct _HTMLArray<Element: HTML>: HTML {
         }
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,

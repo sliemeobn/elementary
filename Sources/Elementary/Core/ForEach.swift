@@ -26,7 +26,7 @@ where Data: Sequence, Content: HTML {
         _contentBuilder = contentBuilder
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -39,7 +39,7 @@ where Data: Sequence, Content: HTML {
         }
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,

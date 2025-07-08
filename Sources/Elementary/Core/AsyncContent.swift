@@ -23,7 +23,7 @@ public struct AsyncContent<Content: HTML>: HTML, Sendable {
         self.content = content
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -32,7 +32,7 @@ public struct AsyncContent<Content: HTML>: HTML, Sendable {
         context.assertionFailureNoAsyncContext(self)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
