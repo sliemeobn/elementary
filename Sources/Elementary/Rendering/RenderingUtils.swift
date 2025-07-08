@@ -1,5 +1,5 @@
 extension _RenderingContext {
-    @inline(__always)
+   
     @usableFromInline
     func assertNoAttributes(_ type: (some HTML).Type) {
         #if hasFeature(Embedded)
@@ -9,7 +9,7 @@ extension _RenderingContext {
         #endif
     }
 
-    @inline(__always)
+   
     @usableFromInline
     func assertionFailureNoAsyncContext(_ type: (some HTML).Type) {
         #if hasFeature(Embedded)
@@ -26,7 +26,7 @@ extension _RenderingContext {
 // I do not know why this function does not work in embedded, but currently it crashes the compiler
 #if !hasFeature(Embedded)
 extension [UInt8] {
-    @inline(__always)
+   
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {
         // avoid strings and append each component directly
         switch token {
@@ -60,14 +60,14 @@ extension [UInt8] {
         }
     }
 
-    @inline(__always)
+   
     mutating func appendString(_ string: consuming String) {
         string.withUTF8 { utf8 in
             append(contentsOf: utf8)
         }
     }
 
-    @inline(__always)
+   
     mutating func appendEscapedAttributeValue(_ value: consuming String) {
         value.withUTF8 { utf8 in
             var start = utf8.startIndex
@@ -93,7 +93,7 @@ extension [UInt8] {
         }
     }
 
-    @inline(__always)
+   
     mutating func appendEscapedText(_ value: consuming String) {
         value.withUTF8 { utf8 in
             var start = utf8.startIndex

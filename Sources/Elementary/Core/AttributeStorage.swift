@@ -150,7 +150,7 @@ extension _StoredAttribute {
 }
 
 extension String {
-    @inline(__always)
+   
     fileprivate func utf8Equals(_ other: borrowing String) -> Bool {
         // for embedded support
         utf8.elementsEqual(other.utf8)

@@ -45,7 +45,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
         self.content = content()
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -58,7 +58,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
         renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -107,7 +107,7 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
         _attributes = .init(attributes)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -117,7 +117,7 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
         renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -142,7 +142,7 @@ public struct HTMLComment: HTML {
         self.text = text
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -152,7 +152,7 @@ public struct HTMLComment: HTML {
         renderer.appendToken(.comment(html.text))
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -175,7 +175,7 @@ public struct HTMLRaw: HTML {
         self.text = text
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -185,7 +185,7 @@ public struct HTMLRaw: HTML {
         renderer.appendToken(.raw(html.text))
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -202,7 +202,7 @@ extension HTMLComment: Sendable {}
 extension HTMLRaw: Sendable {}
 
 extension HTMLTagDefinition {
-    @usableFromInline @inline(__always)
+    @usableFromInline
     static var renderingType: _HTMLRenderToken.RenderingType {
         _rendersInline ? .inline : .block
     }

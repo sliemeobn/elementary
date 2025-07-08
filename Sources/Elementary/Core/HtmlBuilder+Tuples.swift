@@ -62,7 +62,7 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
         self.v1 = v1
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -74,7 +74,7 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
         V1._render(html.v1, into: &renderer, with: copy context)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -100,7 +100,7 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
         self.v2 = v2
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -113,7 +113,7 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
         V2._render(html.v2, into: &renderer, with: copy context)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -142,7 +142,7 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
         self.v3 = v3
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -156,7 +156,7 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
         V3._render(html.v3, into: &renderer, with: copy context)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -188,7 +188,7 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
         self.v4 = v4
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -203,7 +203,7 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
         V4._render(html.v4, into: &renderer, with: copy context)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -238,7 +238,7 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
         self.v5 = v5
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -254,7 +254,7 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
         V5._render(html.v5, into: &renderer, with: copy context)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -283,7 +283,7 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
         self.value = (repeat each value)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -298,7 +298,7 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
         repeat renderElement(each html.value, &renderer)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,

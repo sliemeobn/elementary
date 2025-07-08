@@ -73,7 +73,7 @@ public struct _AttributedElement<Content: HTML>: HTML {
         self.attributes = attributes
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -83,7 +83,7 @@ public struct _AttributedElement<Content: HTML>: HTML {
         Content._render(html.content, into: &renderer, with: context)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,

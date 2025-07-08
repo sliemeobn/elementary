@@ -87,7 +87,7 @@ public protocol _AsyncHTMLRendering {
 }
 
 public extension HTML {
-    @inlinable @inline(__always)
+    @inlinable
     static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -96,7 +96,7 @@ public extension HTML {
         Content._render(html.content, into: &renderer, with: context)
     }
 
-    @inlinable @inline(__always)
+    @inlinable
     static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -107,6 +107,6 @@ public extension HTML {
 }
 
 public extension HTMLTagDefinition {
-    @inlinable @inline(__always)
+    @inlinable
     static var _rendersInline: Bool { false }
 }
