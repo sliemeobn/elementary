@@ -148,11 +148,3 @@ private func nextflattenedAttribute(
 extension _StoredAttribute {
     fileprivate static let blankedOut = _StoredAttribute(name: "")
 }
-
-extension String {
-    @inline(__always)
-    fileprivate func utf8Equals(_ other: borrowing String) -> Bool {
-        // for embedded support
-        utf8.elementsEqual(other.utf8)
-    }
-}
