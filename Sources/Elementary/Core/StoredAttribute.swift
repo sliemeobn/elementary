@@ -50,7 +50,7 @@ public struct _StoredAttribute: Equatable, Sendable {
     var _value: Value
 
     // NOTE: this is mainly here to not break API for now
-    var value: String? {
+    public var value: String? {
         get {
             switch _value {
             case .empty: return nil
