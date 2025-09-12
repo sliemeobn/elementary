@@ -13,16 +13,40 @@ public struct _StoredAttribute: Equatable, Sendable {
         case appendValue(_ separator: String = " ")
         case replaceValue
         case ignoreIfSet
+
+        @usableFromInline
+        static func == (lhs: MergeMode, rhs: MergeMode) -> Bool {
+            switch (lhs, rhs) {
+            case let (.appendValue(lhsSeparator), .appendValue(rhsSeparator)): return lhsSeparator.utf8Equals(rhsSeparator)
+            case (.replaceValue, .replaceValue): return true
+            case (.ignoreIfSet, .ignoreIfSet): return true
+            default:
+                return false
+            }
+        }
     }
 
-    enum Value: Equatable {
+    @usableFromInline
+    enum Value: Equatable, Sendable {
         case empty
         case plain(String)
         case styles(Styles)
         case classes(Classes)
+
+        @usableFromInline
+        static func == (lhs: Value, rhs: Value) -> Bool {
+            switch (lhs, rhs) {
+            case (.empty, .empty): return true
+            case let (.plain(lhsValue), .plain(rhsValue)): return lhsValue.utf8Equals(rhsValue)
+            case let (.styles(lhsStyles), .styles(rhsStyles)): return lhsStyles == rhsStyles
+            case let (.classes(lhsClasses), .classes(rhsClasses)): return lhsClasses == rhsClasses
+            default: return false
+            }
+        }
     }
 
     public var name: String
+    @usableFromInline
     var _value: Value
 
     // NOTE: this is mainly here to not break API for now
@@ -105,6 +129,11 @@ public struct _StoredAttribute: Equatable, Sendable {
             break
         }
     }
+
+    @inlinable
+    public static func == (lhs: _StoredAttribute, rhs: _StoredAttribute) -> Bool {
+        lhs.name.utf8Equals(rhs.name) && lhs._value == rhs._value && lhs.mergeMode == rhs.mergeMode
+    }
 }
 
 extension _StoredAttribute {
@@ -119,6 +148,11 @@ extension _StoredAttribute {
             init(key: String, value: String) {
                 self.key = key
                 self.value = value
+            }
+
+            @usableFromInline
+            static func == (lhs: Entry, rhs: Entry) -> Bool {
+                lhs.value.utf8Equals(rhs.value) && lhs.key.utf8Equals(rhs.key)
             }
         }
 
@@ -203,13 +237,23 @@ extension _StoredAttribute {
         consuming func flatten() -> String {
             classes.joined(separator: " ")
         }
+
+        @usableFromInline
+        static func == (lhs: Classes, rhs: Classes) -> Bool {
+            lhs.classes.elementsEqual(rhs.classes, by: String.utf8Equals)
+        }
     }
 }
 
 extension String {
     @inline(__always)
-    fileprivate func utf8Equals(_ other: borrowing String) -> Bool {
+    @usableFromInline
+    func utf8Equals(_ other: borrowing String) -> Bool {
         // for embedded support
         utf8.elementsEqual(other.utf8)
+    }
+
+    fileprivate static func utf8Equals(_ lhs: borrowing String, _ rhs: borrowing String) -> Bool {
+        lhs.utf8.elementsEqual(rhs.utf8)
     }
 }
