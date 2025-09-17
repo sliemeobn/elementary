@@ -13,7 +13,7 @@ let package = Package(
     name: "elementary",
     platforms: [
         .macOS(.v14),
-        .iOS(.v17),
+        .iOS(.v15),
         .tvOS(.v17),
         .watchOS(.v10),
     ],
