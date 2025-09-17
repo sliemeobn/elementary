@@ -1,4 +1,4 @@
-#if compiler(>=6.0) && !hasFeature(Embedded)
+#if compiler(>=6.0) && !hasFeature(Embedded) && !os(iOS)
 import Synchronization
 
 @available(macOS 15.0, *)

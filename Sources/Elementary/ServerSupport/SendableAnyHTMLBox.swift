@@ -1,4 +1,4 @@
-#if !hasFeature(Embedded)
+#if !hasFeature(Embedded) && !os(iOS)
 /// A wrapper around an `any HTML` value that can be safely sent once.
 ///
 /// Note: For non-sendable values, this will only allow the value to be taken only once.
