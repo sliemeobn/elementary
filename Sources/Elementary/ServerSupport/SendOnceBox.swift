@@ -1,7 +1,7 @@
-#if compiler(>=6.0) && !hasFeature(Embedded) && !os(iOS)
+#if compiler(>=6.0) && !hasFeature(Embedded)
 import Synchronization
 
-@available(macOS 15.0, *)
+@available(iOS 18, macOS 15, *)
 final class SendOnceBox: Sendable, SendOnceBoxing {
     // final class SendOnceBox<Value>: Sendable, SendOnceBoxing {
     typealias Value = any HTML

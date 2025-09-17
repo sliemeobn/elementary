@@ -1,3 +1,7 @@
+#if os(iOS)
+import Foundation
+#endif
+
 #if !hasFeature(Embedded)
 struct HTMLTextRenderer: _HTMLRendering {
     private var result: [UInt8] = []
@@ -24,6 +28,7 @@ struct HTMLStreamRenderer: _HTMLRendering {
         writer(token.renderedValue())
     }
 }
+
 
 struct PrettyHTMLTextRenderer {
     let indentation: String
@@ -68,7 +73,11 @@ struct PrettyHTMLTextRenderer {
         }
 
         if currentInlineText.contains("\n") {
+            #if os(iOS)
+            currentInlineText = currentInlineText.replacingOccurrences(of: "\n", with: "\n\(currentIndentation)")
+            #else
             currentInlineText.replace("\n", with: "\n\(currentIndentation)")
+            #endif
             addLineBreak()
             result += currentInlineText
             return true

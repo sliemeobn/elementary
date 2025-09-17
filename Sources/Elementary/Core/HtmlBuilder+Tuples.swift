@@ -44,6 +44,7 @@ public extension HTMLBuilder {
     // variadic generics currently not supported in embedded
     #if !hasFeature(Embedded)
     @inlinable
+    @available(iOS 17, *)
     static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple<repeat each Content>
     where repeat each Content: HTML {
         _HTMLTuple(repeat each content)
@@ -273,8 +274,10 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
 
 // variadic generics currently not supported in embedded
 #if !hasFeature(Embedded)
+@available(iOS 17, *)
 extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
 
+@available(iOS 17, *)
 public struct _HTMLTuple<each Child: HTML>: HTML {
     public let value: (repeat each Child)
 
