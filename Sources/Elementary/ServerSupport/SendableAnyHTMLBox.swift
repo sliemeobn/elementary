@@ -1,8 +1,10 @@
-#if !hasFeature(Embedded) && !os(iOS)
+#if !hasFeature(Embedded)
 /// A wrapper around an `any HTML` value that can be safely sent once.
 ///
 /// Note: For non-sendable values, this will only allow the value to be taken only once.
 /// Sendable values can safely be taken multiple times.
+
+@available(iOS 18, *)
 public struct _SendableAnyHTMLBox: Sendable {
     var storage: Storage
 
