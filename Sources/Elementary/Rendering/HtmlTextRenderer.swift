@@ -29,7 +29,6 @@ struct HTMLStreamRenderer: _HTMLRendering {
     }
 }
 
-
 struct PrettyHTMLTextRenderer {
     let indentation: String
 
