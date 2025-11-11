@@ -15,3 +15,13 @@ func HTMLAssertEqualAsyncOnly(_ html: some HTML, _ expected: String, file: Stati
 func HTMLFormattedAssertEqual(_ html: some HTML, _ expected: String, file: StaticString = #filePath, line: UInt = #line) {
     XCTAssertEqual(expected, html.renderFormatted(), file: file, line: line)
 }
+
+final class TestBufferWriter: HTMLStreamWriter {
+    var result: [UInt8] = []
+    var writeCount: Int = 0
+
+    func write(_ bytes: ArraySlice<UInt8>) async throws {
+        writeCount += 1
+        result.append(contentsOf: bytes)
+    }
+}

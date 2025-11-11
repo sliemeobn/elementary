@@ -15,7 +15,7 @@ struct AsyncHTMLRenderer<Writer: HTMLStreamWriter>: _AsyncHTMLRendering {
     mutating func appendToken(_ token: consuming _HTMLRenderToken) async throws {
         // let value = token.renderedValue.utf8
         buffer.appendToken(token)
-        if buffer.count >= buffer.capacity {
+        if buffer.count >= self.chunkSize {
             try await flush()
             buffer.replaceSubrange(0...buffer.count - 1, with: [])
         }
