@@ -70,21 +70,21 @@ final class AsyncRenderingTests: XCTestCase {
             "<p>late response foo</p><p>late response bar</p>"
         )
     }
-    
+
     func testBufferFlushesWhenChunkSizeExceeded() async throws {
         let writer = TestBufferWriter()
         try await div { "This is some content" }
             .render(into: writer, chunkSize: 1)
-        
+
         XCTAssertEqual("<div>This is some content</div>", String(decoding: writer.result, as: UTF8.self), file: #filePath, line: #line)
         XCTAssertGreaterThan(writer.writeCount, 1)
     }
-    
+
     func testBufferFlushesExactlyOnceOnSmallInput() async throws {
         let writer = TestBufferWriter()
         try await div { "This is some content" }
             .render(into: writer, chunkSize: 1024)
-        
+
         XCTAssertEqual("<div>This is some content</div>", String(decoding: writer.result, as: UTF8.self), file: #filePath, line: #line)
         XCTAssertEqual(writer.writeCount, 1)
     }
