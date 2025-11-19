@@ -41,21 +41,6 @@ public protocol HTMLDocument: HTML {
     @HTMLBuilder var body: HTMLBody { get }
 }
 
-public extension HTMLDocument {
-    @HTMLBuilder var content: some HTML {
-        HTMLRaw("<!DOCTYPE html>")
-        html {
-            Elementary.head {
-                Elementary.title { self.title }
-                self.head
-            }
-            Elementary.body { self.body }
-        }
-        .attributes(.lang(lang), when: lang != defaultUndefinedLanguage)
-        .attributes(.dir(dir), when: dir.value != defaultUndefinedDirection)
-    }
-}
-
 // NOTE: The default implementation uses an empty string as the "magic value" for undefined.
 // This is to avoid the need for an optional `lang` or `dir`` property on the protocol,
 // which would cause confusing issues when adopters provide a property of a non-optional type.
@@ -67,4 +52,48 @@ public extension HTMLDocument {
     var lang: String { defaultUndefinedLanguage }
     /// The default value for the `dir` property is an empty string and will not be rendered in the HTML.
     var dir: HTMLAttributeValue.Direction { .init(value: defaultUndefinedDirection) }
+}
+
+// NOTE: this is a bit messy after the renaming of var content to var body
+public extension HTMLDocument {
+    static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
+        func render<H: HTML>(_ html: H, into renderer: inout some _HTMLRendering, with context: consuming _RenderingContext) {
+            H._render(html, into: &renderer, with: context)
+        }
+
+        render(html.__body, into: &renderer, with: context)
+    }
+
+    static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
+        func render<H: HTML>(
+            _ html: H,
+            into renderer: inout some _AsyncHTMLRendering,
+            with context: consuming _RenderingContext
+        ) async throws {
+            try await H._render(html, into: &renderer, with: context)
+        }
+
+        try await render(html.__body, into: &renderer, with: context)
+    }
+
+    @HTMLBuilder var __body: some HTML {
+        HTMLRaw("<!DOCTYPE html>")
+        html {
+            Elementary.head {
+                Elementary.title { self.title }
+                self.head
+            }
+            Elementary.body { self.body }
+        }
+        .attributes(.lang(lang), when: lang != defaultUndefinedLanguage)
+        .attributes(.dir(dir), when: dir.value != defaultUndefinedDirection)
+    }
 }

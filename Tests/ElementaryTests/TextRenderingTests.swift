@@ -71,7 +71,7 @@ class Bar {
 class JO: HTML {
     var bar: Bar = .init()
 
-    var content: some HTML {
+    var body: some HTML {
         "Hello, World!"
     }
 }

@@ -29,7 +29,7 @@ class NonSendable {
 
 struct MyComponent: HTML {
     let ns = NonSendable()
-    var content: some HTML {
+    var body: some HTML {
         div { "\(ns.x)" }
     }
 }
