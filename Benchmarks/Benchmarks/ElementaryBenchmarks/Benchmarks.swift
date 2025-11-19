@@ -252,7 +252,7 @@ struct MyCustomElement<H: HTML>: HTML {
         myContent = content()
     }
 
-    var content: some HTML {
+    var body: some HTML {
         myContent
     }
 }
@@ -260,7 +260,7 @@ struct MyCustomElement<H: HTML>: HTML {
 struct MyListItem: HTML {
     let number: Int
 
-    var content: some HTML {
+    var body: some HTML {
         let isEven = number.isMultiple(of: 2)
 
         li(.id("\(number)")) {

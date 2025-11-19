@@ -7,7 +7,7 @@
 /// struct FeatureList: HTML {
 ///   var features: [String]
 ///
-///   var content: some HTML {
+///   var body: some HTML {
 ///     ul {
 ///       for feature in features {
 ///         li { feature }
@@ -58,7 +58,7 @@ extension HTML {
     public typealias Content = Body
 
     public var content: Body {
-        fatalError("content was renamed to body")
+        fatalError("Please make sure to add a `var body` implementation to your HTML type.")
     }
 }
 
