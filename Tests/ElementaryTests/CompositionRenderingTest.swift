@@ -65,7 +65,7 @@ struct MyList: HTML {
     var items: [String]
     var selectedIndex: Int
 
-    var content: some HTML {
+    var body: some HTML {
         ul {
             for (index, item) in items.enumerated() {
                 MyListItem(text: item, isSelected: index == selectedIndex)
@@ -79,7 +79,7 @@ struct MyListItem: HTML {
     var text: String
     var isSelected: Bool = false
 
-    var content: some HTML<HTMLTag.li> {
+    var body: some HTML<HTMLTag.li> {
         li { text }
             .attributes(.class("selected"), when: isSelected)
     }

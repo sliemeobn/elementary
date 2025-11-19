@@ -28,14 +28,14 @@ final class EnvironmentRenderingTests: XCTestCase {
 struct MyNumber: HTML {
     @Environment(Values.$number) var number
 
-    var content: some HTML {
+    var body: some HTML {
         "\(number)"
     }
 }
 
 struct MyDatabaseValue: HTML {
     @Environment(requiring: Values.$database) var database
-    var content: some HTML {
+    var body: some HTML {
         p {
             await database.value
         }

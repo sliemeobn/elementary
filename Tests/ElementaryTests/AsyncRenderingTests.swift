@@ -92,7 +92,7 @@ final class AsyncRenderingTests: XCTestCase {
 
 private struct AwaitedP: HTML {
     var number: Int
-    var content: some HTML {
+    var body: some HTML {
         AsyncContent {
             let _ = try await Task.sleep(for: .milliseconds(1))
             p { "\(number)" }

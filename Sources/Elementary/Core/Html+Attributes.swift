@@ -64,6 +64,9 @@ extension HTMLAttribute {
 }
 
 public struct _AttributedElement<Content: HTML>: HTML {
+    public typealias Body = Never
+    public typealias Tag = Content.Tag
+
     public var content: Content
     public var attributes: _AttributeStorage
 

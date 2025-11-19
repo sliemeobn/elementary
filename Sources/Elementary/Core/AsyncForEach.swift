@@ -12,6 +12,8 @@
 /// }
 /// ```
 public struct AsyncForEach<Source: AsyncSequence, Content: HTML>: HTML {
+    public typealias Body = Never
+
     @usableFromInline
     var sequence: Source
     @usableFromInline

@@ -25,7 +25,7 @@ struct MainLayout<Body: HTML>: HTMLDocument {
 }
 
 struct WelcomePage: HTML {
-    var content: some HTML {
+    var body: some HTML {
         div(.class("flex flex-col gap-4")) {
             p {
                 "This is a simple example of using "
@@ -52,7 +52,7 @@ struct GreetingPage: HTML {
     @Environment(requiring: EnvironmentValues.$name) var name
     var greetingCount: Int
 
-    var content: some HTML {
+    var body: some HTML {
         if greetingCount < 1 {
             p(.class("text-red-500")) {
                 "No greetings to show."
