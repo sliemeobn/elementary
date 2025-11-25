@@ -35,7 +35,7 @@ struct MainPage: HTMLDocument {
 struct FeatureList: HTML {
     var features: [String]
 
-    var content: some HTML {
+    var body: some HTML {
         ul {
             for feature in features {
                 li { feature }
@@ -122,7 +122,7 @@ struct List: HTML {
     var items: [String]
     var importantIndex: Int
 
-    var content: some HTML {
+    var body: some HTML {
         // conditional rendering
         if items.isEmpty {
             p { "No items" }
@@ -142,7 +142,7 @@ struct ListItem: HTML {
     var text: String
     var isImportant: Bool = false
 
-    var content: some HTML {
+    var body: some HTML {
         // conditional attributes
         li { text }
             .attributes(.class("important"), when: isImportant)
@@ -183,7 +183,7 @@ struct Button: HTML {
     var text: String
 
     // by exposing the HTMLTag type information...
-    var content: some HTML<HTMLTag.input> {
+    var body: some HTML<HTMLTag.input> {
         input(.type(.button), .value(text))
     }
 }
@@ -209,7 +209,7 @@ div {
 }
 
 struct MyComponent: HTML {
-    var content: some HTML {
+    var body: some HTML {
         AsyncContent {
             "So does this: \(await getMoreData())"
         }
@@ -245,7 +245,7 @@ struct MyComponent: HTML {
     // ... their values can be accessed ...
     @Environment(MyValues.$userName) var userName
 
-    var content: some HTML {
+    var body: some HTML {
         p { "Hello, \(userName)!" }
     }
 }

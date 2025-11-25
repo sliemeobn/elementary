@@ -11,7 +11,7 @@
 /// struct MyNumber: HTML {
 ///     @Environment(Values.$myNumber) var number
 ///
-///     var content: some HTML {
+///     var body: some HTML {
 ///         p { "\(number)" }
 ///     }
 /// }

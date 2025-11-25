@@ -2,6 +2,9 @@
 public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag: HTMLTrait.Paired {
     /// The type of the HTML tag this element represents.
     public typealias Tag = Tag
+    public typealias Body = Never
+    public typealias Content = Content
+
     public var _attributes: _AttributeStorage
 
     // The content of the element.

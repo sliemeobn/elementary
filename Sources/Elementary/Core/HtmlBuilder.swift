@@ -49,8 +49,8 @@
     }
 }
 
-public extension HTML where Content == Never {
-    var content: Never {
+public extension HTML where Body == Never {
+    var body: Never {
         #if hasFeature(Embedded)
         fatalError("content was called on an unsupported type")
         #else
@@ -61,7 +61,7 @@ public extension HTML where Content == Never {
 
 extension Never: HTML {
     public typealias Tag = Never
-    public typealias Content = Never
+    public typealias Body = Never
 }
 
 extension Optional: HTML where Wrapped: HTML {
