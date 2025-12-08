@@ -2,9 +2,14 @@
 
 **A modern and efficient HTML rendering library - inspired by SwiftUI, built for the web.**
 
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsliemeobn%2Felementary%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/sliemeobn/elementary) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsliemeobn%2Felementary%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/sliemeobn/elementary)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsliemeobn%2Felementary%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/elementary-swift/elementary) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsliemeobn%2Felementary%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/elementary-swift/elementary)
 
-[Examples](#play-with-it) | [Motivation](#motivation-and-other-packages) | [Discussion](https://github.com/sliemeobn/elementary/discussions)
+> [!IMPORTANT]
+> 
+> This repo 📦 moved 📦 to its new home at **`https://github.com/elementary-swift`**.    
+> Please update your URLs to avoid trouble - and reach out if anything breaks!
+
+[Examples](#play-with-it) | [Motivation](#motivation-and-other-packages) | [Discussion](https://github.com/elementary-swift/elementary/discussions)
 
 ```swift
 struct MainPage: HTMLDocument {
@@ -25,7 +30,7 @@ struct MainPage: HTMLDocument {
                 "Framework agnostic and unopinionated",
             ])
 
-            a(.href("https://github.com/sliemeobn/elementary"), .class("fancy-style")) {
+            a(.href("https://github.com/elementary-swift/elementary"), .class("fancy-style")) {
                 "Learn more"
             }
         }
@@ -49,7 +54,7 @@ struct FeatureList: HTML {
 
 Add the dependency to `Package.swift`
 ```swift
-.package(url: "https://github.com/sliemeobn/elementary.git", from: "0.3.2")
+.package(url: "https://github.com/elementary-swift/elementary.git", from: "0.6.0")
 .product(name: "Elementary", package: "elementary")
 ```
 
@@ -67,17 +72,17 @@ Integration with [Vapor](https://github.com/vapor-community/vapor-elementary)
 
 ## Play with it
 
-Check out the [Hummingbird + Tailwind example app](https://github.com/sliemeobn/elementary/tree/main/Examples/HummingbirdDemo).
+Check out the [Hummingbird + Tailwind example app](https://github.com/elementary-swift/elementary/tree/main/Examples/HummingbirdDemo).
 
-For a demo of [ElementaryHTMX](https://github.com/sliemeobn/elementary-htmx), see this [Hummingbird + HTMX Demo](https://github.com/sliemeobn/elementary-htmx/tree/main/Examples/HummingbirdDemo).
+For a demo of [ElementaryHTMX](https://github.com/elementary-swift/elementary-htmx), see this [Hummingbird + HTMX Demo](https://github.com/elementary-swift/elementary-htmx/tree/main/Examples/HummingbirdDemo).
 
-For a Vapor example, see the [Vapor + HTMX Demo](https://github.com/sliemeobn/elementary-htmx/tree/main/Examples/VaporDemo).
+For a Vapor example, see the [Vapor + HTMX Demo](https://github.com/elementary-swift/elementary-htmx/tree/main/Examples/VaporDemo).
 
 ## Lightweight and fast
 
 Elementary renders straight to text, optimized for serving generated HTML from a [Hummingbird](https://github.com/hummingbird-project/hummingbird) or [Vapor](https://vapor.codes/) server app.
 
-Any type conforming to `HTML` can be rendered individually, ideal for testing or for sending fragments with [htmx](https://github.com/sliemeobn/elementary-htmx).
+Any type conforming to `HTML` can be rendered individually, ideal for testing or for sending fragments with [htmx](https://github.com/elementary-swift/elementary-htmx).
 
 The default rendering mechanism produces chunks of HTML for efficient response streaming, so the browser can start loading a page while the server is still producing the rest of it. Swift concurrency is used to handle back pressure, so you your memory footprint stays low even for large pages.
 
