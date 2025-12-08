@@ -4,13 +4,12 @@
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsliemeobn%2Felementary%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/elementary-swift/elementary) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsliemeobn%2Felementary%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/elementary-swift/elementary)
 
-[Examples](#play-with-it) | [Motivation](#motivation-and-other-packages) | [Discussion](https://github.com/elementary-swift/elementary/discussions)
-
 > [!IMPORTANT]
-> 📦 **New home!**  
-> This repo moved to **`https://github.com/elementary-swift`**
 > 
-> Please update your URLs to avoid trouble - and reach out if anything breaks.
+> This repo 📦 moved 📦 to its new home at **`https://github.com/elementary-swift`**.    
+> Please update your URLs to avoid trouble - and reach out if anything breaks!
+
+[Examples](#play-with-it) | [Motivation](#motivation-and-other-packages) | [Discussion](https://github.com/elementary-swift/elementary/discussions)
 
 ```swift
 struct MainPage: HTMLDocument {
