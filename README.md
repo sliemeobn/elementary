@@ -6,7 +6,7 @@
 
 [Examples](#play-with-it) | [Motivation](#motivation-and-other-packages) | [Discussion](https://github.com/elementary-swift/elementary/discussions)
 
-> [!NOTE]
+> [!IMPORTANT]
 > 📦 **New home!**  
 > This repo moved to **`https://github.com/elementary-swift`**
 > 
