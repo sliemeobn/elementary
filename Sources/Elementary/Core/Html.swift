@@ -16,50 +16,12 @@
 ///   }
 /// }
 /// ```
-public protocol HTML<Tag> {
-    /// The HTML tag this component represents, if any.
-    ///
-    /// The Tag type defines which attributes can be attached to an HTML element.
-    /// If an element does not represent a specific HTML tag, the Tag type will
-    /// be ``Swift/Never`` and the element cannot be attributed.
-    associatedtype Tag: HTMLTagDefinition = Body.Tag
-
-    /// The type of the HTML content this component represents.
-    associatedtype Body: HTML
-
-    /// The HTML content of this component.
-    @HTMLBuilder var body: Body { get }
-
-    /// The HTML content of this component.
-    @HTMLBuilder
-    @available(*, deprecated, message: "`var content` is deprecated, use `var body` instead")
-    var content: Body { get }
-
+public protocol HTML<Tag>: AsyncHTML where Self.Body: HTML {
     static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
         with context: consuming _RenderingContext
     )
-    static func _render<Renderer: _AsyncHTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) async throws
-}
-
-extension HTML {
-    @available(*, deprecated, message: "`var content` is deprecated, use `var body` instead")
-    public var body: Body {
-        // NOTE: sorry for the change
-        content
-    }
-
-    @available(*, deprecated, message: "Content was renamed, use Body instead")
-    public typealias Content = Body
-
-    public var content: Body {
-        fatalError("Please make sure to add a `var body` implementation to your HTML type.")
-    }
 }
 
 /// A type that represents an HTML tag.
@@ -102,10 +64,6 @@ public protocol _HTMLRendering {
     mutating func appendToken(_ token: consuming _HTMLRenderToken)
 }
 
-public protocol _AsyncHTMLRendering {
-    mutating func appendToken(_ token: consuming _HTMLRenderToken) async throws
-}
-
 public extension HTML {
     @inlinable
     static func _render<Renderer: _HTMLRendering>(
@@ -114,15 +72,6 @@ public extension HTML {
         with context: consuming _RenderingContext
     ) {
         Body._render(html.body, into: &renderer, with: context)
-    }
-
-    @inlinable
-    static func _render<Renderer: _AsyncHTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) async throws {
-        try await Body._render(html.body, into: &renderer, with: context)
     }
 }
 

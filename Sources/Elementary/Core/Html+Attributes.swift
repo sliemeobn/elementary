@@ -86,6 +86,7 @@ public struct _AttributedElement<Content: HTML>: HTML {
         Content._render(html.content, into: &renderer, with: context)
     }
 
+    #if !hasFeature(Embedded)
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -95,6 +96,7 @@ public struct _AttributedElement<Content: HTML>: HTML {
         context.prependAttributes(html.attributes)
         try await Content._render(html.content, into: &renderer, with: context)
     }
+    #endif
 }
 
 extension _AttributedElement: Sendable where Content: Sendable {}
@@ -119,6 +121,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attributes: The attributes to add to the element.
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
+    @_disfavoredOverload
     @inlinable
     func attributes(_ attributes: HTMLAttribute<Tag>..., when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))

@@ -26,6 +26,19 @@ public extension HTML {
         var renderer = HTMLStreamRenderer(writer: writer)
         Self._render(self, into: &renderer, with: .emptyContext)
     }
+}
+
+public extension AsyncHTML {
+    /// Renders the HTML content into a single string.
+    /// - Returns: The rendered HTML content.
+    ///
+    /// This method is synchronous and collects the entire rendered content into a single string.
+    /// For server applications, use the async API ``render(into:chunkSize:)`` instead.
+    consuming func render() async throws -> String {
+        var renderer = HTMLTextRenderer()
+        try await Self._render(self, into: &renderer, with: .emptyContext)
+        return renderer.collect()
+    }
 
     /// Renders the HTML content into a stream writer.
     /// - Parameters:
@@ -47,6 +60,16 @@ public extension HTML {
         let writer = BufferWriter()
         try await render(into: writer)
         return String(decoding: writer.result, as: UTF8.self)
+    }
+
+    /// Renders the HTML content into a formatted string.
+    /// - Returns: The rendered HTML content.
+    ///
+    /// Should only be used for testing and debugging purposes.
+    consuming func renderFormatted() async throws -> String {
+        var renderer = PrettyHTMLTextRenderer(spaces: 2)
+        try await Self._render(self, into: &renderer, with: .emptyContext)
+        return renderer.collect()
     }
 }
 

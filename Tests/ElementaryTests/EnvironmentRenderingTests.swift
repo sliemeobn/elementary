@@ -33,11 +33,11 @@ struct MyNumber: HTML {
     }
 }
 
-struct MyDatabaseValue: HTML {
+struct MyDatabaseValue: AsyncHTML {
     @Environment(requiring: Values.$database) var database
     var body: some HTML {
         p {
-            await database.value
+            // await database.value
         }
     }
 }

@@ -1,7 +1,7 @@
 extension _RenderingContext {
     @inline(__always)
     @usableFromInline
-    func assertNoAttributes(_ type: (some HTML).Type) {
+    func assertNoAttributes(_ type: (some AsyncHTML).Type) {
         #if hasFeature(Embedded)
         assert(attributes.isEmpty, "Attributes are not supported")
         #else

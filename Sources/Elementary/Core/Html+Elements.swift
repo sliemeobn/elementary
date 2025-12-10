@@ -1,9 +1,8 @@
 /// An HTML element that can contain content.
-public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag: HTMLTrait.Paired {
+public struct HTMLElement<Tag: HTMLTagDefinition, Content: AsyncHTML>: AsyncHTML where Tag: HTMLTrait.Paired {
     /// The type of the HTML tag this element represents.
     public typealias Tag = Tag
     public typealias Body = Never
-    public typealias Content = Content
 
     public var _attributes: _AttributeStorage
 
@@ -32,6 +31,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     /// - Parameters:
     ///  - attributes: The attributes to apply to the element.
     ///  - content: The content of the element.
+    @_disfavoredOverload
     @inlinable
     public init(_ attributes: HTMLAttribute<Tag>..., @HTMLBuilder content: () -> Content) {
         _attributes = .init(attributes)
@@ -49,19 +49,6 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
     }
 
     @inlinable
-    public static func _render<Renderer: _HTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) {
-        html._attributes.append(context.attributes)
-
-        renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
-        Content._render(html.content, into: &renderer, with: .emptyContext)
-        renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
-    }
-
-    @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -74,6 +61,21 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: HTML>: HTML where Tag
         )
         try await Content._render(html.content, into: &renderer, with: .emptyContext)
         try await renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
+    }
+}
+
+extension HTMLElement: HTML where Content: HTML {
+    @inlinable
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
+        html._attributes.append(context.attributes)
+
+        renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: false, type: Tag.renderingType))
+        Content._render(html.content, into: &renderer, with: .emptyContext)
+        renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
 }
 
@@ -98,6 +100,7 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
 
     /// Creates a new HTML void element with the specified attributes.
     /// - Parameter attributes: The attributes to apply to the element.
+    @_disfavoredOverload
     @inlinable
     public init(_ attributes: HTMLAttribute<Tag>...) {
         _attributes = .init(attributes)
@@ -155,6 +158,7 @@ public struct HTMLComment: HTML {
         renderer.appendToken(.comment(html.text))
     }
 
+    #if !hasFeature(Embedded)
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -164,6 +168,7 @@ public struct HTMLComment: HTML {
         context.assertNoAttributes(self)
         try await renderer.appendToken(.comment(html.text))
     }
+    #endif
 }
 
 /// A type that represents custom raw, untyped HTML.
@@ -188,6 +193,7 @@ public struct HTMLRaw: HTML {
         renderer.appendToken(.raw(html.text))
     }
 
+    #if !hasFeature(Embedded)
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -197,6 +203,7 @@ public struct HTMLRaw: HTML {
         context.assertNoAttributes(self)
         try await renderer.appendToken(.raw(html.text))
     }
+    #endif
 }
 
 extension HTMLElement: Sendable where Content: Sendable {}

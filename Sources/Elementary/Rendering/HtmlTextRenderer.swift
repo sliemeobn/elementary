@@ -3,7 +3,7 @@ import Foundation
 #endif
 
 #if !hasFeature(Embedded)
-struct HTMLTextRenderer: _HTMLRendering {
+struct HTMLTextRenderer: _HTMLRendering, _AsyncHTMLRendering{
     private var result: [UInt8] = []
 
     init() {
@@ -90,6 +90,8 @@ struct PrettyHTMLTextRenderer {
         }
     }
 }
+
+extension PrettyHTMLTextRenderer: _AsyncHTMLRendering {}
 
 extension PrettyHTMLTextRenderer: _HTMLRendering {
     mutating func appendToken(_ token: consuming _HTMLRenderToken) {

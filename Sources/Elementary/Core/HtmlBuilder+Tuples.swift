@@ -44,6 +44,7 @@ public extension HTMLBuilder {
     // variadic generics currently not supported in embedded
     #if !hasFeature(Embedded)
     @inlinable
+    @_disfavoredOverload
     @available(iOS 17, *)
     static func buildBlock<each Content>(_ content: repeat each Content) -> _HTMLTuple<repeat each Content>
     where repeat each Content: HTML {
@@ -278,7 +279,7 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
 extension _HTMLTuple: Sendable where repeat each Child: Sendable {}
 
 @available(iOS 17, *)
-public struct _HTMLTuple<each Child: HTML>: HTML {
+public struct _HTMLTuple<each Child: AsyncHTML>: AsyncHTML {
     public let value: (repeat each Child)
 
     @inlinable
@@ -286,6 +287,23 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
         self.value = (repeat each value)
     }
 
+    @inlinable
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
+        context.assertNoAttributes(self)
+
+        // NOTE: use iteration in swift 6
+        func renderElement<Element: AsyncHTML>(_ element: Element, _ renderer: inout Renderer) async throws {
+            try await Element._render(element, into: &renderer, with: copy context)
+        }
+        repeat try await renderElement(each html.value, &renderer)
+    }
+}
+
+extension _HTMLTuple: HTML where repeat each Child: HTML {
     @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
@@ -299,21 +317,6 @@ public struct _HTMLTuple<each Child: HTML>: HTML {
             Element._render(element, into: &renderer, with: copy context)
         }
         repeat renderElement(each html.value, &renderer)
-    }
-
-    @inlinable
-    public static func _render<Renderer: _AsyncHTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) async throws {
-        context.assertNoAttributes(self)
-
-        // NOTE: use iteration in swift 6
-        func renderElement<Element: HTML>(_ element: Element, _ renderer: inout Renderer) async throws {
-            try await Element._render(element, into: &renderer, with: copy context)
-        }
-        repeat try await renderElement(each html.value, &renderer)
     }
 }
 #endif
