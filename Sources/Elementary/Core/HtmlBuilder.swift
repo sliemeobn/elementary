@@ -1,7 +1,7 @@
 /// A result builder for building HTML components.
 @resultBuilder public struct HTMLBuilder {
     @inlinable
-    public static func buildExpression<Content>(_ content: Content) -> Content where Content: AsyncHTML {
+    public static func buildExpression<Content>(_ content: Content) -> Content where Content: _BaseHTML {
         content
     }
 
@@ -21,31 +21,31 @@
     }
 
     @inlinable
-    public static func buildBlock<Content>(_ content: Content) -> Content where Content: AsyncHTML {
+    public static func buildBlock<Content>(_ content: Content) -> Content where Content: _BaseHTML {
         content
     }
 
     @inlinable
-    public static func buildIf<Content>(_ content: Content?) -> Content? where Content: AsyncHTML {
+    public static func buildIf<Content>(_ content: Content?) -> Content? where Content: _BaseHTML {
         content
     }
 
     @inlinable
-    public static func buildEither<TrueContent: AsyncHTML, FalseContent: AsyncHTML>(
+    public static func buildEither<TrueContent: _BaseHTML, FalseContent: _BaseHTML>(
         first: TrueContent
     ) -> _HTMLConditional<TrueContent, FalseContent> {
         _HTMLConditional(.trueContent(first))
     }
 
     @inlinable
-    public static func buildEither<TrueContent: AsyncHTML, FalseContent: AsyncHTML>(
+    public static func buildEither<TrueContent: _BaseHTML, FalseContent: _BaseHTML>(
         second: FalseContent
     ) -> _HTMLConditional<TrueContent, FalseContent> {
         _HTMLConditional(.falseContent(second))
     }
 
     @inlinable
-    public static func buildArray<Element: AsyncHTML>(_ components: [Element]) -> _HTMLArray<Element> {
+    public static func buildArray<Element: _BaseHTML>(_ components: [Element]) -> _HTMLArray<Element> {
         _HTMLArray(components)
     }
 }
@@ -177,7 +177,7 @@ public struct HTMLText: HTML, Sendable {
 extension _HTMLConditional.Value: Sendable where TrueContent: Sendable, FalseContent: Sendable {}
 extension _HTMLConditional: Sendable where _HTMLConditional.Value: Sendable {}
 
-public struct _HTMLConditional<TrueContent: AsyncHTML, FalseContent: AsyncHTML>: AsyncHTML {
+public struct _HTMLConditional<TrueContent: _BaseHTML, FalseContent: _BaseHTML> {
     public enum Value {
         case trueContent(TrueContent)
         case falseContent(FalseContent)
@@ -189,7 +189,10 @@ public struct _HTMLConditional<TrueContent: AsyncHTML, FalseContent: AsyncHTML>:
     public init(_ value: Value) {
         self.value = value
     }
+}
 
+#if !hasFeature(Embedded)
+extension _HTMLConditional: AsyncHTML where TrueContent: AsyncHTML, FalseContent: AsyncHTML {
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -202,6 +205,7 @@ public struct _HTMLConditional<TrueContent: AsyncHTML, FalseContent: AsyncHTML>:
         }
     }
 }
+#endif
 
 extension _HTMLConditional: HTML where TrueContent: HTML, FalseContent: HTML {
     @inlinable
@@ -223,7 +227,7 @@ public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
 
 extension _HTMLArray: Sendable where Element: Sendable {}
 
-public struct _HTMLArray<Element> {
+public struct _HTMLArray<Element: _BaseHTML> {
     public let value: [Element]
 
     @inlinable

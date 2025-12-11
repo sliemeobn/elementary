@@ -8,7 +8,7 @@
 ///    li { "Item \(index)" }
 /// }
 /// ```
-public struct ForEach<Data: Sequence, Content> {
+public struct ForEach<Data: Sequence, Content: _BaseHTML> {
     public var _data: Data
     // TODO: Swift 6 - @Sendable is not ideal here, but currently the response generators for hummingbird/vapor require sendable HTML types
     // also, currently there is no good way to conditionally apply Sendable conformance based on closure type
