@@ -33,9 +33,9 @@ struct MyNumber: HTML {
     }
 }
 
-struct MyDatabaseValue: HTML {
+struct MyDatabaseValue: AsyncHTML {
     @Environment(requiring: Values.$database) var database
-    var body: some HTML {
+    var body: some AsyncHTML {
         p {
             await database.value
         }

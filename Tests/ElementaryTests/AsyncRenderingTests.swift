@@ -90,9 +90,9 @@ final class AsyncRenderingTests: XCTestCase {
     }
 }
 
-private struct AwaitedP: HTML {
+private struct AwaitedP: AsyncHTML {
     var number: Int
-    var body: some HTML {
+    var body: some AsyncHTML {
         AsyncContent {
             let _ = try await Task.sleep(for: .milliseconds(1))
             p { "\(number)" }

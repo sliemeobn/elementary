@@ -54,7 +54,7 @@ public struct Environment<T: Sendable>: Sendable {
     }
 }
 
-public extension HTML {
+public extension AsyncHTML {
     /// Sets the value of a `TaskLocal` for the duration of rendering the content.
     ///
     /// The value can be accessed using the ``Environment`` property wrapper.
@@ -70,31 +70,17 @@ public extension HTML {
     /// }
     /// ```
     func environment<T: Sendable>(_ taskLocal: TaskLocal<T>, _ value: T) -> _ModifiedTaskLocal<T, Self> {
-        _ModifiedTaskLocal(wrappedContent: self, taskLocal: taskLocal, value: value)
+        _ModifiedTaskLocal(content: self, taskLocal: taskLocal, value: value)
     }
 }
 
-public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
+public struct _ModifiedTaskLocal<T: Sendable, Content: AsyncHTML>: AsyncHTML {
+    public typealias Body = Never
     public typealias Tag = Content.Tag
 
-    var wrappedContent: Content
+    var content: Content
     var taskLocal: TaskLocal<T>
     var value: T
-
-    public static func _render<Renderer: _HTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) {
-        #if compiler(>=6.0)
-        // https://github.com/swiftlang/swift/issues/76474
-        let context = consume context
-        #endif
-
-        html.taskLocal.withValue(html.value) {
-            Content._render(html.wrappedContent, into: &renderer, with: context)
-        }
-    }
 
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -107,7 +93,24 @@ public struct _ModifiedTaskLocal<T: Sendable, Content: HTML>: HTML {
         #endif
 
         try await html.taskLocal.withValue(html.value) {
-            try await Content._render(html.wrappedContent, into: &renderer, with: context)
+            try await Content._render(html.content, into: &renderer, with: context)
+        }
+    }
+}
+
+extension _ModifiedTaskLocal: HTML where Content: HTML {
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
+        #if compiler(>=6.0)
+        // https://github.com/swiftlang/swift/issues/76474
+        let context = consume context
+        #endif
+
+        html.taskLocal.withValue(html.value) {
+            Content._render(html.content, into: &renderer, with: context)
         }
     }
 }

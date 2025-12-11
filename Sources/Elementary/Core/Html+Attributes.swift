@@ -63,9 +63,8 @@ extension HTMLAttribute {
     }
 }
 
-public struct _AttributedElement<Content: HTML>: HTML {
+public struct _AttributedElement<Content> {
     public typealias Body = Never
-    public typealias Tag = Content.Tag
 
     public var content: Content
     public var attributes: _AttributeStorage
@@ -75,16 +74,11 @@ public struct _AttributedElement<Content: HTML>: HTML {
         self.content = content
         self.attributes = attributes
     }
+}
 
-    @inlinable
-    public static func _render<Renderer: _HTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) {
-        context.prependAttributes(html.attributes)
-        Content._render(html.content, into: &renderer, with: context)
-    }
+#if !hasFeature(Embedded)
+extension _AttributedElement: AsyncHTML where Content: AsyncHTML {
+    public typealias Tag = Content.Tag
 
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
@@ -96,10 +90,27 @@ public struct _AttributedElement<Content: HTML>: HTML {
         try await Content._render(html.content, into: &renderer, with: context)
     }
 }
+#endif
+
+extension _AttributedElement: HTML where Content: HTML {
+    #if hasFeature(Embedded)
+    public typealias Tag = Content.Tag
+    #endif
+
+    @inlinable
+    public static func _render<Renderer: _HTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) {
+        context.prependAttributes(html.attributes)
+        Content._render(html.content, into: &renderer, with: context)
+    }
+}
 
 extension _AttributedElement: Sendable where Content: Sendable {}
 
-public extension HTML where Tag: HTMLTrait.Attributes.Global {
+public extension _BaseHTML where Tag: HTMLTrait.Attributes.Global {
     /// Adds the specified attribute to the element.
     /// - Parameters:
     ///   - attribute: The attribute to add to the element.
@@ -119,6 +130,7 @@ public extension HTML where Tag: HTMLTrait.Attributes.Global {
     ///   - attributes: The attributes to add to the element.
     ///   - condition: If set to false, the attributes will not be added.
     /// - Returns: A new element with the specified attributes added.
+    @_disfavoredOverload
     @inlinable
     func attributes(_ attributes: HTMLAttribute<Tag>..., when condition: Bool = true) -> _AttributedElement<Self> {
         _AttributedElement(content: self, attributes: .init(condition ? attributes : []))

@@ -11,7 +11,7 @@
 ///   }
 /// }
 /// ```
-public struct AsyncForEach<Source: AsyncSequence, Content: HTML>: HTML {
+public struct AsyncForEach<Source: AsyncSequence, Content: AsyncHTML>: AsyncHTML {
     public typealias Body = Never
 
     @usableFromInline
@@ -27,15 +27,6 @@ public struct AsyncForEach<Source: AsyncSequence, Content: HTML>: HTML {
     public init(_ sequence: Source, @HTMLBuilder contentBuilder: @escaping (Source.Element) -> Content) {
         self.sequence = sequence
         self.contentBuilder = contentBuilder
-    }
-
-    @inlinable
-    public static func _render<Renderer: _HTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) {
-        context.assertionFailureNoAsyncContext(self)
     }
 
     @inlinable

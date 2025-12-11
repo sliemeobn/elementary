@@ -68,6 +68,7 @@ public extension HTMLDocument {
         render(html.__body, into: &renderer, with: context)
     }
 
+    #if !hasFeature(Embedded)
     static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
         into renderer: inout Renderer,
@@ -83,6 +84,7 @@ public extension HTMLDocument {
 
         try await render(html.__body, into: &renderer, with: context)
     }
+    #endif
 
     @HTMLBuilder var __body: some HTML {
         HTMLRaw("<!DOCTYPE html>")
