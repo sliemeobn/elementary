@@ -85,7 +85,7 @@ extension HTMLElement: AsyncHTML where Content: AsyncHTML {
     ///   - attributes: The attributes to apply to the element.
     ///   - content: The future content of the element.
     @inlinable
-    public init<AwaitedContent: HTML>(
+    public init<AwaitedContent: AsyncHTML>(
         attributes: [HTMLAttribute<Tag>],
         @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent
     ) where Content == AsyncContent<AwaitedContent> {
