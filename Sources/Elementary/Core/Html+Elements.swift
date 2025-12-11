@@ -1,5 +1,5 @@
 /// An HTML element that can contain content.
-public struct HTMLElement<Tag: HTMLTagDefinition, Content: AsyncHTML>: AsyncHTML where Tag: HTMLTrait.Paired {
+public struct HTMLElement<Tag: HTMLTagDefinition, Content> where Tag: HTMLTrait.Paired {
     /// The type of the HTML tag this element represents.
     public typealias Tag = Tag
     public typealias Body = Never
@@ -8,7 +8,9 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: AsyncHTML>: AsyncHTML
 
     // The content of the element.
     public var content: Content
+}
 
+extension HTMLElement {
     /// Creates a new HTML element with the specified content.
     /// - Parameter content: The content of the element.
     @inlinable
@@ -47,6 +49,49 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: AsyncHTML>: AsyncHTML
         _attributes = .init(attributes)
         self.content = content()
     }
+}
+
+#if !hasFeature(Embedded)
+extension HTMLElement: AsyncHTML where Content: AsyncHTML {
+    @inlinable
+    @_disfavoredOverload
+    public init<AwaitedContent: AsyncHTML>(@HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent) where Content == AsyncContent<AwaitedContent> {
+        _attributes = .init()
+        self.content = AsyncContent(content: content)
+    }
+
+    /// Creates a new HTML element with the specified tag and async content.
+    ///
+    /// The async content closure is automatically wrapped in an ``AsyncContent`` element and can only be rendered in an async context.
+    ///
+    /// - Parameters:
+    ///   - attributes: The attributes to apply to the element.
+    ///   - content: The future content of the element.
+    @inlinable
+    @_disfavoredOverload
+    public init<AwaitedContent: AsyncHTML>(
+        _ attributes: HTMLAttribute<Tag>...,
+        @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent
+    ) where Content == AsyncContent<AwaitedContent> {
+        _attributes = .init(attributes)
+        self.content = AsyncContent(content: content)
+    }
+
+    /// Creates a new HTML element with the specified tag and async content.
+    ///
+    /// The async content closure is automatically wrapped in an ``AsyncContent``  element and can only be rendered in an async context.
+    ///
+    /// - Parameters:
+    ///   - attributes: The attributes to apply to the element.
+    ///   - content: The future content of the element.
+    @inlinable
+    public init<AwaitedContent: HTML>(
+        attributes: [HTMLAttribute<Tag>],
+        @HTMLBuilder content: @escaping @Sendable () async throws -> AwaitedContent
+    ) where Content == AsyncContent<AwaitedContent> {
+        _attributes = .init(attributes)
+        self.content = AsyncContent(content: content)
+    }
 
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
@@ -63,6 +108,7 @@ public struct HTMLElement<Tag: HTMLTagDefinition, Content: AsyncHTML>: AsyncHTML
         try await renderer.appendToken(.endTag(Tag.name, type: Tag.renderingType))
     }
 }
+#endif
 
 extension HTMLElement: HTML where Content: HTML {
     @inlinable
@@ -123,6 +169,7 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
         renderer.appendToken(.startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: true, type: Tag.renderingType))
     }
 
+    #if !hasFeature(Embedded)
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -134,6 +181,7 @@ public struct HTMLVoidElement<Tag: HTMLTagDefinition>: HTML where Tag: HTMLTrait
             .startTag(Tag.name, attributes: html._attributes.flattened(), isUnpaired: true, type: Tag.renderingType)
         )
     }
+    #endif
 }
 
 /// A type that represents an HTML comment.

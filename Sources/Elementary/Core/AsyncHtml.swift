@@ -1,16 +1,16 @@
 #if !hasFeature(Embedded)
-/// A type that represents async HTML content that can be rendered.
+/// A type that represents HTML content that can be rendered asynchronously.
 ///
 /// You can create reusable Async HTML components by conforming to this protocol
 /// and implementing the ``body`` property.
 ///
 /// ```swift
-/// struct FeatureList: HTML {
+/// struct FeatureList: AsyncHTML {
 ///   var features: [String]
 ///
-///   var body: some HTML {
+///   var body: some AsyncHTML {
 ///     ul {
-///       for feature in features {
+///       for await feature in features {
 ///         li { feature }
 ///       }
 ///     }
@@ -52,4 +52,6 @@ extension AsyncHTML {
 public protocol _AsyncHTMLRendering {
     mutating func appendToken(_ token: consuming _HTMLRenderToken) async throws
 }
+
+public typealias _BaseHTML = AsyncHTML
 #endif

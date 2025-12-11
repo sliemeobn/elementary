@@ -4,22 +4,22 @@
 
 public extension HTMLBuilder {
     @inlinable
-    static func buildBlock<V0: HTML, V1: HTML>(_ v0: V0, _ v1: V1) -> _HTMLTuple2<V0, V1> {
+    static func buildBlock<V0: _BaseHTML, V1: _BaseHTML>(_ v0: V0, _ v1: V1) -> _HTMLTuple2<V0, V1> {
         _HTMLTuple2(v0: v0, v1: v1)
     }
 
     @inlinable
-    static func buildBlock<V0: HTML, V1: HTML, V2: HTML>(_ v0: V0, _ v1: V1, _ v2: V2) -> _HTMLTuple3<V0, V1, V2> {
+    static func buildBlock<V0: _BaseHTML, V1: _BaseHTML, V2: _BaseHTML>(_ v0: V0, _ v1: V1, _ v2: V2) -> _HTMLTuple3<V0, V1, V2> {
         _HTMLTuple3(v0: v0, v1: v1, v2: v2)
     }
 
     @inlinable
-    static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML>(_ v0: V0, _ v1: V1, _ v2: V2, _ v3: V3) -> _HTMLTuple4<V0, V1, V2, V3> {
+    static func buildBlock<V0: _BaseHTML, V1: _BaseHTML, V2: _BaseHTML, V3: _BaseHTML>(_ v0: V0, _ v1: V1, _ v2: V2, _ v3: V3) -> _HTMLTuple4<V0, V1, V2, V3> {
         _HTMLTuple4(v0: v0, v1: v1, v2: v2, v3: v3)
     }
 
     @inlinable
-    static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>(
+    static func buildBlock<V0: _BaseHTML, V1: _BaseHTML, V2: _BaseHTML, V3: _BaseHTML, V4: _BaseHTML>(
         _ v0: V0,
         _ v1: V1,
         _ v2: V2,
@@ -30,7 +30,7 @@ public extension HTMLBuilder {
     }
 
     @inlinable
-    static func buildBlock<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: HTML>(
+    static func buildBlock<V0: _BaseHTML, V1: _BaseHTML, V2: _BaseHTML, V3: _BaseHTML, V4: _BaseHTML, V5: _BaseHTML>(
         _ v0: V0,
         _ v1: V1,
         _ v2: V2,
@@ -54,7 +54,7 @@ public extension HTMLBuilder {
 }
 
 extension _HTMLTuple2: Sendable where V0: Sendable, V1: Sendable {}
-public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
+public struct _HTMLTuple2<V0, V1> {
     public let v0: V0
     public let v1: V1
 
@@ -63,7 +63,9 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
         self.v0 = v0
         self.v1 = v1
     }
+}
 
+extension _HTMLTuple2: HTML where V0: HTML, V1: HTML {
     @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
@@ -75,7 +77,10 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
         V0._render(html.v0, into: &renderer, with: copy context)
         V1._render(html.v1, into: &renderer, with: copy context)
     }
+}
 
+#if !hasFeature(Embedded)
+extension _HTMLTuple2: AsyncHTML where V0: AsyncHTML, V1: AsyncHTML {
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -88,9 +93,10 @@ public struct _HTMLTuple2<V0: HTML, V1: HTML>: HTML {
         try await V1._render(html.v1, into: &renderer, with: copy context)
     }
 }
+#endif
 
 extension _HTMLTuple3: Sendable where V0: Sendable, V1: Sendable, V2: Sendable {}
-public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
+public struct _HTMLTuple3<V0, V1, V2> {
     public let v0: V0
     public let v1: V1
     public let v2: V2
@@ -101,7 +107,9 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
         self.v1 = v1
         self.v2 = v2
     }
+}
 
+extension _HTMLTuple3: HTML where V0: HTML, V1: HTML, V2: HTML {
     @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
@@ -114,7 +122,10 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
         V1._render(html.v1, into: &renderer, with: copy context)
         V2._render(html.v2, into: &renderer, with: copy context)
     }
+}
 
+#if !hasFeature(Embedded)
+extension _HTMLTuple3: AsyncHTML where V0: AsyncHTML, V1: AsyncHTML, V2: AsyncHTML {
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -128,9 +139,10 @@ public struct _HTMLTuple3<V0: HTML, V1: HTML, V2: HTML>: HTML {
         try await V2._render(html.v2, into: &renderer, with: copy context)
     }
 }
+#endif
 
 extension _HTMLTuple4: Sendable where V0: Sendable, V1: Sendable, V2: Sendable, V3: Sendable {}
-public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
+public struct _HTMLTuple4<V0, V1, V2, V3> {
     public let v0: V0
     public let v1: V1
     public let v2: V2
@@ -143,7 +155,9 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
         self.v2 = v2
         self.v3 = v3
     }
+}
 
+extension _HTMLTuple4: HTML where V0: HTML, V1: HTML, V2: HTML, V3: HTML {
     @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
@@ -157,7 +171,10 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
         V2._render(html.v2, into: &renderer, with: copy context)
         V3._render(html.v3, into: &renderer, with: copy context)
     }
+}
 
+#if !hasFeature(Embedded)
+extension _HTMLTuple4: AsyncHTML where V0: AsyncHTML, V1: AsyncHTML, V2: AsyncHTML, V3: AsyncHTML { 
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -172,9 +189,10 @@ public struct _HTMLTuple4<V0: HTML, V1: HTML, V2: HTML, V3: HTML>: HTML {
         try await V3._render(html.v3, into: &renderer, with: copy context)
     }
 }
+#endif
 
 extension _HTMLTuple5: Sendable where V0: Sendable, V1: Sendable, V2: Sendable, V3: Sendable, V4: Sendable {}
-public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTML {
+public struct _HTMLTuple5<V0, V1, V2, V3, V4> {
     public let v0: V0
     public let v1: V1
     public let v2: V2
@@ -189,7 +207,9 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
         self.v3 = v3
         self.v4 = v4
     }
+}
 
+extension _HTMLTuple5: HTML where V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML {
     @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
@@ -204,7 +224,10 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
         V3._render(html.v3, into: &renderer, with: copy context)
         V4._render(html.v4, into: &renderer, with: copy context)
     }
+}
 
+#if !hasFeature(Embedded)
+extension _HTMLTuple5: AsyncHTML where V0: AsyncHTML, V1: AsyncHTML, V2: AsyncHTML, V3: AsyncHTML, V4: AsyncHTML {
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -220,9 +243,10 @@ public struct _HTMLTuple5<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML>: HTM
         try await V4._render(html.v4, into: &renderer, with: copy context)
     }
 }
+#endif
 
 extension _HTMLTuple6: Sendable where V0: Sendable, V1: Sendable, V2: Sendable, V3: Sendable, V4: Sendable, V5: Sendable {}
-public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: HTML>: HTML {
+public struct _HTMLTuple6<V0, V1, V2, V3, V4, V5> {
     public let v0: V0
     public let v1: V1
     public let v2: V2
@@ -240,6 +264,9 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
         self.v5 = v5
     }
 
+}
+
+extension _HTMLTuple6: HTML where V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: HTML {
     @inlinable
     public static func _render<Renderer: _HTMLRendering>(
         _ html: consuming Self,
@@ -255,7 +282,10 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
         V4._render(html.v4, into: &renderer, with: copy context)
         V5._render(html.v5, into: &renderer, with: copy context)
     }
+}
 
+#if !hasFeature(Embedded)
+extension _HTMLTuple6: AsyncHTML where V0: AsyncHTML, V1: AsyncHTML, V2: AsyncHTML, V3: AsyncHTML, V4: AsyncHTML, V5: AsyncHTML {
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -272,6 +302,7 @@ public struct _HTMLTuple6<V0: HTML, V1: HTML, V2: HTML, V3: HTML, V4: HTML, V5: 
         try await V5._render(html.v5, into: &renderer, with: copy context)
     }
 }
+#endif
 
 // variadic generics currently not supported in embedded
 #if !hasFeature(Embedded)

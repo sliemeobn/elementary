@@ -63,9 +63,8 @@ extension HTMLAttribute {
     }
 }
 
-public struct _AttributedElement<Content: HTML>: HTML {
+public struct _AttributedElement<Content> {
     public typealias Body = Never
-    public typealias Tag = Content.Tag
 
     public var content: Content
     public var attributes: _AttributeStorage
@@ -75,6 +74,28 @@ public struct _AttributedElement<Content: HTML>: HTML {
         self.content = content
         self.attributes = attributes
     }
+}
+
+#if !hasFeature(Embedded)
+extension _AttributedElement: AsyncHTML where Content: AsyncHTML {
+    public typealias Tag = Content.Tag
+
+    @inlinable
+    public static func _render<Renderer: _AsyncHTMLRendering>(
+        _ html: consuming Self,
+        into renderer: inout Renderer,
+        with context: consuming _RenderingContext
+    ) async throws {
+        context.prependAttributes(html.attributes)
+        try await Content._render(html.content, into: &renderer, with: context)
+    }
+}
+#endif
+
+extension _AttributedElement: HTML where Content: HTML {
+    #if hasFeature(Embedded)
+    public typealias Tag = Content.Tag
+    #endif
 
     @inlinable
     public static func _render<Renderer: _HTMLRendering>(
@@ -85,23 +106,11 @@ public struct _AttributedElement<Content: HTML>: HTML {
         context.prependAttributes(html.attributes)
         Content._render(html.content, into: &renderer, with: context)
     }
-
-    #if !hasFeature(Embedded)
-    @inlinable
-    public static func _render<Renderer: _AsyncHTMLRendering>(
-        _ html: consuming Self,
-        into renderer: inout Renderer,
-        with context: consuming _RenderingContext
-    ) async throws {
-        context.prependAttributes(html.attributes)
-        try await Content._render(html.content, into: &renderer, with: context)
-    }
-    #endif
 }
 
 extension _AttributedElement: Sendable where Content: Sendable {}
 
-public extension HTML where Tag: HTMLTrait.Attributes.Global {
+public extension _BaseHTML where Tag: HTMLTrait.Attributes.Global {
     /// Adds the specified attribute to the element.
     /// - Parameters:
     ///   - attribute: The attribute to add to the element.

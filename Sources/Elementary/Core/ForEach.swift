@@ -8,12 +8,16 @@
 ///    li { "Item \(index)" }
 /// }
 /// ```
-public struct ForEach<Data, Content>: AsyncHTML where Data: Sequence, Content: HTML {
+public struct ForEach<Data: Sequence, Content> {
     public var _data: Data
     // TODO: Swift 6 - @Sendable is not ideal here, but currently the response generators for hummingbird/vapor require sendable HTML types
     // also, currently there is no good way to conditionally apply Sendable conformance based on closure type
 
     public var _contentBuilder: @Sendable (Data.Element) -> Content
+}
+
+#if !hasFeature(Embedded)
+extension ForEach: AsyncHTML where Content: AsyncHTML {
 
     /// Creates a new `ForEach` element with the given sequence and content builder closure.
     ///
@@ -38,6 +42,7 @@ public struct ForEach<Data, Content>: AsyncHTML where Data: Sequence, Content: H
         }
     }
 }
+#endif
 
 extension ForEach: HTML where Content: HTML {
     @inlinable

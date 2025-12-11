@@ -223,14 +223,17 @@ public extension _HTMLConditional where TrueContent.Tag == FalseContent.Tag {
 
 extension _HTMLArray: Sendable where Element: Sendable {}
 
-public struct _HTMLArray<Element: AsyncHTML>: AsyncHTML {
+public struct _HTMLArray<Element> {
     public let value: [Element]
 
     @inlinable
     public init(_ value: [Element]) {
         self.value = value
     }
+}
 
+#if !hasFeature(Embedded)
+extension _HTMLArray: AsyncHTML where Element: AsyncHTML {
     @inlinable
     public static func _render<Renderer: _AsyncHTMLRendering>(
         _ html: consuming Self,
@@ -244,6 +247,7 @@ public struct _HTMLArray<Element: AsyncHTML>: AsyncHTML {
         }
     }
 }
+#endif
 
 extension _HTMLArray: HTML where Element: HTML {
     @inlinable

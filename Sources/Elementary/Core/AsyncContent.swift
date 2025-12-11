@@ -36,6 +36,6 @@ public struct AsyncContent<Content: AsyncHTML>: AsyncHTML, Sendable {
     }
 }
 
-// @available(*, unavailable, message: "Cannot render async content in a synchronous context.")
-// extension AsyncContent: HTML {}
+@available(*, unavailable, message: "Cannot render async content in a synchronous context.")
+extension AsyncContent: HTML {}
 #endif
